@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">android-native-client</string>
+    <string name="password">Password</string>
+    <string name="passwordExp">Tung1234</string>
+    <string name="hidePassword">Hide password</string>
+    <string name="showPassword">Show password</string>
+    <string name="loginTitle">Welcome Back!\n</string>
+
+
 </resources>

@@ -16,10 +16,13 @@
       <SelectionState runConfigName="ComicCardPreview">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="IndeterminateCircularIndicatorPreview">
+      <SelectionState runConfigName="AvatarPreview">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ComicImageCardPreview">
+      <SelectionState runConfigName="MeScreenPreview">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="LoginScreenPreview">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
