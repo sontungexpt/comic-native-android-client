@@ -1,11 +1,14 @@
 package com.comic.android_native_client.ui.components.common
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
@@ -18,30 +21,36 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.comic.android_native_client.R
+import com.comic.android_native_client.ui.components.common.validation.ValidableTextField
+import com.comic.android_native_client.ui.components.common.validation.ValidableTextFieldState
 
 @Composable
 fun PasswordEditable(
-    password: String,
-    onPasswordChange: (String) -> Unit,
+    state: ValidableTextFieldState,
+    onPasswordChange: (String) -> Unit = {},
     enabled: Boolean = true,
-    isError: Boolean = false,
     readOnly: Boolean = false,
     modifier: Modifier = Modifier,
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
     shape: Shape = OutlinedTextFieldDefaults.shape,
+    additionalErrorCondition: Boolean = false,
+    enterErrorTransition: EnterTransition = EnterTransition.None,
+    exitErrorTransition: ExitTransition = fadeOut() + shrinkVertically(),
     leadingIcon: @Composable (() -> Unit)? = null,
     prefix: @Composable (() -> Unit)? = null,
     suffix: @Composable (() -> Unit)? = null,
     supportingText: @Composable (() -> Unit)? = null,
 ) {
     val passwordVisible = remember { mutableStateOf(false) }
-    OutlinedTextField(
-        value = password,
+    return ValidableTextField(
+        state = state,
+        additionalErrorCondition = additionalErrorCondition,
+        enterErrorTransition = enterErrorTransition,
+        exitErrorTransition = exitErrorTransition,
         onValueChange = onPasswordChange,
         enabled = enabled,
         label = { Text(text = stringResource(R.string.password)) },
         colors = colors,
-        isError = isError,
         readOnly = readOnly,
         singleLine = true,
         shape = shape,

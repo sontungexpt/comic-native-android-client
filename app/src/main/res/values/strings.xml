@@ -1,10 +1,22 @@
 <resources>
     <string name="app_name">android-native-client</string>
     <string name="password">Password</string>
+    <string name="username">Username</string>
     <string name="passwordExp">Tung1234</string>
-    <string name="hidePassword">Hide password</string>
-    <string name="showPassword">Show password</string>
-    <string name="loginTitle">Welcome Back!\n</string>
+    <string name="hidePassword">Hide Password</string>
+    <string name="showPassword">Show Password</string>
+    <string name="loginTitle">Welcome Back</string>
 
+    <!-- error message-->
+    <string name="invalid_email_address_msg">"The string %s is not a valid email address"</string>
+    <string name="invalid_password_msg">"Password must have 1 upcase char and at least 8 character"</string>
+    <string name="required_field_msg">This %s field must not be blank</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="name">Name</string>
+    <string name="register">Sign Up</string>
+    <string name="already_have_account_ask">Already have an account?</string>
+    <string name="login">Login</string>
+    <string name="do_not_have_account_ask">Don\'t have an account?</string>
+    <string name="google_login">Google Login</string>
 
 </resources>

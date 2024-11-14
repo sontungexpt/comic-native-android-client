@@ -38,6 +38,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.validable)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 

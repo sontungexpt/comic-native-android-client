@@ -17,7 +17,7 @@ fun AppLogo(
     alpha: Float = DefaultAlpha,
     contentScale: ContentScale = ContentScale.Fit,
     colorFilter: ColorFilter? = null,
-    contentDescription: String = "App Logo"
+    contentDescription: String? = null
 ) {
     Image(
         painter = painterResource(id = R.drawable.logo),
