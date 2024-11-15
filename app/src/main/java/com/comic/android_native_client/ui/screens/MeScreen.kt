@@ -30,7 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.comic.android_native_client.ui.components.Avatar
-import com.comic.android_native_client.ui.theme.AppTheme
+import com.comic.shareable_theme.ui.theme.ShareableTheme
 
 @Composable
 fun MeScreen(modifier: Modifier = Modifier) {
@@ -63,7 +63,7 @@ fun MeScreen(modifier: Modifier = Modifier) {
 @Composable
 @Preview
 fun MeScreenPreview() {
-    AppTheme {
+    ShareableTheme {
         Scaffold(
             topBar = {
                 TopAppBar(

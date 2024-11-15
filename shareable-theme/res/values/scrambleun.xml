@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="scrambleun_game_name">ScrambleUn</string>
+    <string name="scrambleun_game_score">0</string>
+    <string name="scrambleun_game_enter_your_word">Enter your word</string>
+    <string name="scrambleun_game_word_count">%d/10</string>
+    <string name="scrambleun_game_instructions">Unscramble the word using all the letters.</string>
+    <string name="scrambleun_game_congratulations">Congratulations!</string>
+    <string name="scrambleun_game_you_scored">"You scored: %d"</string>
+    <string name="scrambleun_game_wrong_guess">Wrong Guess!</string>
+
+</resources>

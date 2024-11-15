@@ -1,4 +1,4 @@
-package com.comic.android_native_client.ui.theme
+package com.comic.shareable_theme.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.comic.android_native_client.ui.components.common.validation.validator.EmailValidator
 import com.comic.android_native_client.ui.components.common.validation.validator.RequiredValidator
 import com.comic.android_native_client.ui.components.common.validation.validator.TextFieldValidator
-import com.comic.android_native_client.ui.theme.AppTheme
+import com.comic.shareable_theme.ui.theme.ShareableTheme
 
 
 class ValidableTextFieldState(
@@ -204,7 +204,7 @@ fun ValidableTextField(
 @Composable
 @Preview
 fun ValidableTextFieldPreview() {
-    AppTheme {
+    ShareableTheme {
         Scaffold { innerPadding ->
             var state = remember {
                 ValidableTextFieldState(
@@ -224,8 +224,9 @@ fun ValidableTextFieldPreview() {
             }
             Button(onClick = {
                 if (fieldWatcher.validateAll()) {
+
                 } else {
-                    // Show validation errors
+
                 }
             }) {
                 Text("Submit")

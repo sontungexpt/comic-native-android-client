@@ -38,7 +38,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.validable)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
@@ -52,6 +51,9 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(project(":unscramable-game"))
+    implementation(project(":shareable-theme"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.comic.android_native_client.data.model.Comic
-import com.comic.android_native_client.ui.theme.AppTheme
+import com.comic.shareable_theme.ui.theme.ShareableTheme
 
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -98,7 +98,7 @@ fun ComicImageCard(
 @Preview
 @Composable
 fun ComicImageCardPreview() {
-    AppTheme {
+    ShareableTheme  {
         ComicImageCard(
             comic = Comic(
                 authors = listOf("Author"),

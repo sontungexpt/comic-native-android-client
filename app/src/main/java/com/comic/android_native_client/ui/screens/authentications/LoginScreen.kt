@@ -36,8 +36,7 @@ import com.comic.android_native_client.ui.components.common.validation.Validable
 import com.comic.android_native_client.ui.components.common.validation.ValidableTextFieldState
 import com.comic.android_native_client.ui.components.common.validation.rememberValidableTextFieldState
 import com.comic.android_native_client.ui.components.common.validation.validator.RequiredValidator
-import com.comic.android_native_client.ui.theme.AppTheme
-import com.comic.android_native_client.ui.theme.Typography
+import com.comic.shareable_theme.ui.theme.ShareableTheme
 
 @Composable
 fun LoginScreen(
@@ -100,7 +99,7 @@ fun LoginScreen(
             Text(
                 stringResource(R.string.forgot_password) + "?",
                 color = MaterialTheme.colorScheme.primary,
-                style = Typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium
             )
         }
 
@@ -119,7 +118,7 @@ fun LoginScreen(
             Text(
                 text = stringResource(R.string.login),
                 color = MaterialTheme.colorScheme.onPrimary,
-                style = Typography.titleMedium,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -148,14 +147,14 @@ fun LoginScreen(
             Text(
                 stringResource(R.string.do_not_have_account_ask),
                 color = textColor,
-                style = Typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium
             )
             Spacer(modifier = Modifier.width(8.dp))
             TextButton(onClick = onSignUpClick) {
                 Text(
                     stringResource(R.string.register),
                     color = MaterialTheme.colorScheme.primary,
-                    style = Typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -166,7 +165,7 @@ fun LoginScreen(
 @Composable
 @Preview
 fun LoginScreenPreview() {
-    AppTheme {
+    ShareableTheme {
         Scaffold { innerPadding ->
             LoginScreen()
         }

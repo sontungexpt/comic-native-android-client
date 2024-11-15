@@ -11,6 +11,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -20,5 +21,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "android-native-client"
+
 include(":app")
- 
+include(":unscramable-game")
+include(":shareable-theme")

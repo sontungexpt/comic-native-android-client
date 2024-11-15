@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,8 +33,7 @@ import com.comic.android_native_client.ui.components.common.validation.Validable
 import com.comic.android_native_client.ui.components.common.validation.rememberValidableTextFieldState
 import com.comic.android_native_client.ui.components.common.validation.validator.PasswordValidator
 import com.comic.android_native_client.ui.components.common.validation.validator.RequiredValidator
-import com.comic.android_native_client.ui.theme.AppTheme
-import com.comic.android_native_client.ui.theme.Typography
+import com.comic.shareable_theme.ui.theme.ShareableTheme
 
 @Composable
 fun SignUpScreen(
@@ -44,7 +42,6 @@ fun SignUpScreen(
     onSignUpClick: () -> Unit,
     onForgotPasswordClick: () -> Unit
 ) {
-    val context = LocalContext.current
     val usernameFieldName = stringResource(id = R.string.username)
     val passwordFieldName = stringResource(id = R.string.password)
     val nameFieldName = stringResource(id = R.string.name)
@@ -133,7 +130,7 @@ fun SignUpScreen(
                 Text(
                     stringResource(R.string.login),
                     color = textColor,
-                    style = Typography.titleLarge,
+                    style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -146,8 +143,7 @@ fun SignUpScreen(
 @Composable
 @Preview
 fun SignUpScreenPreview() {
-    AppTheme {
-        val scrollState = rememberScrollState()
+    ShareableTheme {
         Scaffold { innerPadding ->
             SignUpScreen(
                 onLoginClick = { username, password -> {} },
