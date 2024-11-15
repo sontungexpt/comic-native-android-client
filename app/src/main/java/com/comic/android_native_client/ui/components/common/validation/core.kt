@@ -45,12 +45,17 @@ class ValidableTextFieldState(
 ) {
     var isValidationAttempted = false
         private set
-    val valid: MutableState<Boolean> = mutableStateOf(true)
+
+    private val _valid: MutableState<Boolean> = mutableStateOf(true)
+
+    val valid: Boolean
+        get() = _valid.value
+
     var errorMessage: String = ""
         private set
 
     fun validate(lazy: Boolean, context: Context? = null): Boolean {
-        valid.value = true
+        _valid.value = true
         if (lazy) return true
         isValidationAttempted = true
 
@@ -58,11 +63,11 @@ class ValidableTextFieldState(
             if (!validator.validate(value)) {
                 errorMessage =
                     validator.showErrorMessage(value, fieldName, context)
-                valid.value = false
+                _valid.value = false
                 break
             }
         }
-        return valid.value
+        return _valid.value
     }
 
     fun validate(context: Context? = null): Boolean {
@@ -70,7 +75,7 @@ class ValidableTextFieldState(
     }
 
     override fun toString(): String {
-        return "ValidableTextFieldState(value='$value', fieldName='$fieldName', lazy=$lazy, valid=$valid, errorMessage='$errorMessage')"
+        return "ValidableTextFieldState(value='$value', fieldName='$fieldName', lazy=$lazy, valid=$_valid, errorMessage='$errorMessage')"
 
     }
 }
@@ -94,7 +99,7 @@ class ValidableTextFieldWatcher(
             if (state.lazy || !state.isValidationAttempted) {
                 state.validate(false, context)
             }
-            if (!state.valid.value) {
+            if (!state.valid) {
                 isAllValid = false
             }
         }
@@ -156,7 +161,7 @@ fun ValidableTextField(
     Column(
         modifier = modifier,
     ) {
-        val hasError = !state.valid.value || additionalErrorCondition
+        val hasError = !state.valid || additionalErrorCondition
         OutlinedTextField(
             value = textInput.value,
             onValueChange = { newValue ->
@@ -211,7 +216,7 @@ fun ValidableTextFieldPreview() {
                     fieldName = "Email",
                     value = "",
                     validators = listOf(RequiredValidator(), EmailValidator()),
-                    lazy = false,
+                    lazy = true,
                 )
             }
             ValidableTextField(
