@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
@@ -21,8 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.comic.android_native_client.R
-import com.comic.android_native_client.ui.components.common.validation.ValidableTextField
-import com.comic.android_native_client.ui.components.common.validation.ValidableTextFieldState
+import com.comic.validation_text_field.ValidableTextFieldState
+import com.comic.validation_text_field.components.ValidableOutlineTextField
 
 @Composable
 fun PasswordEditable(
@@ -37,19 +38,29 @@ fun PasswordEditable(
     enterErrorTransition: EnterTransition = EnterTransition.None,
     exitErrorTransition: ExitTransition = fadeOut() + shrinkVertically(),
     leadingIcon: @Composable (() -> Unit)? = null,
+    label: @Composable (() -> Unit)? = null,
     prefix: @Composable (() -> Unit)? = null,
     suffix: @Composable (() -> Unit)? = null,
     supportingText: @Composable (() -> Unit)? = null,
 ) {
     val passwordVisible = remember { mutableStateOf(false) }
-    return ValidableTextField(
+    return ValidableOutlineTextField(
         state = state,
         additionalErrorCondition = additionalErrorCondition,
         enterErrorTransition = enterErrorTransition,
         exitErrorTransition = exitErrorTransition,
         onValueChange = onPasswordChange,
         enabled = enabled,
-        label = { Text(text = stringResource(R.string.password)) },
+        label = {
+            if (label != null) {
+                label()
+            } else {
+                Text(
+                    text = stringResource(R.string.password),
+                    style = MaterialTheme.typography.labelMedium
+                )
+            }
+        },
         colors = colors,
         readOnly = readOnly,
         singleLine = true,

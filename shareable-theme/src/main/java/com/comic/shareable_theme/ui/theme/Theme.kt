@@ -1,53 +1,55 @@
 package com.comic.shareable_theme.ui.theme
 
 import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
-
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
+import com.comic.shareable_theme.ui.theme.constants.DarkColorScheme
+import com.comic.shareable_theme.ui.theme.constants.LightColorScheme
+import com.comic.shareable_theme.ui.theme.constants.Typography
 
-val DarkColorScheme =
-    darkColorScheme(primary = Purple80, secondary = PurpleGrey80, tertiary = Pink80)
-
-val LightColorScheme =
-    lightColorScheme(
-        primary = Purple40,
-        secondary = PurpleGrey40,
-        tertiary = Pink40,
-
-//        background = Color(0xFFFFFBFE),
-//        surface = Color(0xFFFFFBFE),
-//        onPrimary = Color.White,
-//        onSecondary = Color.White,
-//        onTertiary = Color.White,
-//        onBackground = Color(0xFF1C1B1F),
-//        onSurface = Color(0xFF1C1B1F),
-
-    )
+@Composable
+fun isDarkTheme(): Boolean {
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        ThemeManager.initialize(context)
+    }
+    val isDarkTheme = ThemeManager.isDarkTheme.collectAsState()
+    return isDarkTheme.value
+}
 
 @Composable
 fun ShareableTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean? = null,
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
+    val isDarkTheme = darkTheme ?: isDarkTheme()
     val colorScheme =
         when {
             dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
                 val context = LocalContext.current
-                if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+                if (isDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(
+                    context
+                )
             }
 
-            darkTheme -> DarkColorScheme
+            isDarkTheme -> DarkColorScheme
             else -> LightColorScheme
         }
 
-    MaterialTheme(colorScheme = colorScheme, typography = Typography, content = content)
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = Typography,
+        content = content
+    )
 }
+
+
+
 

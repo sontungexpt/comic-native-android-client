@@ -4,9 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.comic.unscramable_game.data.MAX_NO_OF_WORDS
 import com.comic.unscramable_game.data.SCORE_INCREASE
-import com.comic.unscramable_game.data.allWords
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +15,9 @@ import kotlinx.coroutines.flow.update
 /**
  * ViewModel containing the app data and methods to process the data
  */
-class GameViewModel : ViewModel() {
+class GameViewModel(
+    val allWords: Set<String>
+) : ViewModel() {
 
     // Game UI state
     private val _uiState = MutableStateFlow(GameUiState())
@@ -36,6 +38,7 @@ class GameViewModel : ViewModel() {
      * Re-initializes the game data to restart the game.
      */
     fun resetGame() {
+        
         usedWords.clear()
         _uiState.value = GameUiState(currentScrambledWord = pickRandomWordAndShuffle())
     }
@@ -124,3 +127,17 @@ class GameViewModel : ViewModel() {
         }
     }
 }
+
+
+class GameViewModelFactory(
+    private val allWords: Set<String>
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(GameViewModel::class.java)) {
+            return GameViewModel(allWords) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
+

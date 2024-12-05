@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.comic.android_native_client.data.model.Comic
 import com.comic.shareable_theme.ui.theme.ShareableTheme
+import java.util.UUID
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -173,6 +174,7 @@ fun ComicCardPreview() {
     ShareableTheme {
         ComicCard(
             comic = Comic(
+                id = UUID.randomUUID().toString(),
                 authors = listOf("Author"),
                 imageUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
                 name = "Nam chinh muon ly hon nhung vo anh khong chiu",

@@ -1,0 +1,121 @@
+package com.comic.android_native_client.ui.components
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import com.comic.android_native_client.data.model.Comic
+import com.comic.shareable_theme.ui.theme.ShareableTheme
+import java.util.UUID
+
+
+@Composable
+fun SimpleComic(
+    comic: Comic,
+    onclick: () -> Unit = {},
+    modifier: Modifier,
+    enabled: Boolean = true,
+    cornerShape: RoundedCornerShape = RoundedCornerShape(20.dp),
+
+    maxNameLines: Int = 1,
+    nameFontSize: TextUnit = TextUnit.Unspecified,
+    nameStyle: TextStyle = MaterialTheme.typography.titleMedium,
+    nameFontFamily: FontFamily? = null,
+    nameFontWeight: FontWeight? = null,
+    nameFontStyle: FontStyle? = null,
+
+    imageModifier: Modifier = Modifier,
+    nameModifier: Modifier = Modifier,
+
+    belowName: @Composable () -> Unit = {},
+
+    ) {
+    Column(
+        modifier = modifier
+            .clip(cornerShape)
+            .clickable {
+                if (enabled) {
+                    onclick()
+                }
+            },
+
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        AsyncImage(
+            model = comic.imageUrl,
+            contentScale = ContentScale.Crop,
+            contentDescription = null,
+            modifier = imageModifier
+                .fillMaxSize()
+                .clip(cornerShape)
+                .weight(1f),
+        )
+        Text(
+            text = comic.name,
+            maxLines = maxNameLines,
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Center,
+            style = nameStyle,
+            fontSize = nameFontSize,
+            fontWeight = nameFontWeight,
+            fontFamily = nameFontFamily,
+            fontStyle = nameFontStyle,
+            modifier = nameModifier.fillMaxWidth()
+        )
+
+        belowName()
+    }
+}
+
+@Preview
+@Composable
+fun SimpleComicPreview() {
+    ShareableTheme {
+        Scaffold { innerPadding ->
+            SimpleComic(
+                comic = Comic(
+                    id = UUID.randomUUID().toString(),
+                    authors = listOf("Author"),
+                    imageUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
+                    name = "Ai day han nhu vay tu tien",
+                    description = "Comic description",
+                    rating = 5u,
+                    newChapters = listOf()
+                ),
+
+                enabled = true,
+                onclick = {},
+                modifier = Modifier
+                    .width(170.dp)
+                    .height(260.dp)
+            )
+        }
+
+    }
+
+}
+
+

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Validatation_text_field</string>
+    <string name="validatation_text_field_invalid_email_address_msg">"The string %s is not a valid email address"</string>
+    <string name="validatation_text_field_invalid_password_msg">"Password must contain at least one uppercase letter, one lowercase letter, and be at least 8 characters long."</string>
+    <string name="validatation_text_field_required_field_msg">This %s field must not be blank</string>
+</resources>

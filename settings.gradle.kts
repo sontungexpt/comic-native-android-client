@@ -25,3 +25,4 @@ rootProject.name = "android-native-client"
 include(":app")
 include(":unscramable-game")
 include(":shareable-theme")
+include(":validatable-text-field")

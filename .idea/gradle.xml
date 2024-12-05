@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/shareable-theme" />
             <option value="$PROJECT_DIR$/unscramable-game" />
+            <option value="$PROJECT_DIR$/validatable-text-field" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
