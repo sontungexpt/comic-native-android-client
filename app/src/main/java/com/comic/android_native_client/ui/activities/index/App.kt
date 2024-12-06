@@ -18,8 +18,8 @@ import com.comic.android_native_client.ui.activities.index.screens.ComicReading
 import com.comic.android_native_client.ui.activities.index.screens.ComicSearchScreen
 import com.comic.android_native_client.ui.activities.index.screens.ExploreScreen
 import com.comic.android_native_client.ui.activities.index.screens.FavoriteScreen
-import com.comic.android_native_client.ui.activities.index.screens.ProfileScreen
 import com.comic.android_native_client.ui.activities.index.screens.home.HomeScreen
+import com.comic.android_native_client.ui.activities.index.screens.profile.ProfileScreen
 import com.comic.shareable_theme.ui.theme.ShareableTheme
 
 

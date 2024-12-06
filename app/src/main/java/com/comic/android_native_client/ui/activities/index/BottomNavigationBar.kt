@@ -6,6 +6,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,10 +20,8 @@ import com.comic.android_native_client.constants.Screen
 @Composable
 fun BottomNavigationBar(
     navController: NavHostController,
-    onHomeClick: () -> Unit = {},
-    onExploreClick: () -> Unit = {},
-    onFavoriteClick: () -> Unit = {},
-    onProfileClick: () -> Unit = {}
+    onBeforeNavigation: ((Screen) -> Unit)? = null,
+    onAfterNavigation: ((Screen) -> Unit)? = null
 ) {
     val items = remember {
         listOf(
@@ -36,8 +35,8 @@ fun BottomNavigationBar(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight(),
-        containerColor = MaterialTheme.colorScheme.background,
-        //contentColor = MaterialTheme.colorScheme.onBackground
+        containerColor = MaterialTheme.colorScheme.surfaceDim,
+        contentColor = MaterialTheme.colorScheme.onSurface
     ) {
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -47,14 +46,8 @@ fun BottomNavigationBar(
             NavigationBarItem(
                 selected = currentRoute == screen.route,
                 onClick = {
-                    when (screen) {
-                        Screen.HOME -> onHomeClick()
-                        Screen.EXPLORE -> onExploreClick()
-                        Screen.FAVORITE -> onFavoriteClick()
-                        Screen.PROFILE -> onProfileClick()
-                        else -> {}
-                    }
                     if (currentRoute != screen.route) {
+                        onBeforeNavigation?.invoke(screen)
                         navController.navigate(screen.route) {
                             launchSingleTop = true
                             restoreState = true
@@ -62,35 +55,32 @@ fun BottomNavigationBar(
                                 saveState = true
                             }
                         }
+                        onAfterNavigation?.invoke(screen)
                     }
                 },
                 icon = {
                     Icon(
                         imageVector = screen.icon,
                         contentDescription = null,
-                        tint = if (currentRoute == screen.route)
-                            MaterialTheme.colorScheme.primary
-                        else
-                            MaterialTheme.colorScheme.primary
-                        
-//                            MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f)
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 },
                 label = {
                     Text(
                         text = stringResource(screen.label),
-//                        color = if (currentRoute == screen.route)
-//                            MaterialTheme.colorScheme.primary
-//                        else
-//                            MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f)
+                        color = if (currentRoute == screen.route)
+                            MaterialTheme.colorScheme.primary
+                        else
+                            MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f)
                     )
                 },
-//                colors = NavigationBarItemDefaults.colors(
-//                    selectedIconColor = MaterialTheme.colorScheme.primary,
-//                    unselectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f),
-//                    selectedTextColor = MaterialTheme.colorScheme.primary,
-//                    unselectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f)
-//                ),
+                colors = NavigationBarItemDefaults.colors(
+                    indicatorColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unselectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f),
+                    unselectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f),
+                    disabledIconColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f),
+                    disabledTextColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f)
+                )
             )
         }
     }

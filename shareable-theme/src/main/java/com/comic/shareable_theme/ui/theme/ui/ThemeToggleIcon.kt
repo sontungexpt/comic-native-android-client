@@ -10,28 +10,35 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.IconToggleButtonColors
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.comic.shareable_theme.ui.theme.ThemeManager
-import com.comic.shareable_theme.ui.theme.isDarkTheme
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun ThemeToggleIcon(
-    onToggleTheme: () -> Unit = {},
+    onToggleTheme: ((Boolean) -> Unit)? = null,
     modifier: Modifier = Modifier,
     colors: IconToggleButtonColors = IconButtonDefaults.iconToggleButtonColors(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+
+    enabled: Boolean = true,
+    iconSize: Int = 40,
+    iconModifier: Modifier = Modifier,
+    tint: Color = LocalContentColor.current,
 ) {
     val context = LocalContext.current
-    var isDarkTheme = isDarkTheme()
+    val isDarkTheme by ThemeManager.isDarkTheme.collectAsState()
 
     val rotation by animateFloatAsState(if (isDarkTheme) 180f else 0f)
     val scope = rememberCoroutineScope()
@@ -41,14 +48,13 @@ fun ThemeToggleIcon(
         onCheckedChange = {
             scope.launch {
                 ThemeManager.saveDarkMode(context, !isDarkTheme)
-                onToggleTheme()
+                onToggleTheme?.invoke(!isDarkTheme)
             }
 
         },
         modifier = modifier
-            .size(90.dp)
             .graphicsLayer(rotationZ = rotation),
-        enabled = true,
+        enabled = enabled,
         colors = colors,
         interactionSource = interactionSource
 
@@ -56,7 +62,8 @@ fun ThemeToggleIcon(
         Icon(
             imageVector = if (isDarkTheme) Icons.Filled.DarkMode else Icons.Filled.Brightness5,
             contentDescription = if (isDarkTheme) "Dark Mode" else "Light Mode",
-            modifier = Modifier.size(40.dp)
+            modifier = iconModifier.size(iconSize.dp),
+            tint = tint
         )
     }
 

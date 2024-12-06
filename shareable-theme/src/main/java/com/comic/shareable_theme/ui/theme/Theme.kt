@@ -13,13 +13,11 @@ import com.comic.shareable_theme.ui.theme.constants.LightColorScheme
 import com.comic.shareable_theme.ui.theme.constants.Typography
 
 @Composable
-fun isDarkTheme(): Boolean {
+private fun rememberIsDarkTheme(): Boolean {
     val context = LocalContext.current
-    LaunchedEffect(Unit) {
-        ThemeManager.initialize(context)
-    }
-    val isDarkTheme = ThemeManager.isDarkTheme.collectAsState()
-    return isDarkTheme.value
+    LaunchedEffect(Unit) { ThemeManager.initialize(context) }
+    val isDarkThemeState = ThemeManager.isDarkTheme.collectAsState()
+    return isDarkThemeState.value
 }
 
 @Composable
@@ -29,7 +27,10 @@ fun ShareableTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val isDarkTheme = darkTheme ?: isDarkTheme()
+    val context = LocalContext.current
+    LaunchedEffect(Unit) { ThemeManager.initialize(context) }
+    val isDarkTheme = darkTheme ?: ThemeManager.isDarkTheme.collectAsState().value
+
     val colorScheme =
         when {
             dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {

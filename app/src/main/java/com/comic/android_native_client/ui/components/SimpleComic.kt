@@ -62,7 +62,7 @@ fun SimpleComic(
             },
 
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         AsyncImage(
             model = comic.imageUrl,
@@ -88,6 +88,7 @@ fun SimpleComic(
 
         belowName()
     }
+
 }
 
 @Preview

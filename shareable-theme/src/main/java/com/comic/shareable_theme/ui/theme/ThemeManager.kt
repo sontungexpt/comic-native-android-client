@@ -2,46 +2,45 @@ package com.comic.shareable_theme.ui.theme
 
 import android.content.Context
 import com.comic.shareable_theme.ui.theme.datastore.ThemeDataStore
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 
 object ThemeManager {
-    private var _init = false
-    private val _isDarkTheme = MutableStateFlow<Boolean>(true)
+    private var initialized = false
+    private val _isDarkTheme = MutableStateFlow(true)
     val isDarkTheme: StateFlow<Boolean> = _isDarkTheme.asStateFlow()
-    private val mutex = Mutex()
+
+    private val themeScope = CoroutineScope(Dispatchers.IO)
+
     fun initialize(context: Context) {
-        if (_init == false) {
-            _init = true
-            GlobalScope.launch {
-                _isDarkTheme.value = ThemeDataStore.getDarkModeState(context).first()
+        if (!initialized) {
+            initialized = true
+            themeScope.launch {
+                val isDark = ThemeDataStore.getDarkModeState(context).first()
+                _isDarkTheme.emit(isDark)
             }
         }
     }
 
-    suspend fun getDarkModeState(context: Context): Flow<Boolean> {
-        return ThemeDataStore.getDarkModeState(context).also { flow ->
-            flow.collect { theme ->
-                _isDarkTheme.value = theme
-            }
+    fun observeDarkModeState(context: Context): Flow<Boolean> =
+        ThemeDataStore.getDarkModeState(context).onEach { isDarkMode ->
+            _isDarkTheme.emit(isDarkMode)
         }
-    }
 
     suspend fun saveDarkMode(context: Context, isDarkTheme: Boolean) {
-        mutex.withLock {
-            if (_isDarkTheme.value == isDarkTheme) {
-                return
+        if (_isDarkTheme.value != isDarkTheme) {
+            _isDarkTheme.emit(isDarkTheme)
+            withContext(Dispatchers.IO) {
+                ThemeDataStore.saveDarkMode(context, isDarkTheme)
             }
-            _isDarkTheme.value = isDarkTheme
-            ThemeDataStore.saveDarkMode(context, isDarkTheme)
         }
     }
 }
-

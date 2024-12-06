@@ -1,7 +1,7 @@
 package com.comic.android_native_client.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -75,34 +75,25 @@ fun Avatar(
     // only works if imageUrl is not null
     clipToBounds: Boolean = true,
 ) {
-    val MAX_IMAGE_ID = 6
-    val alternativeImageId = when ((1..MAX_IMAGE_ID).random()) {
-        1 -> R.drawable.default_avatar_1
-        2 -> R.drawable.default_avatar_2
-        3 -> R.drawable.default_avatar_3
-        4 -> R.drawable.default_avatar_4
-        5 -> R.drawable.default_avatar_5
-        6 -> R.drawable.default_avatar_6
-        else -> R.drawable.default_avatar_1
-    }
-    if (imageUrl == null) {
-        return Image(
-            painter = painterResource(alternativeImageId),
-            contentDescription = contentDescription,
-            modifier = modifier,
-            contentScale = contentScale,
-            alignment = alignment,
-            colorFilter = colorFilter,
-            alpha = alpha,
-        )
+    val alternativeImageId = remember {
+        val MAX_IMAGE_ID = 6
+        when ((1..MAX_IMAGE_ID).random()) {
+            1 -> R.drawable.default_avatar_1
+            2 -> R.drawable.default_avatar_2
+            3 -> R.drawable.default_avatar_3
+            4 -> R.drawable.default_avatar_4
+            5 -> R.drawable.default_avatar_5
+            6 -> R.drawable.default_avatar_6
+            else -> R.drawable.default_avatar_1
+        }
     }
 
     AsyncImage(
         model = imageUrl,
         error = painterResource(alternativeImageId),
+        fallback = fallback ?: painterResource(alternativeImageId),
         placeholder = placeholder,
         modifier = modifier,
-        fallback = fallback,
         contentDescription = contentDescription,
         contentScale = contentScale,
         onLoading = onLoading,
