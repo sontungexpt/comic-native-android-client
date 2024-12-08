@@ -2,7 +2,7 @@ package com.comic.validation_text_field.validator
 
 import android.content.Context
 import com.comic.validation_text_field.R
-
+ 
 class PasswordValidator(
     val regex: Regex = Regex("^(?=.*[a-z])(?=.*[A-Z])[A-Za-z0-9@$!%*?&]{8,}$"),
     val errorMessage: String? = null

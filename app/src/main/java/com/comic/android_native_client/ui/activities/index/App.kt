@@ -8,6 +8,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,8 +18,8 @@ import com.comic.android_native_client.constants.Screen
 import com.comic.android_native_client.ui.activities.index.screens.ComicDetailScreen
 import com.comic.android_native_client.ui.activities.index.screens.ComicReading
 import com.comic.android_native_client.ui.activities.index.screens.ComicSearchScreen
-import com.comic.android_native_client.ui.activities.index.screens.ExploreScreen
 import com.comic.android_native_client.ui.activities.index.screens.FavoriteScreen
+import com.comic.android_native_client.ui.activities.index.screens.explore.ExploreScreen
 import com.comic.android_native_client.ui.activities.index.screens.home.HomeScreen
 import com.comic.android_native_client.ui.activities.index.screens.profile.ProfileScreen
 import com.comic.shareable_theme.ui.theme.ShareableTheme
@@ -35,6 +37,7 @@ class AppActivity : ComponentActivity() {
 
 @Composable
 fun App(
+    horizontalPadding: Dp = 20.dp
 ) {
     val navController: NavHostController = rememberNavController()
 
@@ -49,13 +52,13 @@ fun App(
             startDestination = Screen.HOME.route
         ) {
             composable(route = Screen.HOME.route) {
-                HomeScreen()
+                HomeScreen(horizontalPadding = horizontalPadding)
             }
             composable(route = Screen.EXPLORE.route) {
-                ExploreScreen()
+                ExploreScreen(horizontalPadding = horizontalPadding)
             }
             composable(route = Screen.FAVORITE.route) {
-                FavoriteScreen()
+                FavoriteScreen(horizontalPadding = horizontalPadding)
             }
             composable(route = Screen.PROFILE.route) {
                 ProfileScreen()

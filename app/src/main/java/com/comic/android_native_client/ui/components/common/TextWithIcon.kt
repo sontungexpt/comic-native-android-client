@@ -46,12 +46,12 @@ fun TextWithIcon(
 
     prefixIcon: ImageVector? = null,
     prefixIconModifier: Modifier = Modifier,
-    prefixIconTint: Color = MaterialTheme.colorScheme.onSurface,
+    prefixIconTint: Color = MaterialTheme.colorScheme.primary,
     prefixIconContentDescription: String? = null,
 
     suffixIcon: ImageVector? = null,
     suffixIconModifier: Modifier = Modifier,
-    suffixIconTint: Color = MaterialTheme.colorScheme.onSurface,
+    suffixIconTint: Color = MaterialTheme.colorScheme.primary,
     suffixIconContentDescription: String? = null,
 
 
@@ -63,6 +63,7 @@ fun TextWithIcon(
         verticalAlignment = verticalAlignment,
         modifier = modifier
     ) {
+
         if (prefixIcon != null) {
             Icon(
                 imageVector = prefixIcon,
@@ -72,13 +73,13 @@ fun TextWithIcon(
             )
         }
 
-
         Text(
             text = text,
             style = style,
             color = color,
             modifier = textModifier,
             fontSize = fontSize,
+            fontStyle = fontStyle,
             fontWeight = fontWeight,
             fontFamily = fontFamily,
             letterSpacing = letterSpacing,
@@ -91,8 +92,6 @@ fun TextWithIcon(
             minLines = minLines,
             onTextLayout = onTextLayout,
         )
-
-
 
         if (suffixIcon != null) {
             Icon(

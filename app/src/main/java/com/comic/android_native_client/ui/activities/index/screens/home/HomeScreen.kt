@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.comic.android_native_client.R
@@ -90,6 +91,7 @@ enum class GENRE(
 
 @Composable
 fun HomeScreen(
+    horizontalPadding: Dp = 16.dp,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -97,6 +99,7 @@ fun HomeScreen(
         modifier = modifier
             .wrapContentHeight()
             .padding(24.dp)
+            .padding(horizontal = horizontalPadding)
     ) {
         items(items = GENRE.values(), key = { it }) {
             Sliceable(
