@@ -24,7 +24,7 @@ import com.comic.android_native_client.ui.components.FavoriteIconToggleable
 import com.comic.android_native_client.ui.components.common.TextWithIcon
 
 @Composable
-fun MetascoreSection(
+fun ComicStatsSection(
     views: Long,
     favorited: Boolean,
     rating: String,

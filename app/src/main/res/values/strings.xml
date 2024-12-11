@@ -83,6 +83,9 @@
     <string name="show_less">Show less</string>
     <string name="continue_reading">Continue Reading</string>
     <string name="views">Views</string>
+    <string name="comment_count">%d Comments</string>
+    <string name="reply">Reply</string>
+    <string name="view_replys">Show more %d replies</string>
 
 
 </resources>

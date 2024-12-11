@@ -97,7 +97,7 @@ fun ComicDetailScreen(
 
         item {
             var favorited = remember { mutableStateOf(false) }
-            MetascoreSection(
+            ComicStatsSection(
                 views = 100,
                 rating = "200",
                 favorited = favorited.value,
