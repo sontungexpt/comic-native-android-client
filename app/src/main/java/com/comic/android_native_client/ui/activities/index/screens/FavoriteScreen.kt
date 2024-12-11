@@ -59,16 +59,17 @@ fun FavoriteScreen(
                 SimpleComic(
                     comic = it,
                     enabled = true,
-                    belowName = {
+                    footer = {
                         TextWithIcon(
                             prefixIcon = Icons.Default.CalendarToday,
                             prefixIconTint = MaterialTheme.colorScheme.primary,
                             text = "1 day ago",
                             style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
                         )
                     },
-                    modifier = Modifier.height(270.dp)
+                    modifier = Modifier.height(284.dp)
 
                 )
             }

@@ -10,16 +10,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.comic.android_native_client.exmaple.data.genres
-import com.comic.android_native_client.ui.activities.index.constants.GenreIconMap
+import com.comic.android_native_client.ui.activities.index.constants.GenreIconProvider
+import com.comic.android_native_client.ui.components.GenreCard
 
 @Composable
 fun ExploreScreen(
     horizontalPadding: Dp = 20.dp
 ) {
-
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .padding(horizontal = horizontalPadding)
@@ -39,18 +41,19 @@ fun ExploreScreen(
                 contentType = { it.javaClass },
                 key = { it.id }
             ) { genre ->
-                GenreIconMap[genre.name]?.let {
+                val icon = GenreIconProvider.provideGenreIconMap(context)[genre.name]
+                if (icon != null) {
                     GenreCard(
                         genre = genre,
-                        icon = it,
+                        icon = icon,
                     )
                 }
             }
         }
     }
-
-
 }
+
+
 
 
 

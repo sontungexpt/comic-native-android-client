@@ -54,7 +54,6 @@ fun TextWithIcon(
     suffixIconTint: Color = MaterialTheme.colorScheme.primary,
     suffixIconContentDescription: String? = null,
 
-
     horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(8.dp),
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
 ) {

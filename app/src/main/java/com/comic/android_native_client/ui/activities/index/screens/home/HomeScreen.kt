@@ -8,61 +8,26 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.carousel.CarouselDefaults
+import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
+import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.comic.android_native_client.R
+import com.comic.android_native_client.constants.Screen
 import com.comic.android_native_client.data.model.Comic
+import com.comic.android_native_client.exmaple.data.comics
 import com.comic.android_native_client.ui.components.SimpleComic
 import com.comic.android_native_client.ui.components.common.Sliceable
-import com.comic.shareable_theme.ui.theme.ShareableTheme
 
-val list = listOf(
-    Comic(
-        id = "1",
-        authors = listOf("Author"),
-        imageUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
-        name = "Nam chinh muon ly hon nhung vo anh khong chiu",
-        description = "Comic description",
-        rating = 5u,
-        newChapters = listOf()
-
-    ),
-    Comic(
-        id = "2",
-        authors = listOf("Author"),
-        imageUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
-        name = "Nam chinh muon ly hon nhung vo anh khong chiu",
-        description = "Comic description",
-        rating = 5u,
-        newChapters = listOf()
-
-    ), Comic(
-        id = "3",
-        authors = listOf("Author"),
-        imageUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
-        name = "Nam chinh muon ly hon nhung vo anh khong chiu",
-        description = "Comic description",
-        rating = 5u,
-        newChapters = listOf()
-
-    ), Comic(
-        id = "4",
-        authors = listOf("Author"),
-        imageUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
-        name = "Nam chinh muon ly hon nhung vo anh khong chiu",
-        description = "Comic description",
-        rating = 5u,
-        newChapters = listOf()
-
-    )
-)
 
 enum class GENRE(
     @StringRes
@@ -70,7 +35,7 @@ enum class GENRE(
     val mapId: String,
 ) {
     COLOR(
-        title = R.string.color_comic_title,
+        title = R.string.colorful_comic_title,
         mapId = ""
     ),
     COMEDY(
@@ -89,34 +54,86 @@ enum class GENRE(
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    navController: NavController,
     horizontalPadding: Dp = 16.dp,
     modifier: Modifier = Modifier
 ) {
+    val carouselState = rememberCarouselState { 10 }
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(32.dp),
         modifier = modifier
             .wrapContentHeight()
-            .padding(24.dp)
+            .padding(vertical = 24.dp)
             .padding(horizontal = horizontalPadding)
     ) {
-        items(items = GENRE.values(), key = { it }) {
+        item(key = "_outstanding") {
+            Text(
+                text = stringResource(id = R.string.outstanding_comic_title),
+                fontWeight = FontWeight.W600,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+            HorizontalMultiBrowseCarousel(
+                flingBehavior = CarouselDefaults.singleAdvanceFlingBehavior(state = carouselState),
+                state = carouselState,
+                preferredItemWidth = 280.dp,
+                modifier = Modifier,
+                itemSpacing = 12.dp,
+            ) { index ->
+                SimpleComic(
+                    comic = Comic(
+                        id = "1",
+                        authors = listOf("Author"),
+                        imageUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
+                        name = "Nam chinh muon ly hon nhung vo anh khong chiu",
+                        description = "Comic description",
+                        rating = 5u,
+                        newChapters = listOf()
+
+                    ),
+                    enabled = true,
+                    nameFontWeight = FontWeight.W500,
+                    onclick = { },
+                    modifier = Modifier
+                        .maskClip(MaterialTheme.shapes.medium)
+                        .width(300.dp)
+                        .height(264.dp)
+                )
+            }
+
+
+        }
+
+        items(items = GENRE.entries, key = { it }) {
             Sliceable(
                 loading = false,
                 label = stringResource(it.title),
-                labelFontSize = 24.sp,
+                labelStyle = MaterialTheme.typography.titleLarge,
                 labelFontWeight = FontWeight.W600,
-                items = list
+                items = comics
             ) {
                 SimpleComic(
                     comic = it,
                     enabled = true,
                     nameFontWeight = FontWeight.W500,
-                    onclick = { },
+                    onclick = {
+                        navController.navigate(
+                            route = Screen.ComicDetail(
+                                id = it.id,
+                                authors = it.authors,
+                                imageUrl = it.imageUrl,
+                                name = it.name,
+                                description = it.description,
+                            )
+                        )
+                    },
                     modifier = Modifier
-                        .width(148.dp)
-                        .height(264.dp)
+                        .width(154.dp)
+                        .height(248.dp)
                 )
             }
         }
@@ -126,14 +143,5 @@ fun HomeScreen(
 
 }
 
-@Composable
-@Preview
-fun HomeScreenPreview() {
-    ShareableTheme {
-        Scaffold { innerPadding ->
-            HomeScreen(modifier = Modifier.padding(innerPadding))
 
-        }
-    }
-}
 

@@ -9,9 +9,10 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+kotlinxSerializationJson = "1.6.0"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
-composeBom = "2024.04.01"
+composeBom = "2024.11.00"
 roomCompiler = "2.6.1"
 iconsExtend = "1.7.5"
 securityCrypto = "1.0.0"
@@ -28,6 +29,7 @@ navigationCompose = "2.8.4"
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
@@ -49,6 +51,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "iconsExtend" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
@@ -60,8 +63,12 @@ androidx-lifecycle-viewmodel-savedstate = { module = "androidx.lifecycle:lifecyc
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "navigationCompose" }
+androidx-navigation-dynamic-features-fragment = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "navigationCompose" }
+androidx-navigation-ui = { module = "androidx.navigation:navigation-ui", version.ref = "navigationCompose" }
+androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "navigationCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }

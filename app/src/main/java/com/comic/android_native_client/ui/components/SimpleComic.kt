@@ -1,18 +1,16 @@
 package com.comic.android_native_client.ui.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -37,8 +35,7 @@ fun SimpleComic(
     onclick: () -> Unit = {},
     modifier: Modifier,
     enabled: Boolean = true,
-    cornerShape: RoundedCornerShape = RoundedCornerShape(20.dp),
-
+    shape: CornerBasedShape = MaterialTheme.shapes.large,
     maxNameLines: Int = 1,
     nameFontSize: TextUnit = TextUnit.Unspecified,
     nameStyle: TextStyle = MaterialTheme.typography.titleMedium,
@@ -49,20 +46,17 @@ fun SimpleComic(
     imageModifier: Modifier = Modifier,
     nameModifier: Modifier = Modifier,
 
-    belowName: @Composable () -> Unit = {},
+    footer: @Composable () -> Unit = {},
 
     ) {
     Column(
         modifier = modifier
-            .clip(cornerShape)
+            .clip(shape)
             .clickable {
                 if (enabled) {
                     onclick()
                 }
             },
-
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         AsyncImage(
             model = comic.imageUrl,
@@ -70,7 +64,7 @@ fun SimpleComic(
             contentDescription = null,
             modifier = imageModifier
                 .fillMaxSize()
-                .clip(cornerShape)
+                .clip(shape)
                 .weight(1f),
         )
         Text(
@@ -86,7 +80,7 @@ fun SimpleComic(
             modifier = nameModifier.fillMaxWidth()
         )
 
-        belowName()
+        footer()
     }
 
 }

@@ -1,4 +1,4 @@
-package com.comic.android_native_client.ui.activities.index.screens.explore
+package com.comic.android_native_client.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -33,8 +33,7 @@ fun GenreCard(
 ) {
     Card(
         onClick = onClick,
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         elevation = CardDefaults.cardElevation(8.dp),

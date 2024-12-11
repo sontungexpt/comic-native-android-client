@@ -16,6 +16,11 @@
     <string name="forgot_password">Forgot Password</string>
     <string name="exit">Exit</string>
     <string name="play_again">Play Again</string>
+    <string name="favorite">Favorite</string>
+    <string name="view">View</string>
+    <string name="rating">Rating</string>
+    <string name="search">Search</string>
+
 
     <!-- others -->
     <string name="loginTitle">Welcome Back</string>
@@ -47,10 +52,37 @@
     <string name="explore_screen_label">Explore</string>
     <string name="comic_detail_screen_label">Comic Detail</string>
     <string name="comic_reading_screen_label">Reading</string>
-    <string name="search_screen_label">Search</string>
 
-    <string name="color_comic_title">Color</string>
+    <string name="colorful_comic_title">Colorful</string>
     <string name="comedy_comic_title">Comedy</string>
     <string name="adventure_comic_title">Adventure</string>
     <string name="reincarnation_comic_title">Reincarnation</string>
+    <string name="comic_view_int">Views: %d</string>
+
+    <string name="date_rank">Date Rank: %d</string>
+    <string name="month_rank">Month Rank: %d</string>
+
+
+    <string name="genre_action">Action</string>
+    <string name="genre_adventure">Adventure</string>
+    <string name="genre_anime">Anime</string>
+    <string name="genre_reincarnation">Reincarnation</string>
+    <string name="genre_ancient">Ancient</string>
+    <string name="genre_comedy">Comedy</string>
+    <string name="genre_drama">Drama</string>
+    <string name="genre_fantasy">Fantasy</string>
+    <string name="genre_historical">Historical</string>
+    <string name="genre_horror">Horror</string>
+    <string name="genre_mystery">Mystery</string>
+    <string name="genre_psychological">Psychological</string>
+    <string name="genre_romance">Romance</string>
+    <string name="outstanding_comic_title">Outstanding</string>
+    <string name="comic_introduction_title">Introduction</string>
+    <string name="comic_summary_title">Summary</string>
+    <string name="show_more">Show More</string>
+    <string name="show_less">Show less</string>
+    <string name="continue_reading">Continue Reading</string>
+    <string name="views">Views</string>
+
+
 </resources>

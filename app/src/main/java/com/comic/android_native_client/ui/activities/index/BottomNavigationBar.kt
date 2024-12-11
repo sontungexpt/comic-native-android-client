@@ -25,10 +25,10 @@ fun BottomNavigationBar(
 ) {
     val items = remember {
         listOf(
-            Screen.HOME,
-            Screen.EXPLORE,
-            Screen.FAVORITE,
-            Screen.PROFILE
+            Screen.Home,
+            Screen.Explore,
+            Screen.Favorite,
+            Screen.Profile
         )
     }
     NavigationBar(

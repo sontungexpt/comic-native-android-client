@@ -14,14 +14,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.comic.android_native_client.constants.Screen
-import com.comic.android_native_client.ui.activities.index.screens.ComicDetailScreen
-import com.comic.android_native_client.ui.activities.index.screens.ComicReading
 import com.comic.android_native_client.ui.activities.index.screens.ComicSearchScreen
 import com.comic.android_native_client.ui.activities.index.screens.FavoriteScreen
+import com.comic.android_native_client.ui.activities.index.screens.detail.ComicDetailScreen
 import com.comic.android_native_client.ui.activities.index.screens.explore.ExploreScreen
 import com.comic.android_native_client.ui.activities.index.screens.home.HomeScreen
 import com.comic.android_native_client.ui.activities.index.screens.profile.ProfileScreen
+import com.comic.android_native_client.ui.activities.index.screens.reading.ComicReadingScreen
 import com.comic.shareable_theme.ui.theme.ShareableTheme
 
 
@@ -37,7 +38,7 @@ class AppActivity : ComponentActivity() {
 
 @Composable
 fun App(
-    horizontalPadding: Dp = 20.dp
+    horizontalPadding: Dp = 18.dp
 ) {
     val navController: NavHostController = rememberNavController()
 
@@ -49,29 +50,41 @@ fun App(
         NavHost(
             modifier = Modifier.padding(innerPadding),
             navController = navController,
-            startDestination = Screen.HOME.route
+            startDestination = Screen.Home.route
         ) {
-            composable(route = Screen.HOME.route) {
-                HomeScreen(horizontalPadding = horizontalPadding)
+            composable(route = Screen.Home.route) {
+                HomeScreen(
+                    navController = navController,
+                    horizontalPadding = horizontalPadding
+                )
             }
-            composable(route = Screen.EXPLORE.route) {
+            composable(route = Screen.Explore.route) {
                 ExploreScreen(horizontalPadding = horizontalPadding)
             }
-            composable(route = Screen.FAVORITE.route) {
+            composable(route = Screen.Favorite.route) {
                 FavoriteScreen(horizontalPadding = horizontalPadding)
             }
-            composable(route = Screen.PROFILE.route) {
+            composable(route = Screen.Profile.route) {
                 ProfileScreen()
             }
 
             // hidden screen
-            composable(route = Screen.COMIC_DETAIL.route) {
-                ComicDetailScreen()
+            composable<Screen.ComicDetail> {
+                val currentComic = it.toRoute<Screen.ComicDetail>()
+                ComicDetailScreen(
+                    horizontalPadding = horizontalPadding,
+                    currentComic = currentComic,
+                    navController = navController
+                )
             }
-            composable(route = Screen.COMIC_READING.route) {
-                ComicReading()
+            composable<Screen.ComicReading> {
+                val currentChapterInfo = it.toRoute<Screen.ComicReading>()
+                ComicReadingScreen(
+                    horizontalPadding = horizontalPadding,
+                    currentChapter = currentChapterInfo
+                )
             }
-            composable(route = Screen.SEARCH.route) {
+            composable(route = Screen.Search.route) {
                 ComicSearchScreen()
             }
         }

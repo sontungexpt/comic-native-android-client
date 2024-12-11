@@ -20,11 +20,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import com.comic.android_native_client.common.Identifiable
 
 
-interface SliceableItem<T> {
-    val id: T
-}
+interface SliceableItem<T> : Identifiable<T>
 
 @Composable
 fun <ID : Any, T : SliceableItem<ID>> Sliceable(
@@ -38,6 +37,7 @@ fun <ID : Any, T : SliceableItem<ID>> Sliceable(
     itemsWrapperModifier: Modifier = Modifier,
 
     label: String? = null,
+    labelGap: Dp = 16.dp,
     labelFontSize: TextUnit = TextUnit.Unspecified,
     labelFontFamily: FontFamily? = null,
     labelFontWeight: FontWeight? = null,
@@ -51,7 +51,7 @@ fun <ID : Any, T : SliceableItem<ID>> Sliceable(
     ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(labelGap)
     ) {
         if (label != null) {
             Text(
