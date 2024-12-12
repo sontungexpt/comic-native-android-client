@@ -88,7 +88,12 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
 
 
+    val emoji2_version = "1.5.0"
 
+    implementation(libs.androidx.emoji2)
+    implementation(libs.androidx.emoji2.views)
+    implementation(libs.androidx.emoji2.views.helper)
+    implementation(libs.androidx.emoji2.emojipicker)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)

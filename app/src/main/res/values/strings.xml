@@ -83,6 +83,7 @@
     <string name="view_replys">Show more %d replies</string>
     <string name="comic_view_int">Views: %d</string>
     <string name="terms">Terms</string>
+    <string name="input_comment">Write your comment ...</string>
 
 
 </resources>

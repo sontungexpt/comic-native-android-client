@@ -41,8 +41,8 @@ val DarkColorScheme =
         surfaceContainerLow = Color(0xFF272732), // Nền container độ cao thấp
         surfaceContainerLowest = Color(0xFF1A1A26), // Nền container thấp nhất
 
-        error = Color(0xCF6679),
-        onError = Color(0x000000),
+        error = Color(0xFFCF6679),
+        onError = Color(0xFF000000),
         errorContainer = Color(0xFF370B0E), // Nền cho thành phần liên quan đến lỗi
         onErrorContainer = Color(0xFFFFB4A9), // Văn bản trên nền màu lỗi
 

@@ -5,28 +5,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.filled.EmojiEmotions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -145,7 +135,22 @@ fun ComicReadingScreen(
                     }
                 }
 
-                CommentInput()
+                var comment by remember { mutableStateOf("") }
+                var isSendError by remember { mutableStateOf(false) }
+                CommentInput(
+                    comment = comment,
+                    onCommentChange = {
+                        isSendError = false
+                        comment = it
+                    },
+                    isError = isSendError,
+                    onSendComment = {
+                        isSendError = true
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surfaceBright)
+                )
             }
 
         }
@@ -153,35 +158,4 @@ fun ComicReadingScreen(
 }
 
 
-@Composable
-fun CommentInput() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        // Emoji picker
-        IconButton(onClick = { /* Mở emoji picker */ }) {
-            Icon(imageVector = Icons.Default.EmojiEmotions, contentDescription = "Emoji")
-        }
 
-        // Input field
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            modifier = Modifier.weight(1f),
-            placeholder = { Text("Viết bình luận...") },
-
-            )
-
-        Spacer(modifier = Modifier.width(8.dp))
-
-        // Send button
-        IconButton(onClick = { /* Xử lý gửi bình luận */ }) {
-            Icon(imageVector = Icons.AutoMirrored.Filled.Send, contentDescription = "Gửi")
-        }
-    }
-}
