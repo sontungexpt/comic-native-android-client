@@ -1,4 +1,4 @@
-package com.comic.android_native_client.ui.activities.index.screens.profile
+package com.comic.android_native_client.ui.activities.index.screens.profile.index
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

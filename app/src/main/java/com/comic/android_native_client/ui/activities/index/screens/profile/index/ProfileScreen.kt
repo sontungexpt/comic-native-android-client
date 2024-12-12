@@ -1,4 +1,4 @@
-package com.comic.android_native_client.ui.activities.index.screens.profile
+package com.comic.android_native_client.ui.activities.index.screens.profile.index
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,12 +23,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.comic.android_native_client.ui.components.common.TextWithIcon
 import com.comic.shareable_theme.ui.theme.ui.RowThemeChoosable
 
 @Composable
 fun ProfileScreen(
+    horizontalPadding: Dp = 18.dp,
 ) {
     val paddingX = 16
     LazyColumn(

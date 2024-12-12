@@ -14,6 +14,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.comic.android_native_client.constants.Screen
 import com.comic.android_native_client.ui.activities.index.screens.ComicSearchScreen
@@ -21,7 +22,9 @@ import com.comic.android_native_client.ui.activities.index.screens.FavoriteScree
 import com.comic.android_native_client.ui.activities.index.screens.detail.ComicDetailScreen
 import com.comic.android_native_client.ui.activities.index.screens.explore.ExploreScreen
 import com.comic.android_native_client.ui.activities.index.screens.home.HomeScreen
-import com.comic.android_native_client.ui.activities.index.screens.profile.ProfileScreen
+import com.comic.android_native_client.ui.activities.index.screens.profile.AboutUsScreen
+import com.comic.android_native_client.ui.activities.index.screens.profile.PrivacyPolycyScreen
+import com.comic.android_native_client.ui.activities.index.screens.profile.index.ProfileScreen
 import com.comic.android_native_client.ui.activities.index.screens.reading.ComicReadingScreen
 import com.comic.shareable_theme.ui.theme.ShareableTheme
 
@@ -64,8 +67,34 @@ fun App(
             composable(route = Screen.Favorite.route) {
                 FavoriteScreen(horizontalPadding = horizontalPadding)
             }
-            composable(route = Screen.Profile.route) {
-                ProfileScreen()
+
+            navigation(
+                route = Screen.ProfileGraph.route,
+                startDestination = Screen.ProfileGraph.Profile.route
+            ) {
+                composable(route = Screen.ProfileGraph.Profile.route) {
+                    ProfileScreen(horizontalPadding = horizontalPadding)
+                }
+                composable(route = Screen.ProfileGraph.PrivacyPolicy.route) {
+                    PrivacyPolycyScreen(
+                        navController = navController,
+                        horizontalPadding = horizontalPadding
+                    )
+                }
+                composable(route = Screen.ProfileGraph.AboutUs.route) {
+                    AboutUsScreen(
+                        navController = navController,
+                        horizontalPadding = horizontalPadding
+                    )
+                }
+                composable(route = Screen.ProfileGraph.Terms.route) {
+                    AboutUsScreen(
+                        navController = navController,
+                        horizontalPadding = horizontalPadding
+                    )
+                }
+
+
             }
 
             // hidden screen

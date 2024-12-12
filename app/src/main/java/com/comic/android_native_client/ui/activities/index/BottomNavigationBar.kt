@@ -28,7 +28,7 @@ fun BottomNavigationBar(
             Screen.Home,
             Screen.Explore,
             Screen.Favorite,
-            Screen.Profile
+            Screen.ProfileGraph
         )
     }
     NavigationBar(

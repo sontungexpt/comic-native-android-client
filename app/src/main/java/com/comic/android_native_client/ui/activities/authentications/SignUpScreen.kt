@@ -81,7 +81,7 @@ fun SignUpScreen(
                 .width(100.dp)
         )
         Text(
-            text = stringResource(R.string.loginTitle),
+            text = stringResource(R.string.welcome_back),
             color = Color.White
         )
         Spacer(modifier = Modifier.height(14.dp))

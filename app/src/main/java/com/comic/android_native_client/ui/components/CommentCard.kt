@@ -1,11 +1,11 @@
 package com.comic.android_native_client.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.comic.android_native_client.R
 import com.comic.android_native_client.ui.components.common.TextWithIcon
@@ -38,24 +39,26 @@ fun CommentCard(
         modifier = modifier
             .fillMaxWidth()
     ) {
-        Box(
+
+        Avatar(
             modifier = Modifier
                 .fillMaxWidth(0.12f)
                 .aspectRatio(1f)
-                .clip(CircleShape)
-        ) {
-            Avatar(imageUrl = authorAvatar)
-        }
+                .offset(y = 4.dp)
+                .clip(CircleShape), imageUrl = authorAvatar
+        )
 
         Column(
             modifier = Modifier
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             // Author Name
             Text(
                 text = authorName,
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.labelLarge.copy(
+                    lineHeight = TextUnit.Unspecified,
+                ),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 

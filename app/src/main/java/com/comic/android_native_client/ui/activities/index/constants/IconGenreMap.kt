@@ -16,19 +16,19 @@ object GenreIconProvider {
     fun provideGenreIconMap(context: Context): Map<String, ImageVector?> {
         if (!::genreIconMap.isInitialized) {
             genreIconMap = mapOf(
-                context.getString(R.string.genre_action) to Icons.Default.PlayArrow,
-                context.getString(R.string.genre_adventure) to Icons.Default.PlayArrow,
-                context.getString(R.string.genre_anime) to Icons.Default.SentimentSatisfied,
-                context.getString(R.string.genre_reincarnation) to Icons.Default.Refresh,
-                context.getString(R.string.genre_ancient) to Icons.Default.Flag,
-                context.getString(R.string.genre_comedy) to Icons.Default.SentimentSatisfied,
-                context.getString(R.string.genre_drama) to Icons.Default.Refresh,
-                context.getString(R.string.genre_fantasy) to Icons.Default.Flag,
-                context.getString(R.string.genre_historical) to Icons.Default.PlayArrow,
-                context.getString(R.string.genre_horror) to Icons.Default.SentimentSatisfied,
-                context.getString(R.string.genre_mystery) to Icons.Default.Refresh,
-                context.getString(R.string.genre_psychological) to Icons.Default.Flag,
-                context.getString(R.string.genre_romance) to Icons.Default.SentimentSatisfied
+                context.getString(R.string.action) to Icons.Default.PlayArrow,
+                context.getString(R.string.adventure) to Icons.Default.PlayArrow,
+                context.getString(R.string.anime) to Icons.Default.SentimentSatisfied,
+                context.getString(R.string.reincarnation) to Icons.Default.Refresh,
+                context.getString(R.string.ancient) to Icons.Default.Flag,
+                context.getString(R.string.comedy) to Icons.Default.SentimentSatisfied,
+                context.getString(R.string.drama) to Icons.Default.Refresh,
+                context.getString(R.string.fantasy) to Icons.Default.Flag,
+                context.getString(R.string.historical) to Icons.Default.PlayArrow,
+                context.getString(R.string.horror) to Icons.Default.SentimentSatisfied,
+                context.getString(R.string.mystery) to Icons.Default.Refresh,
+                context.getString(R.string.psychological) to Icons.Default.Flag,
+                context.getString(R.string.romance) to Icons.Default.SentimentSatisfied
             )
         }
         return genreIconMap

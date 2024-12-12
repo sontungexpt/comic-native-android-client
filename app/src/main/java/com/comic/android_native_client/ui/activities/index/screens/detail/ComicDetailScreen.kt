@@ -115,7 +115,7 @@ fun ComicDetailScreen(
             Text(
                 modifier = Modifier.padding(bottom = 4.dp),
                 style = MaterialTheme.typography.titleMedium,
-                text = stringResource(R.string.comic_introduction_title)
+                text = stringResource(R.string.introduction)
             )
             Column {
                 Text(
@@ -129,7 +129,7 @@ fun ComicDetailScreen(
 
         item(key = "comic_summary") {
             Text(
-                text = stringResource(R.string.comic_summary_title),
+                text = stringResource(R.string.summary),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )

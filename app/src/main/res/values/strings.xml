@@ -5,6 +5,7 @@
     <string name="skip">Skip</string>
     <string name="submit">Submit</string>
     <string name="password">Password</string>
+    <string name="email">Email</string>
     <string name="username">Username</string>
     <string name="passwordExp">Tung1234</string>
     <string name="hidePassword">Hide Password</string>
@@ -16,14 +17,42 @@
     <string name="forgot_password">Forgot Password</string>
     <string name="exit">Exit</string>
     <string name="play_again">Play Again</string>
-    <string name="favorite">Favorite</string>
     <string name="view">View</string>
     <string name="rating">Rating</string>
     <string name="search">Search</string>
+    <string name="home">Home</string>
+    <string name="favorite">Favorite</string>
+    <string name="profile">Profile</string>
+    <string name="explore">Explore</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="about_us">About Us</string>
+    <string name="show_more">Show More</string>
+    <string name="show_less">Show less</string>
+    <string name="continue_reading">Continue Reading</string>
+    <string name="views">Views</string>
+    <string name="reply">Reply</string>
+    <string name="outstanding">Outstanding</string>
+    <string name="introduction">Introduction</string>
+    <string name="summary">Summary</string>
+    <string name="action">Action</string>
+    <string name="adventure">Adventure</string>
+    <string name="anime">Anime</string>
+    <string name="reincarnation">Reincarnation</string>
+    <string name="ancient">Ancient</string>
+    <string name="comedy">Comedy</string>
+    <string name="drama">Drama</string>
+    <string name="fantasy">Fantasy</string>
+    <string name="historical">Historical</string>
+    <string name="horror">Horror</string>
+    <string name="mystery">Mystery</string>
+    <string name="psychological">Psychological</string>
+    <string name="romance">Romance</string>
+    <string name="colorful">Colorful</string>
+    <string name="reading">Reading</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="comic_detail">Comic Detail</string>
 
-
-    <!-- others -->
-    <string name="loginTitle">Welcome Back</string>
 
     <!-- error message-->
     <string name="validatation_text_field_invalid_email_address_msg">"The string %s is not a valid email address"</string>
@@ -35,8 +64,8 @@
 
     <string name="title_activity_login">LoginActivity</string>
 
-    <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
+    <string name="prompt_email">Email</string>
 
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -44,48 +73,16 @@
     <string name="welcome_msg">"Welcome !"</string>
     <string name="invalid_username_msg">Not a valid username</string>
     <string name="invalid_password_msg">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
 
-    <string name="home_screen_label">Home</string>
-    <string name="favorite_screen_label">Favorite</string>
-    <string name="profile_screen_label">Profile</string>
-    <string name="explore_screen_label">Explore</string>
-    <string name="comic_detail_screen_label">Comic Detail</string>
-    <string name="comic_reading_screen_label">Reading</string>
-
-    <string name="colorful_comic_title">Colorful</string>
-    <string name="comedy_comic_title">Comedy</string>
-    <string name="adventure_comic_title">Adventure</string>
-    <string name="reincarnation_comic_title">Reincarnation</string>
-    <string name="comic_view_int">Views: %d</string>
 
     <string name="date_rank">Date Rank: %d</string>
     <string name="month_rank">Month Rank: %d</string>
 
 
-    <string name="genre_action">Action</string>
-    <string name="genre_adventure">Adventure</string>
-    <string name="genre_anime">Anime</string>
-    <string name="genre_reincarnation">Reincarnation</string>
-    <string name="genre_ancient">Ancient</string>
-    <string name="genre_comedy">Comedy</string>
-    <string name="genre_drama">Drama</string>
-    <string name="genre_fantasy">Fantasy</string>
-    <string name="genre_historical">Historical</string>
-    <string name="genre_horror">Horror</string>
-    <string name="genre_mystery">Mystery</string>
-    <string name="genre_psychological">Psychological</string>
-    <string name="genre_romance">Romance</string>
-    <string name="outstanding_comic_title">Outstanding</string>
-    <string name="comic_introduction_title">Introduction</string>
-    <string name="comic_summary_title">Summary</string>
-    <string name="show_more">Show More</string>
-    <string name="show_less">Show less</string>
-    <string name="continue_reading">Continue Reading</string>
-    <string name="views">Views</string>
     <string name="comment_count">%d Comments</string>
-    <string name="reply">Reply</string>
     <string name="view_replys">Show more %d replies</string>
+    <string name="comic_view_int">Views: %d</string>
+    <string name="terms">Terms</string>
 
 
 </resources>

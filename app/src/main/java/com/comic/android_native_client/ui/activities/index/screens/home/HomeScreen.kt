@@ -35,20 +35,20 @@ enum class GENRE(
     val mapId: String,
 ) {
     COLOR(
-        title = R.string.colorful_comic_title,
+        title = R.string.colorful,
         mapId = ""
     ),
     COMEDY(
-        title = R.string.comedy_comic_title,
+        title = R.string.comedy,
         mapId = ""
     ),
     ADVENTURE(
-        title = R.string.adventure_comic_title,
+        title = R.string.adventure,
         mapId = ""
     ),
     REINCARNATION
         (
-        title = R.string.reincarnation_comic_title,
+        title = R.string.reincarnation,
         mapId = ""
     )
 
@@ -71,7 +71,7 @@ fun HomeScreen(
     ) {
         item(key = "_outstanding") {
             Text(
-                text = stringResource(id = R.string.outstanding_comic_title),
+                text = stringResource(id = R.string.outstanding),
                 fontWeight = FontWeight.W600,
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(bottom = 16.dp)
