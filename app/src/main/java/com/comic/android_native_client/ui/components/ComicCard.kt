@@ -90,10 +90,9 @@ fun ComicCard(
             }
             Column(
                 modifier = Modifier
-                    .padding(start = 8.dp, end = 8.dp, top = 0.dp, bottom = 0.dp)
-                    .fillMaxHeight(0.9f)
+                    .padding(8.dp)
                     .fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth()

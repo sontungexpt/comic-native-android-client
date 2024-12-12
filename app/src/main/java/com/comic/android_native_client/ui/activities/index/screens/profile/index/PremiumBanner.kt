@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.comic.android_native_client.R
@@ -25,6 +27,7 @@ import com.comic.android_native_client.ui.components.common.TextWithIcon
 fun PremiumBanner(
     paddingX: Int = 16,
     height: Int = 200,
+    headlineStyle: TextStyle = MaterialTheme.typography.headlineSmall,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -33,7 +36,8 @@ fun PremiumBanner(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         TextWithIcon(
-            text = "Upgrade to Premium",
+            text = stringResource(id = R.string.upgrade_to_premium),
+            style = headlineStyle,
             prefixIcon = Icons.Default.Star,
             prefixIconTint = MaterialTheme.colorScheme.onSurface,
             textModifier = Modifier.padding(start = 8.dp),

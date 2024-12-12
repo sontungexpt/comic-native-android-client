@@ -31,7 +31,7 @@ sealed class Screen(
             Screen("privacy_policy", R.string.privacy_policy, Icons.Filled.Policy)
 
         object AboutUs : Screen("about_us", R.string.about_us, Icons.Filled.Info)
-        object Terms : Screen("terms", R.string.terms, Icons.Filled.Description)
+        object Terms : Screen("terms_and_conditions", R.string.terms, Icons.Filled.Description)
 
     }
 

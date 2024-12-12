@@ -4,6 +4,7 @@ import android.content.Context
 import com.comic.shareable_theme.ui.theme.datastore.ThemeDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,14 +12,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 object ThemeManager {
     private var initialized = false
     private val _isDarkTheme = MutableStateFlow(true)
     val isDarkTheme: StateFlow<Boolean> = _isDarkTheme.asStateFlow()
 
-    private val themeScope = CoroutineScope(Dispatchers.IO)
+    private var currentJob: Job? = null
+    val themeScope = CoroutineScope(Dispatchers.IO)
 
     fun initialize(context: Context) {
         if (!initialized) {
@@ -37,8 +38,9 @@ object ThemeManager {
 
     suspend fun saveDarkMode(context: Context, isDarkTheme: Boolean) {
         if (_isDarkTheme.value != isDarkTheme) {
-            _isDarkTheme.emit(isDarkTheme)
-            withContext(Dispatchers.IO) {
+            _isDarkTheme.value = isDarkTheme
+            currentJob?.cancel()
+            currentJob = themeScope.launch {
                 ThemeDataStore.saveDarkMode(context, isDarkTheme)
             }
         }

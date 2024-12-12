@@ -73,7 +73,10 @@ fun App(
                 startDestination = Screen.ProfileGraph.Profile.route
             ) {
                 composable(route = Screen.ProfileGraph.Profile.route) {
-                    ProfileScreen(horizontalPadding = horizontalPadding)
+                    ProfileScreen(
+                        navController = navController,
+                        horizontalPadding = horizontalPadding
+                    )
                 }
                 composable(route = Screen.ProfileGraph.PrivacyPolicy.route) {
                     PrivacyPolycyScreen(
