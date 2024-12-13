@@ -38,7 +38,7 @@ fun ThemeSwitcher(
             thumbContent = thumbContent,
             onCheckedChange = { isDark ->
                 scope.launch {
-                    ThemeDataStore.saveDarkMode(context, !isDark)
+                    ThemeDataStore.setDarkMode(context, !isDark)
                     onToggleTheme?.invoke(!isDark)
                 }
             }

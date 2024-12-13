@@ -13,6 +13,9 @@ class ValidableTextFieldState(
     val fieldName: String,
     val validators: List<TextFieldValidator>,
     val lazy: Boolean = false,
+
+    // the list of state that will validate in same time
+    var stateFriends: List<ValidableTextFieldState> = emptyList()
 ) {
     var _value: MutableState<String> = mutableStateOf(value)
     var value: String
@@ -43,6 +46,9 @@ class ValidableTextFieldState(
                 _valid.value = false
                 break
             }
+        }
+        for (state in stateFriends) {
+            state.validate(context)
         }
         return _valid.value
     }

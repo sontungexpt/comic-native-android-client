@@ -41,7 +41,7 @@ object ThemeManager {
             _isDarkTheme.value = isDarkTheme
             currentJob?.cancel()
             currentJob = themeScope.launch {
-                ThemeDataStore.saveDarkMode(context, isDarkTheme)
+                ThemeDataStore.setDarkMode(context, isDarkTheme)
             }
         }
     }

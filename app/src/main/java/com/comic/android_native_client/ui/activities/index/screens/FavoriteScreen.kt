@@ -17,10 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.comic.android_native_client.exmaple.data.comics
-import com.comic.android_native_client.ui.activities.layout.HeaderScreen
 import com.comic.android_native_client.ui.components.SimpleComic
 import com.comic.android_native_client.ui.components.common.LoadingCircle
 import com.comic.android_native_client.ui.components.common.TextWithIcon
+import com.comic.android_native_client.ui.components.layout.HeaderScreen
 
 
 @Composable

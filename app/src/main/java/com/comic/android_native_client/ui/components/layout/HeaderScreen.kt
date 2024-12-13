@@ -1,4 +1,4 @@
-package com.comic.android_native_client.ui.activities.layout
+package com.comic.android_native_client.ui.components.layout
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

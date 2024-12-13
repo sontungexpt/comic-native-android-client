@@ -50,6 +50,8 @@ android {
 
 dependencies {
     // dependency injection
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.fragment)
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
@@ -67,6 +69,7 @@ dependencies {
 
     //data store
     implementation(libs.androidx.security.crypto)
+    implementation(libs.androidx.datastore.preferences)
 
     //navigation
     implementation(libs.androidx.navigation.compose)
@@ -88,8 +91,13 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
 
 
-    val emoji2_version = "1.5.0"
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.logging.interceptor)
 
+
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
     implementation(libs.androidx.emoji2)
     implementation(libs.androidx.emoji2.views)
     implementation(libs.androidx.emoji2.views.helper)

@@ -3,6 +3,7 @@ package com.comic.android_native_client.constants
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Login
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Favorite
@@ -20,6 +21,9 @@ sealed class Screen(
     val icon: ImageVector
 ) {
     // Tab Screens
+    object Login : Screen("login", R.string.login, Icons.AutoMirrored.Filled.Login)
+    object Register : Screen("register", R.string.register, Icons.AutoMirrored.Filled.Login)
+
     object Home : Screen("home", R.string.home, Icons.Filled.Home)
     object Explore : Screen("explore", R.string.explore, Icons.Filled.Explore)
     object Favorite : Screen("favorite", R.string.favorite, Icons.Filled.Favorite)

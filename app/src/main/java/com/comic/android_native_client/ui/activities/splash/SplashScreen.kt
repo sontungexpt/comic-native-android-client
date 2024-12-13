@@ -1,4 +1,4 @@
-package com.comic.android_native_client.ui.activities
+package com.comic.android_native_client.ui.activities.splash
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode

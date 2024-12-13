@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.comic.android_native_client.constants.Screen
+import com.comic.android_native_client.ui.activities.authentications.screens.login.LoginScreen
 import com.comic.android_native_client.ui.activities.index.screens.ComicSearchScreen
 import com.comic.android_native_client.ui.activities.index.screens.FavoriteScreen
 import com.comic.android_native_client.ui.activities.index.screens.detail.ComicDetailScreen
@@ -53,7 +54,7 @@ fun App(
         NavHost(
             modifier = Modifier.padding(innerPadding),
             navController = navController,
-            startDestination = Screen.Home.route
+            startDestination = Screen.Login.route
         ) {
             composable(route = Screen.Home.route) {
                 HomeScreen(
@@ -67,6 +68,10 @@ fun App(
             composable(route = Screen.Favorite.route) {
                 FavoriteScreen(horizontalPadding = horizontalPadding)
             }
+            composable(route = Screen.Login.route) {
+                LoginScreen(navController = navController, horizontalPadding = horizontalPadding)
+            }
+
 
             navigation(
                 route = Screen.ProfileGraph.route,

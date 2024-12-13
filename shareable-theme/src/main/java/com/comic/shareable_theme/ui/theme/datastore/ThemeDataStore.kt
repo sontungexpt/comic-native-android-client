@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.map
 private val Context.dataStore by preferencesDataStore("theme_preferences")
 
 object ThemeDataStore {
-    private val IS_DARK_THEME = booleanPreferencesKey("is_dark_theme")
 
+    private val IS_DARK_THEME = booleanPreferencesKey("is_dark_theme")
 
     fun getDarkModeState(context: Context): Flow<Boolean> {
         return context.dataStore.data.map { preferences ->
@@ -21,7 +21,7 @@ object ThemeDataStore {
         }
     }
 
-    suspend fun saveDarkMode(context: Context, isDarkTheme: Boolean) {
+    suspend fun setDarkMode(context: Context, isDarkTheme: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[IS_DARK_THEME] = isDarkTheme
         }
