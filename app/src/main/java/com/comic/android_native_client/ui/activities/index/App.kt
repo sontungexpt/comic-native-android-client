@@ -1,6 +1,7 @@
 package com.comic.android_native_client.ui.activities.index
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
@@ -11,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
@@ -27,15 +29,20 @@ import com.comic.android_native_client.ui.activities.index.screens.profile.About
 import com.comic.android_native_client.ui.activities.index.screens.profile.PrivacyPolycyScreen
 import com.comic.android_native_client.ui.activities.index.screens.profile.index.ProfileScreen
 import com.comic.android_native_client.ui.activities.index.screens.reading.ComicReadingScreen
-import com.comic.android_native_client.ui.components.common.SlideAnimationNavHost
 import com.comic.shareable_theme.ui.theme.ShareableTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+const val TAG = "AppActivity"
 
+@AndroidEntryPoint
 class AppActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate Called")
         setContent {
-            App()
+            ShareableTheme {
+                App()
+            }
         }
     }
 }
@@ -53,7 +60,7 @@ fun App(
             BottomNavigationBar(navController)
         },
     ) { innerPadding ->
-        SlideAnimationNavHost(
+        NavHost(
             modifier = Modifier.padding(innerPadding),
             navController = navController,
             startDestination = initialScreen

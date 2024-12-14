@@ -1,7 +1,10 @@
 package com.comic.android_native_client.ui.activities.authentications
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.tween
+import android.os.Bundle
+import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -16,8 +19,25 @@ import com.comic.android_native_client.constants.IScreen
 import com.comic.android_native_client.constants.Screen
 import com.comic.android_native_client.ui.activities.authentications.screens.login.LoginScreen
 import com.comic.android_native_client.ui.activities.authentications.screens.signup.SignUpScreen
-import com.comic.android_native_client.ui.components.common.SlideAnimationNavHost
+import com.comic.shareable_theme.ui.theme.ShareableTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+const val TAG = "AuthActivity"
+
+@AndroidEntryPoint
+class AuthActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate Called")
+        enableEdgeToEdge()
+
+        setContent {
+            ShareableTheme {
+                AuthApp()
+            }
+        }
+    }
+}
 
 @Composable
 fun AuthApp(
@@ -26,7 +46,7 @@ fun AuthApp(
 ) {
     val navController: NavHostController = rememberNavController()
     Scaffold { innerPadding ->
-        SlideAnimationNavHost(
+        NavHost(
             modifier = Modifier.padding(innerPadding),
             navController = navController,
             startDestination = initialScreen,

@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,7 +44,7 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel<LoginViewModel>(),
 ) {
-
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -79,7 +80,6 @@ fun LoginScreen(
 
         TextButton(
             onClick = {
-
             },
             modifier = Modifier.align(Alignment.End)
         ) {
@@ -94,10 +94,10 @@ fun LoginScreen(
 
         LoadingIndicatorTextButton(
             onClick = {
-                viewModel.login(navController)
+                viewModel.login(context)
             },
             loadingModifier = Modifier.size(24.dp),
-            loading = viewModel.isLoading
+            loading = viewModel.loginProcessing
         ) {
             Text(
                 text = stringResource(R.string.login),

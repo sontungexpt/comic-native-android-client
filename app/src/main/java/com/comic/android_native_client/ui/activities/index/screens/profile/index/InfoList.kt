@@ -21,7 +21,7 @@ import com.comic.android_native_client.ui.components.common.TextWithIcon
 @Composable
 fun InfoList(
     navController: NavController,
-    headlineStyle: TextStyle = MaterialTheme.typography.headlineSmall,
+    headlineStyle: TextStyle = MaterialTheme.typography.titleLarge,
 ) {
     Column {
         InfoItem(

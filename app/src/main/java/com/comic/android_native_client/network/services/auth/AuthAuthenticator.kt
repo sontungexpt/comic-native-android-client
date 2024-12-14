@@ -21,11 +21,11 @@ class AuthAuthenticator @Inject constructor(
             val updatedToken = runBlocking {
                 jwtRepository.getAccessJwt()
             }
-            val token = if (currentToken != updatedToken) updatedToken else {
+            val newAccessToken = if (currentToken != updatedToken) updatedToken else {
                 val newSessionResponse = runBlocking {
                     refreshTokenService.refreshToken()
                 }
-                if (newSessionResponse.isSuccessful && newSessionResponse.body() != null) {
+                if (newSessionResponse.isSuccessful) {
                     newSessionResponse.body()?.let { body ->
                         runBlocking {
                             jwtRepository.saveAccessJwt(body.accessToken)
@@ -35,8 +35,8 @@ class AuthAuthenticator @Inject constructor(
                     }
                 } else null
             }
-            return if (token != null) response.request.newBuilder()
-                .header(HEADER_AUTHORIZATION, "$BEARER_TOKEN_TYPE $token")
+            return if (newAccessToken != null) response.request.newBuilder()
+                .header(HEADER_AUTHORIZATION, "$BEARER_TOKEN_TYPE $newAccessToken")
                 .build() else null
         }
     }

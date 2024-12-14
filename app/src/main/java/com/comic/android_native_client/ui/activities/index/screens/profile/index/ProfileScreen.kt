@@ -11,18 +11,24 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FormatColorFill
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.comic.android_native_client.ui.components.common.TextWithIcon
 import com.comic.shareable_theme.ui.theme.ui.RowThemeChoosable
 
 @Composable
 fun ProfileScreen(
+    profileViewModel: ProfileViewModel = hiltViewModel<ProfileViewModel>(),
     navController: NavController,
     horizontalPadding: Dp = 18.dp,
 ) {
+    val userState by profileViewModel.userState.collectAsState()
+
     val paddingX = 16
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(30.dp),
@@ -31,11 +37,11 @@ fun ProfileScreen(
     ) {
         item {
             ProfileHeader(
+                username = userState.name,
                 paddingX = paddingX,
                 imageHeight = 300,
             )
         }
-
 
         item {
             Column(
@@ -48,7 +54,7 @@ fun ProfileScreen(
                     prefixIcon = Icons.Filled.FormatColorFill,
                     text = "Theme",
                     prefixIconTint = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.headlineSmall
+                    style = MaterialTheme.typography.titleLarge
                 )
 
                 RowThemeChoosable(

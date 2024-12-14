@@ -27,7 +27,7 @@ import com.comic.android_native_client.ui.components.common.TextWithIcon
 fun PremiumBanner(
     paddingX: Int = 16,
     height: Int = 200,
-    headlineStyle: TextStyle = MaterialTheme.typography.headlineSmall,
+    headlineStyle: TextStyle = MaterialTheme.typography.titleLarge,
     modifier: Modifier = Modifier
 ) {
     Column(
