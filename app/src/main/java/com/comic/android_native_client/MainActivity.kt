@@ -1,11 +1,12 @@
 package com.comic.android_native_client
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.comic.android_native_client.ui.activities.AuthActivity
+import com.comic.android_native_client.ui.activities.index.App
+import com.comic.shareable_theme.ui.theme.ShareableTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "MainActivity"
@@ -17,14 +18,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate Called")
         enableEdgeToEdge()
-        startActivity(Intent(this, AuthActivity::class.java))
+        //startActivity(Intent(this, AuthActivity::class.java))
 
-//        setContent {
-//            ShareableTheme {
-//
-////                App()
-//            }
-//        }
+        setContent {
+            ShareableTheme {
+                App()
+            }
+        }
     }
 }
 

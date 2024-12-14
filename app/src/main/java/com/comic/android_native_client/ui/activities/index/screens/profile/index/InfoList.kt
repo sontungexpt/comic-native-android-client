@@ -27,26 +27,26 @@ fun InfoList(
         InfoItem(
             title = stringResource(id = R.string.terms_and_conditions),
             //description = stringResource(id = R.string.terms_and_conditions_description),
-            icon = Screen.ProfileGraph.Terms.icon,
+            icon = Screen.ProfileGraph.Terms.icon(),
             textStyle = headlineStyle,
             onClick = {
-                navController.navigate(Screen.ProfileGraph.Terms.route)
+                navController.navigate(Screen.ProfileGraph.Terms)
             }
         )
         InfoItem(
             textStyle = headlineStyle,
             title = stringResource(id = R.string.privacy_policy),
-            icon = Screen.ProfileGraph.PrivacyPolicy.icon,
+            icon = Screen.ProfileGraph.PrivacyPolicy.icon(),
             onClick = {
-                navController.navigate(Screen.ProfileGraph.PrivacyPolicy.route)
+                navController.navigate(Screen.ProfileGraph.PrivacyPolicy)
             }
         )
         InfoItem(
             textStyle = headlineStyle,
             title = stringResource(id = R.string.about_us),
-            icon = Screen.ProfileGraph.AboutUs.icon,
+            icon = Screen.ProfileGraph.AboutUs.icon(),
             onClick = {
-                navController.navigate(Screen.ProfileGraph.AboutUs.route)
+                navController.navigate(Screen.ProfileGraph.AboutUs)
             }
         )
     }

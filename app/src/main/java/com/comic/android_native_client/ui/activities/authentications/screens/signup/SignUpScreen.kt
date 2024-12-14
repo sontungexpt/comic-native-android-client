@@ -84,7 +84,7 @@ fun SignUpScreen(
                 label = { Text(stringResource(R.string.match_passowrd)) },
             )
         }
-        
+
         Spacer(modifier = Modifier.height(20.dp))
 
         LoadingIndicatorTextButton(
@@ -114,7 +114,7 @@ fun SignUpScreen(
                 color = MaterialTheme.colorScheme.onBackground,
             )
             TextButton(onClick = {
-                navController.navigate(Screen.Login.route)
+                navController.navigate(Screen.Login)
             }) {
                 Text(
                     stringResource(R.string.login),

@@ -31,7 +31,10 @@ import com.comic.android_native_client.constants.Screen
 import com.comic.android_native_client.ui.components.ChapterCard
 import com.comic.android_native_client.ui.components.common.ExpandableText
 
-fun navigateToReadingScreen(navController: NavController, chapterInfo: Screen.ComicReading) {
+fun navigateToReadingScreen(
+    navController: NavController,
+    chapterInfo: Screen.ComicReading
+) {
     navController.navigate(
         chapterInfo
     ) {
@@ -73,7 +76,7 @@ fun ComicDetailScreen(
                         navController.navigate(
                             Screen.ComicReading(
                                 chapterId = "123",
-                                comicId = "123",
+                                id = "123",
                                 chapterName = "Nhật Ký Từ Chức Cấp S"
                             )
                         )

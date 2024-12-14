@@ -11,11 +11,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import com.comic.android_native_client.constants.IScreen
 import com.comic.android_native_client.constants.Screen
 import com.comic.android_native_client.ui.activities.authentications.screens.login.LoginScreen
 import com.comic.android_native_client.ui.activities.index.screens.ComicSearchScreen
@@ -27,6 +27,7 @@ import com.comic.android_native_client.ui.activities.index.screens.profile.About
 import com.comic.android_native_client.ui.activities.index.screens.profile.PrivacyPolycyScreen
 import com.comic.android_native_client.ui.activities.index.screens.profile.index.ProfileScreen
 import com.comic.android_native_client.ui.activities.index.screens.reading.ComicReadingScreen
+import com.comic.android_native_client.ui.components.common.SlideAnimationNavHost
 import com.comic.shareable_theme.ui.theme.ShareableTheme
 
 
@@ -42,6 +43,7 @@ class AppActivity : ComponentActivity() {
 
 @Composable
 fun App(
+    initialScreen: IScreen = Screen.Home,
     horizontalPadding: Dp = 18.dp
 ) {
     val navController: NavHostController = rememberNavController()
@@ -51,51 +53,44 @@ fun App(
             BottomNavigationBar(navController)
         },
     ) { innerPadding ->
-        NavHost(
+        SlideAnimationNavHost(
             modifier = Modifier.padding(innerPadding),
             navController = navController,
-            startDestination = Screen.Login.route
+            startDestination = initialScreen
         ) {
-            composable(route = Screen.Home.route) {
+            composable<Screen.Home> {
                 HomeScreen(
                     navController = navController,
                     horizontalPadding = horizontalPadding
                 )
             }
-            composable(route = Screen.Explore.route) {
+            composable<Screen.Explore> {
                 ExploreScreen(horizontalPadding = horizontalPadding)
             }
-            composable(route = Screen.Favorite.route) {
+            composable<Screen.Favorite> {
                 FavoriteScreen(horizontalPadding = horizontalPadding)
             }
-            composable(route = Screen.Login.route) {
+            composable<Screen.Search> {
                 LoginScreen(navController = navController, horizontalPadding = horizontalPadding)
             }
 
 
-            navigation(
-                route = Screen.ProfileGraph.route,
-                startDestination = Screen.ProfileGraph.Profile.route
+            navigation<Screen.ProfileGraph>(
+                startDestination = Screen.ProfileGraph.startDestination
             ) {
-                composable(route = Screen.ProfileGraph.Profile.route) {
+                composable<Screen.ProfileGraph.Profile> {
                     ProfileScreen(
                         navController = navController,
                         horizontalPadding = horizontalPadding
                     )
                 }
-                composable(route = Screen.ProfileGraph.PrivacyPolicy.route) {
+                composable<Screen.ProfileGraph.PrivacyPolicy> {
                     PrivacyPolycyScreen(
                         navController = navController,
                         horizontalPadding = horizontalPadding
                     )
                 }
-                composable(route = Screen.ProfileGraph.AboutUs.route) {
-                    AboutUsScreen(
-                        navController = navController,
-                        horizontalPadding = horizontalPadding
-                    )
-                }
-                composable(route = Screen.ProfileGraph.Terms.route) {
+                composable<Screen.ProfileGraph.Terms> {
                     AboutUsScreen(
                         navController = navController,
                         horizontalPadding = horizontalPadding
@@ -121,7 +116,7 @@ fun App(
                     currentChapter = currentChapterInfo
                 )
             }
-            composable(route = Screen.Search.route) {
+            composable<Screen.Search> {
                 ComicSearchScreen()
             }
         }

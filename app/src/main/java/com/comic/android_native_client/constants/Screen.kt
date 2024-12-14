@@ -4,38 +4,99 @@ package com.comic.android_native_client.constants
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Login
-import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Policy
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.comic.android_native_client.R
 import kotlinx.serialization.Serializable
 
+interface IScreen {
+    fun icon(): ImageVector
+}
+
+interface StaticScreen : IScreen
+
+interface DynamicScreen : IScreen
+
+interface NavigationGraph : IScreen {
+    val startDestination: IScreen
+}
+
+@Serializable
 sealed class Screen(
-    val route: String,
-    @StringRes val label: Int,
-    val icon: ImageVector
-) {
+    @StringRes
+    val label: Int,
+) : StaticScreen {
+
+    @Serializable
+    object Login : Screen(R.string.login) {
+        override fun icon(): ImageVector = Icons.AutoMirrored.Filled.Login
+    }
+
+    @Serializable
+    object Register :
+        Screen(R.string.register) {
+        override fun icon(): ImageVector = Icons.AutoMirrored.Filled.Login
+    }
+
     // Tab Screens
-    object Login : Screen("login", R.string.login, Icons.AutoMirrored.Filled.Login)
-    object Register : Screen("register", R.string.register, Icons.AutoMirrored.Filled.Login)
+    @Serializable
+    object Home : Screen(R.string.home) {
+        override fun icon(): ImageVector = Icons.Filled.Home
+    }
 
-    object Home : Screen("home", R.string.home, Icons.Filled.Home)
-    object Explore : Screen("explore", R.string.explore, Icons.Filled.Explore)
-    object Favorite : Screen("favorite", R.string.favorite, Icons.Filled.Favorite)
-    object Search : Screen("search", R.string.search, Icons.Filled.Home)
+    @Serializable
+    object Explore : Screen(R.string.explore) {
+        override fun icon(): ImageVector = Icons.Filled.Explore
+    }
 
-    object ProfileGraph : Screen("profile_graph", R.string.profile, Icons.Filled.Person) {
-        object Profile : Screen("profile", R.string.profile, Icons.Filled.Person)
+    @Serializable
+    object Favorite : Screen(R.string.favorite) {
+        override fun icon(): ImageVector = Icons.Filled.Favorite
+    }
+
+    @Serializable
+    object Search : Screen(R.string.search) {
+        override fun icon(): ImageVector = Icons.Filled.Favorite
+    }
+
+    @Serializable
+    object ProfileGraph :
+        Screen(R.string.profile),
+        NavigationGraph {
+
+        @Serializable
+        object Profile : Screen(R.string.profile) {
+            override fun icon(): ImageVector = Icons.Filled.Person
+        }
+
+        @Serializable
         object PrivacyPolicy :
-            Screen("privacy_policy", R.string.privacy_policy, Icons.Filled.Policy)
+            Screen(R.string.privacy_policy) {
+            override fun icon(): ImageVector = Icons.Filled.Person
+        }
 
-        object AboutUs : Screen("about_us", R.string.about_us, Icons.Filled.Info)
-        object Terms : Screen("terms_and_conditions", R.string.terms, Icons.Filled.Description)
+        @Serializable
+        object AboutUs : Screen(R.string.about_us) {
+            override fun icon(): ImageVector = Icons.Filled.Info
+        }
+
+        @Serializable
+        object Terms :
+            Screen(R.string.terms) {
+            override fun icon(): ImageVector = Icons.Filled.Info
+        }
+
+        override val startDestination: IScreen
+            get() = Profile
+
+        override fun icon(): ImageVector {
+            return Icons.Filled.Person
+        }
+
 
     }
 
@@ -47,12 +108,22 @@ sealed class Screen(
         val imageUrl: String,
         val name: String,
         val description: String,
-    )
+    ) : DynamicScreen {
+        override fun icon(): ImageVector {
+            return Icons.Filled.Info
+        }
+    }
 
     @Serializable
     data class ComicReading(
-        val comicId: String,
+        val id: String,
         val chapterId: String,
         val chapterName: String,
-    )
+    ) : DynamicScreen {
+        override fun icon(): ImageVector {
+            return Icons.Filled.Info
+        }
+    }
 }
+
+

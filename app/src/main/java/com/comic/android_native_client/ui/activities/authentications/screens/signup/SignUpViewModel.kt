@@ -69,13 +69,20 @@ class SignUpViewModel @Inject constructor(
                     )
                 )
                 if (response.isSuccessful) {
-                    println(response.body()?.jwt.toString())
-                    navController.navigate(Screen.Login.route)
+                    navController.navigate(Screen.Login)
                 } else {
-
                     when (response.code()) {
                         409 -> {
                             val msg = "Username or password existed"
+                            Toast.makeText(
+                                context,
+                                msg,
+                                msg.length
+                            ).show()
+                        }
+
+                        else -> {
+                            val msg = "Something went wrong"
                             Toast.makeText(
                                 context,
                                 msg,

@@ -43,12 +43,13 @@ fun BottomNavigationBar(
         val currentRoute = navBackStackEntry?.destination?.route
 
         items.forEach { screen ->
+            val isCurrentRoute = currentRoute == screen::class.qualifiedName
             NavigationBarItem(
-                selected = currentRoute == screen.route,
+                selected = isCurrentRoute,
                 onClick = {
-                    if (currentRoute != screen.route) {
+                    if (!isCurrentRoute) {
                         onBeforeNavigation?.invoke(screen)
-                        navController.navigate(screen.route) {
+                        navController.navigate(screen) {
                             launchSingleTop = true
                             restoreState = true
                             popUpTo(navController.graph.startDestinationId) {
@@ -60,7 +61,7 @@ fun BottomNavigationBar(
                 },
                 icon = {
                     Icon(
-                        imageVector = screen.icon,
+                        imageVector = screen.icon(),
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary
                     )
@@ -68,7 +69,7 @@ fun BottomNavigationBar(
                 label = {
                     Text(
                         text = stringResource(screen.label),
-                        color = if (currentRoute == screen.route)
+                        color = if (isCurrentRoute)
                             MaterialTheme.colorScheme.primary
                         else
                             MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f)

@@ -118,7 +118,7 @@ fun LoginScreen(
                 style = MaterialTheme.typography.bodyMedium
             )
             TextButton(onClick = {
-                navController.navigate(Screen.Register.route)
+                navController.navigate(Screen.Register)
             }) {
                 Text(
                     stringResource(R.string.register),
