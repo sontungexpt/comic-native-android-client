@@ -1,5 +1,7 @@
 package com.comic.android_native_client.ui.activities.authentications.screens.login
 
+import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +34,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.comic.android_native_client.R
 import com.comic.android_native_client.constants.Screen
+import com.comic.android_native_client.ui.activities.index.AppActivity
 import com.comic.android_native_client.ui.components.common.AppLogo
 import com.comic.android_native_client.ui.components.common.LoadingIndicatorTextButton
 import com.comic.android_native_client.ui.components.common.PasswordEditable
@@ -45,6 +49,19 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel<LoginViewModel>(),
 ) {
     val context = LocalContext.current
+
+    LaunchedEffect(viewModel) {
+        viewModel.error.collect { errorMessage ->
+            if (errorMessage.isNotEmpty()) {
+                Toast.makeText(
+                    context,
+                    errorMessage,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -94,7 +111,12 @@ fun LoginScreen(
 
         LoadingIndicatorTextButton(
             onClick = {
-                viewModel.login(context)
+                viewModel.login({
+                    context.startActivity(
+                        Intent(context, AppActivity::class.java)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    )
+                })
             },
             loadingModifier = Modifier.size(24.dp),
             loading = viewModel.loginProcessing

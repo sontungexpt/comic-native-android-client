@@ -12,5 +12,5 @@ class ProfileViewModel @Inject constructor(
     val userState
         get() = sharedUserState.userState
     val isLoggedIn
-        get() = sharedUserState.isLoggedIn
+        get() = sharedUserState.loggedIn
 }

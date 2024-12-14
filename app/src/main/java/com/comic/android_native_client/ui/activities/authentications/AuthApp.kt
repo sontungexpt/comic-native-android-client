@@ -50,8 +50,7 @@ fun AuthApp(
             modifier = Modifier.padding(innerPadding),
             navController = navController,
             startDestination = initialScreen,
-
-            ) {
+        ) {
             composable<Screen.Login> {
                 LoginScreen(
                     navController = navController,

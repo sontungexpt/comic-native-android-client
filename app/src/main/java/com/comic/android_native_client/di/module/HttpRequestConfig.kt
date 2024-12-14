@@ -6,7 +6,6 @@ import com.comic.android_native_client.di.qualifiers.TokenRefreshClient
 import com.comic.android_native_client.network.constants.MainEndpoint
 import com.comic.android_native_client.network.services.auth.AccessTokenInterceptor
 import com.comic.android_native_client.network.services.auth.AuthAuthenticator
-import com.comic.android_native_client.network.services.auth.RefreshTokenInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -38,25 +37,39 @@ object HttpRequestConfig {
         .readTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
 
+//    @Provides
+//    @Singleton
+//    fun provideNetworkMonitor(
+//        @ApplicationContext appContext: Context
+//    ): NetworkMonitor {
+//        return LiveNetworkMonitor(appContext)
+//    }
+
     @[Provides Singleton AuthenticatedClient]
     fun provideAccessOkHttpClient(
+//        networkMonitorInterceptor: NetworkMonitorInterceptor,
         accessTokenInterceptor: AccessTokenInterceptor,
         authAuthenticator: AuthAuthenticator
     ): OkHttpClient = baseOkHttpClientBuilder
         .authenticator(authAuthenticator)
+//        .addInterceptor(networkMonitorInterceptor)
         .addInterceptor(accessTokenInterceptor)
         .build()
 
     @[Provides Singleton TokenRefreshClient]
     fun provideRefreshOkHttpClient(
-        refreshTokenInterceptor: RefreshTokenInterceptor
+//        refreshTokenInterceptor: RefreshTokenInterceptor
     ): OkHttpClient = baseOkHttpClientBuilder
-        .addInterceptor(refreshTokenInterceptor)
+//        .addInterceptor(refreshTokenInterceptor)
         .build()
 
     @[Provides Singleton PublicClient]
-    fun provideUnauthenticatedOkHttpClient(): OkHttpClient =
-        baseOkHttpClientBuilder.build()
+    fun provideUnauthenticatedOkHttpClient(
+//        networkMonitorInterceptor: NetworkMonitorInterceptor,
+    ): OkHttpClient =
+        baseOkHttpClientBuilder
+//            .addInterceptor(networkMonitorInterceptor)
+            .build()
 
 
     @[Provides Singleton AuthenticatedClient]
@@ -81,4 +94,6 @@ object HttpRequestConfig {
     ): Retrofit = baseRetrofitBuilder
         .client(okHttpClient)
         .build()
+
+
 }
