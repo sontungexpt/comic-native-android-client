@@ -28,7 +28,7 @@ fun ExploreScreen(
     val uiState = exploreViewModel.screenUiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        exploreViewModel.loadCategories()
+        exploreViewModel.getCategories()
     }
 
     HeaderScreen(
@@ -45,7 +45,6 @@ fun ExploreScreen(
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-
                 items(
                     items = uiState.value.categories,
                     contentType = { it.javaClass },

@@ -1,5 +1,6 @@
 package com.comic.android_native_client.ui.activities.index.screens.detail
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,17 +19,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
+import com.comic.android_native_client.ui.components.common.BackIconButton
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Header(
     comicName: String,
-    genres: List<String>
+    genres: List<String>,
+    navController: NavController
 ) {
     Box(
         modifier = Modifier.height(500.dp)
     ) {
+        
+
         AsyncImage(
             model = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
             contentDescription = "Comic Image",

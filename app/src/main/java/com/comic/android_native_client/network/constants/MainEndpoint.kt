@@ -14,10 +14,10 @@ object MainEndpoint {
     const val UPDATE_USER_PROFILE_V1 = "v1/users/profile"
 
     // FAVORITE
-    const val GET_FAVORITE_V1 = "v1/comics/followed"
+    const val GET_FAVORITE_COMICS_V1 = "v1/comics/followed"
     const val GET_FAVORITE_COMIC_STATUS_V1 = "v1/comics/{comicId}/follow-status"
-    const val ADD_FAVORITE_V1 = "v1/comics/followed/{comicId}"
-    const val REMOVE_FAVORITE_V1 = "v1/comics/followed/{comicId}"
+    const val ADD_FAVORITE_COMIC_V1 = "v1/comics/followed/{comicId}"
+    const val REMOVE_FAVORITE_COMIC_V1 = "v1/comics/followed/{comicId}"
 
     // Comic
     const val SEARCH_V1 = "v1/comics/searching"

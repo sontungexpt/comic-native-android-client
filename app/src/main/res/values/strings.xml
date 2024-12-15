@@ -89,6 +89,7 @@
     <string name="upgrade_to_premium">Upgrade to Premium</string>
     <string name="match_passowrd">Match Password</string>
     <string name="title_activity_app">App</string>
+    <string name="back">Back</string>
 
 
 </resources>

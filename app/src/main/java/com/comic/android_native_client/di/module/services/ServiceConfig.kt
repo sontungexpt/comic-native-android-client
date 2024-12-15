@@ -6,9 +6,11 @@ import com.comic.android_native_client.di.qualifiers.PublicClient
 import com.comic.android_native_client.di.qualifiers.TokenRefreshClient
 import com.comic.android_native_client.network.services.AuthService
 import com.comic.android_native_client.network.services.ComicCategoryService
+import com.comic.android_native_client.network.services.FavoriteComicService
 import com.comic.android_native_client.network.services.UserService
 import com.comic.android_native_client.network.services.impl.AuthServiceImpl
 import com.comic.android_native_client.network.services.impl.ComicCategoryServiceImpl
+import com.comic.android_native_client.network.services.impl.FavoriteComicServiceImpl
 import com.comic.android_native_client.network.services.impl.UserServiceImpl
 import dagger.Module
 import dagger.Provides
@@ -22,7 +24,7 @@ import javax.inject.Singleton
 object ServiceConfig {
 
     @[Provides Singleton]
-    fun providesAuthService(
+    fun provideAuthService(
         @TokenRefreshClient
         tokenRefreshClientRetrofit: Retrofit,
         @PublicClient
@@ -37,7 +39,7 @@ object ServiceConfig {
     }
 
     @[Provides Singleton]
-    fun providesUserService(
+    fun provideUserService(
         @AuthenticatedClient
         authenticatedRetrofit: Retrofit,
         jwtRepository: JwtRepository
@@ -49,7 +51,7 @@ object ServiceConfig {
     }
 
     @[Provides Singleton]
-    fun providesComicCategoryService(
+    fun provideComicCategoryService(
         @PublicClient
         publicClientRetrofit: Retrofit,
         @AuthenticatedClient
@@ -58,6 +60,16 @@ object ServiceConfig {
         return ComicCategoryServiceImpl(
             publicClientRetrofit = publicClientRetrofit,
             authenticatedClientRetrofit = authenticatedRetrofit
+        )
+    }
+
+    @[Provides Singleton]
+    fun provideFavoriteComicService(
+        @AuthenticatedClient
+        authenticatedRetrofit: Retrofit
+    ): FavoriteComicService {
+        return FavoriteComicServiceImpl(
+            authenticatedRetrofit = authenticatedRetrofit
         )
     }
 }

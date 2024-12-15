@@ -21,7 +21,6 @@ data class ExploreScreenState(
 class ExploreViewModel @Inject constructor(
     private val comicCategoryRepository: ComicCategoryRepository
 ) : ViewModel() {
-
     private val _screenUiState = MutableStateFlow(
         ExploreScreenState(
             categories = emptyList(),
@@ -30,14 +29,12 @@ class ExploreViewModel @Inject constructor(
     )
     val screenUiState = _screenUiState.asStateFlow()
 
-    fun loadCategories() {
+    fun getCategories() {
         _screenUiState.value = _screenUiState.value.copy(
             categoriesFetching = true
         )
         viewModelScope.launch {
-            val result = comicCategoryRepository.getComicCategories()
-            println(result)
-            when (result) {
+            when (val result = comicCategoryRepository.getComicCategories()) {
                 is Result.Success -> {
                     _screenUiState.value = _screenUiState.value.copy(
                         categories = result.data,
@@ -46,11 +43,17 @@ class ExploreViewModel @Inject constructor(
                 }
 
                 is Result.Error -> {
-                    // Handle error
+                    _screenUiState.value = _screenUiState.value.copy(
+                        categories = emptyList(),
+                        categoriesFetching = false
+                    )
                 }
 
                 else -> {
-                    // Handle loading
+                    _screenUiState.value = _screenUiState.value.copy(
+                        categories = emptyList(),
+                        categoriesFetching = false
+                    )
                 }
             }
         }
