@@ -20,15 +20,16 @@ import androidx.navigation.toRoute
 import com.comic.android_native_client.constants.IScreen
 import com.comic.android_native_client.constants.Screen
 import com.comic.android_native_client.ui.activities.authentications.screens.login.LoginScreen
-import com.comic.android_native_client.ui.activities.index.screens.ComicSearchScreen
-import com.comic.android_native_client.ui.activities.index.screens.FavoriteScreen
 import com.comic.android_native_client.ui.activities.index.screens.detail.ComicDetailScreen
 import com.comic.android_native_client.ui.activities.index.screens.explore.ExploreScreen
+import com.comic.android_native_client.ui.activities.index.screens.favorite.FavoriteScreen
 import com.comic.android_native_client.ui.activities.index.screens.home.HomeScreen
-import com.comic.android_native_client.ui.activities.index.screens.profile.AboutUsScreen
-import com.comic.android_native_client.ui.activities.index.screens.profile.PrivacyPolycyScreen
 import com.comic.android_native_client.ui.activities.index.screens.profile.index.ProfileScreen
+import com.comic.android_native_client.ui.activities.index.screens.profile.sub_screens.AboutUsScreen
+import com.comic.android_native_client.ui.activities.index.screens.profile.sub_screens.PrivacyPolicyScreen
+import com.comic.android_native_client.ui.activities.index.screens.profile.sub_screens.TermsScreen
 import com.comic.android_native_client.ui.activities.index.screens.reading.ComicReadingScreen
+import com.comic.android_native_client.ui.activities.index.screens.search.ComicSearchScreen
 import com.comic.shareable_theme.ui.theme.ShareableTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -72,15 +73,16 @@ fun App(
                 )
             }
             composable<Screen.Explore> {
-                ExploreScreen(horizontalPadding = horizontalPadding)
+                ExploreScreen(
+                    horizontalPadding = horizontalPadding
+                )
             }
             composable<Screen.Favorite> {
-                FavoriteScreen(horizontalPadding = horizontalPadding)
+                FavoriteScreen(
+                    navController = navController,
+                    horizontalPadding = horizontalPadding
+                )
             }
-            composable<Screen.Search> {
-                LoginScreen(navController = navController, horizontalPadding = horizontalPadding)
-            }
-
 
             navigation<Screen.ProfileGraph>(
                 startDestination = Screen.ProfileGraph.startDestination
@@ -92,19 +94,31 @@ fun App(
                     )
                 }
                 composable<Screen.ProfileGraph.PrivacyPolicy> {
-                    PrivacyPolycyScreen(
+                    PrivacyPolicyScreen(
                         navController = navController,
                         horizontalPadding = horizontalPadding
                     )
                 }
-                composable<Screen.ProfileGraph.Terms> {
+                composable<Screen.ProfileGraph.AboutUs> {
                     AboutUsScreen(
                         navController = navController,
                         horizontalPadding = horizontalPadding
                     )
                 }
 
+                composable<Screen.ProfileGraph.Terms> {
+                    TermsScreen(
+                        navController = navController,
+                        horizontalPadding = horizontalPadding
+                    )
+                }
+            }
 
+            composable<Screen.Search> {
+                LoginScreen(
+                    navController = navController,
+                    horizontalPadding = horizontalPadding
+                )
             }
 
             // hidden screen

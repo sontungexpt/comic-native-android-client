@@ -39,7 +39,7 @@ fun Header(
         )
 
         Surface(
-            color = MaterialTheme.colorScheme.surfaceDim.copy(alpha = 0.65f),
+            color = MaterialTheme.colorScheme.surfaceDim.copy(alpha = 0.62f),
             modifier = Modifier.align(Alignment.BottomStart)
         ) {
             Column(

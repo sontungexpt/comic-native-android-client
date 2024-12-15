@@ -1,10 +1,15 @@
 package com.comic.android_native_client.di.module.services
 
 import com.comic.android_native_client.data.repository.JwtRepository
+import com.comic.android_native_client.di.qualifiers.AuthenticatedClient
 import com.comic.android_native_client.di.qualifiers.PublicClient
 import com.comic.android_native_client.di.qualifiers.TokenRefreshClient
 import com.comic.android_native_client.network.services.AuthService
+import com.comic.android_native_client.network.services.ComicCategoryService
+import com.comic.android_native_client.network.services.UserService
 import com.comic.android_native_client.network.services.impl.AuthServiceImpl
+import com.comic.android_native_client.network.services.impl.ComicCategoryServiceImpl
+import com.comic.android_native_client.network.services.impl.UserServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,8 +21,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ServiceConfig {
 
-    @Provides
-    @Singleton
+    @[Provides Singleton]
     fun providesAuthService(
         @TokenRefreshClient
         tokenRefreshClientRetrofit: Retrofit,
@@ -29,6 +33,31 @@ object ServiceConfig {
             refreshTokenClientRetrofit = tokenRefreshClientRetrofit,
             publicClientRetrofit = publicClientRetrofit,
             jwtRpository = jwtRepository
+        )
+    }
+
+    @[Provides Singleton]
+    fun providesUserService(
+        @AuthenticatedClient
+        authenticatedRetrofit: Retrofit,
+        jwtRepository: JwtRepository
+    ): UserService {
+        return UserServiceImpl(
+            authenticatedRetrofit = authenticatedRetrofit,
+            jwtRepository = jwtRepository
+        )
+    }
+
+    @[Provides Singleton]
+    fun providesComicCategoryService(
+        @PublicClient
+        publicClientRetrofit: Retrofit,
+        @AuthenticatedClient
+        authenticatedRetrofit: Retrofit
+    ): ComicCategoryService {
+        return ComicCategoryServiceImpl(
+            publicClientRetrofit = publicClientRetrofit,
+            authenticatedClientRetrofit = authenticatedRetrofit
         )
     }
 }

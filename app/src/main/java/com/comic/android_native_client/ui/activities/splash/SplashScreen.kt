@@ -20,7 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.comic.android_native_client.R
-import com.comic.android_native_client.ui.activities.authentications.AuthActivity
+import com.comic.android_native_client.ui.activities.index.AppActivity
 import kotlinx.coroutines.delay
 
 @Composable
@@ -30,7 +30,7 @@ fun SplashScreen(
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         delay(delayTimeMs) // 7 seconds
-        context.startActivity(Intent(context, AuthActivity::class.java))
+        context.startActivity(Intent(context, AppActivity::class.java))
     }
 
 

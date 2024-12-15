@@ -28,7 +28,7 @@ fun FavoriteIconToggleable(
 
     iconSize: Dp = 24.dp,
     iconModifier: Modifier = Modifier,
-    favoritedColor: Color = MaterialTheme.colorScheme.secondary,
+    favoritedColor: Color = MaterialTheme.colorScheme.tertiary,
     unFavoritedColor: Color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f),
     tint: Color? = null,
 ) {

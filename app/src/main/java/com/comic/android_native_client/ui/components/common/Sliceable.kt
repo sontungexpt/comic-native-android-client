@@ -32,7 +32,7 @@ fun <ID : Any, T : SliceableItem<ID>> Sliceable(
 
     loading: Boolean = false,
     items: List<T> = emptyList(),
-    gap: Dp = 20.dp,
+    gap: Dp = 12.dp,
     modifier: Modifier = Modifier,
     itemsWrapperModifier: Modifier = Modifier,
 

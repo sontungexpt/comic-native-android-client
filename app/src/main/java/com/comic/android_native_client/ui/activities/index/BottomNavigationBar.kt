@@ -10,12 +10,19 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.comic.android_native_client.constants.NavigationGraph
 import com.comic.android_native_client.constants.Screen
+
+private val BOTTOM_TAB_SCREENS = setOf(
+    Screen.Home,
+    Screen.Explore,
+    Screen.Favorite,
+    Screen.ProfileGraph
+)
 
 @Composable
 fun BottomNavigationBar(
@@ -23,14 +30,18 @@ fun BottomNavigationBar(
     onBeforeNavigation: ((Screen) -> Unit)? = null,
     onAfterNavigation: ((Screen) -> Unit)? = null
 ) {
-    val items = remember {
-        listOf(
-            Screen.Home,
-            Screen.Explore,
-            Screen.Favorite,
-            Screen.ProfileGraph
-        )
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    if (BOTTOM_TAB_SCREENS.none {
+            if (it is NavigationGraph &&
+                it.startDestination::class.qualifiedName == currentRoute
+            ) return@none true
+            else it::class.qualifiedName == currentRoute
+        }) {
+        return
     }
+
     NavigationBar(
         modifier = Modifier
             .fillMaxWidth()
@@ -38,12 +49,12 @@ fun BottomNavigationBar(
         containerColor = MaterialTheme.colorScheme.surfaceDim,
         contentColor = MaterialTheme.colorScheme.onSurface
     ) {
+        BOTTOM_TAB_SCREENS.forEach { screen ->
+            val isCurrentRoute = if (
+                screen is NavigationGraph &&
+                screen.startDestination::class.qualifiedName == currentRoute
+            ) true else currentRoute == screen::class.qualifiedName
 
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
-
-        items.forEach { screen ->
-            val isCurrentRoute = currentRoute == screen::class.qualifiedName
             NavigationBarItem(
                 selected = isCurrentRoute,
                 onClick = {

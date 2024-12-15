@@ -14,11 +14,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.comic.android_native_client.constants.Screen
 import com.comic.android_native_client.ui.components.common.TextWithIcon
+import com.comic.android_native_client.ui.components.layout.UnauthenticatedScreen
+import com.comic.android_native_client.ui.utils.navigateToAuth
 import com.comic.shareable_theme.ui.theme.ui.RowThemeChoosable
 
 @Composable
@@ -27,8 +31,20 @@ fun ProfileScreen(
     navController: NavController,
     horizontalPadding: Dp = 18.dp,
 ) {
-    val userState by profileViewModel.userState.collectAsState()
+    val context = LocalContext.current
+    if (!profileViewModel.isLoggedIn) {
+        UnauthenticatedScreen(
+            onLoginClick = {
+                navigateToAuth(context)
+            },
+            onHomeClick = {
+                navController.navigate(Screen.Home)
+            }
+        )
+        return
+    }
 
+    val userState by profileViewModel.userState.collectAsState()
     val paddingX = 16
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(30.dp),
@@ -54,7 +70,7 @@ fun ProfileScreen(
                     prefixIcon = Icons.Filled.FormatColorFill,
                     text = "Theme",
                     prefixIconTint = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleMedium
                 )
 
                 RowThemeChoosable(

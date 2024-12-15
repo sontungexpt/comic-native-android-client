@@ -1,9 +1,8 @@
-package com.comic.android_native_client.ui.activities.index.screens
+package com.comic.android_native_client.ui.activities.index.screens.favorite
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -16,6 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.comic.android_native_client.constants.Screen
 import com.comic.android_native_client.exmaple.data.comics
 import com.comic.android_native_client.ui.components.SimpleComic
 import com.comic.android_native_client.ui.components.common.LoadingCircle
@@ -25,10 +27,13 @@ import com.comic.android_native_client.ui.components.layout.HeaderScreen
 
 @Composable
 fun FavoriteScreen(
+    navController: NavController,
+    favoriteViewModel: FavoriteViewModel = hiltViewModel<FavoriteViewModel>(),
     horizontalPadding: Dp = 20.dp
 ) {
+
     HeaderScreen(
-        modifier = Modifier.padding(horizontal = horizontalPadding),
+        contentPadding = horizontalPadding,
         headerText = "Favorite"
     ) {
         LazyVerticalGrid(
@@ -46,6 +51,17 @@ fun FavoriteScreen(
             {
                 SimpleComic(
                     comic = it,
+                    onclick = {
+                        navController.navigate(
+                            Screen.ComicDetail(
+                                id = it.id,
+                                authors = it.authors,
+                                imageUrl = it.imageUrl,
+                                name = it.name,
+                                description = it.description,
+                            )
+                        )
+                    },
                     enabled = true,
                     footer = {
                         TextWithIcon(

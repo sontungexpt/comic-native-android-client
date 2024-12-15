@@ -66,11 +66,6 @@ class LoginViewModel @Inject constructor(
                         )
                         _error.emit("")
                         navigateToHome()
-//                        context.startActivity(
-//                            Intent(context, AppActivity::class.java)
-//                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//                        )
-
                     } else {
                         val errorMessage = when (HttpStatus.from(response.code())) {
                             HttpStatus.NotFound -> "User not found"
@@ -87,27 +82,4 @@ class LoginViewModel @Inject constructor(
 
         }
     }
-
-
-//    fun login(context: Context) {
-//        if (validateFields()) {
-//            sharedUserState.login(
-//                usernameState.value,
-//                passwordState.value,
-//                {
-//                    context.startActivity(
-//                        Intent(context, AppActivity::class.java)
-//                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//                    )
-//
-//                    false
-//                },
-//                { status, response ->
-//                    false
-//                }
-//            )
-//
-//
-//        }
-//    }
 }

@@ -1,4 +1,4 @@
-package com.comic.android_native_client.ui.activities.index.screens
+package com.comic.android_native_client.ui.activities.index.screens.search
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SearchBar

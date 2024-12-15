@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.comic.android_native_client.R
 import com.comic.android_native_client.constants.Screen
@@ -45,6 +45,7 @@ fun navigateToReadingScreen(
 @OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun ComicDetailScreen(
+    comicDetailViewModel: ComicDetailViewModel = hiltViewModel<ComicDetailViewModel>(),
     horizontalPadding: Dp = 16.dp,
     navController: NavController,
     currentComic: Screen.ComicDetail,
@@ -52,7 +53,6 @@ fun ComicDetailScreen(
 
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(
                 horizontal = horizontalPadding,
@@ -60,13 +60,13 @@ fun ComicDetailScreen(
             ),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        item(key = "image_and_name") {
+        item(key = "header_section") {
             Header(
                 comicName = currentComic.name,
                 genres = listOf("Fantasy", "Manhwa", "Action", "Truyện Màu")
             )
         }
-        stickyHeader {
+        stickyHeader(key = "reading_button_section") {
             Surface(
                 tonalElevation = 4.dp,
                 modifier = Modifier.fillMaxWidth()
@@ -98,7 +98,7 @@ fun ComicDetailScreen(
             }
         }
 
-        item {
+        item(key = "comic_stats_section") {
             var favorited = remember { mutableStateOf(false) }
             ComicStatsSection(
                 views = 100,
@@ -113,7 +113,7 @@ fun ComicDetailScreen(
             )
         }
 
-        item(key = "comic_information") {
+        item(key = "comic_information_section") {
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 modifier = Modifier.padding(bottom = 4.dp),
@@ -130,7 +130,7 @@ fun ComicDetailScreen(
             }
         }
 
-        item(key = "comic_summary") {
+        item(key = "comic_summary_section") {
             Text(
                 text = stringResource(R.string.summary),
                 style = MaterialTheme.typography.titleMedium,
@@ -145,19 +145,19 @@ fun ComicDetailScreen(
         }
 
 
-        item {
+        item(key = "comic_chapter_title_section") {
             SectionDivider()
             Text(
                 text = "Danh sách tập",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
-
         }
         val chapters = listOf(
             "Nhật Ký Từ Chức Cấp S cua anh chang ngu dot",
             "Nhật Ký Từ Chức Cấp S"
         )
+        
         items(
             items = chapters,
             key = { it },

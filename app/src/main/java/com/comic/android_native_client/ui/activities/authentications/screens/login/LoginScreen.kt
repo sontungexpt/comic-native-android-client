@@ -1,6 +1,5 @@
 package com.comic.android_native_client.ui.activities.authentications.screens.login
 
-import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,10 +33,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.comic.android_native_client.R
 import com.comic.android_native_client.constants.Screen
-import com.comic.android_native_client.ui.activities.index.AppActivity
 import com.comic.android_native_client.ui.components.common.AppLogo
 import com.comic.android_native_client.ui.components.common.LoadingIndicatorTextButton
 import com.comic.android_native_client.ui.components.common.PasswordEditable
+import com.comic.android_native_client.ui.utils.navigateToApp
 import com.comic.shareable_theme.ui.theme.ShareableTheme
 import com.comic.validation_text_field.components.ValidableOutlineTextField
 
@@ -112,10 +111,7 @@ fun LoginScreen(
         LoadingIndicatorTextButton(
             onClick = {
                 viewModel.login({
-                    context.startActivity(
-                        Intent(context, AppActivity::class.java)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    )
+                    navigateToApp(context)
                 })
             },
             loadingModifier = Modifier.size(24.dp),
