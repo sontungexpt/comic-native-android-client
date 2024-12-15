@@ -1,6 +1,5 @@
 package com.comic.android_native_client.network.services.impl
 
-import com.comic.android_native_client.network.dto.response.ComicCatergoriesResponse
 import com.comic.android_native_client.network.dto.response.ComicCatergoryResponse
 import com.comic.android_native_client.network.services.ComicCategoryService
 import com.comic.android_native_client.network.services.ComicCategoryServiceAuthenticated
@@ -23,7 +22,7 @@ class ComicCategoryServiceImpl @Inject constructor(
         authenticatedClientRetrofit.create(ComicCategoryServiceAuthenticated::class.java)
     }
 
-    override suspend fun fetchComicCategories(): Response<ComicCatergoriesResponse> {
+    override suspend fun fetchComicCategories(): Response<List<ComicCatergoryResponse>> {
         return publicComicCategoryService.fetchComicCategories()
     }
 
