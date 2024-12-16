@@ -1,19 +1,16 @@
 package com.comic.android_native_client.ui.activities.index.screens.detail
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -22,21 +19,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.comic.android_native_client.R
 import com.comic.android_native_client.constants.Screen
 import com.comic.android_native_client.ui.components.ChapterCard
-import com.comic.android_native_client.ui.components.common.BackIconButton
 import com.comic.android_native_client.ui.components.common.ExpandableText
+import com.comic.android_native_client.ui.components.layout.BackFloatingScreen
 
 fun navigateToReadingScreen(
     navController: NavController,
@@ -57,20 +51,12 @@ fun ComicDetailScreen(
     navController: NavController,
     currentComic: Screen.ComicDetail,
 ) {
-    Box {
-        BackIconButton(
-            onBackClick = {
-                navController.popBackStack()
-            },
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(top = 24.dp, start = 20.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.8f))
-                .zIndex(10f),
-            iconModifier = Modifier
-                .size(32.dp)
-        )
+    BackFloatingScreen(
+        onBackCLick = {
+            navController.popBackStack()
+        },
+        backButtonModifier = Modifier.offset(x = 24.dp, y = 24.dp),
+    ) {
         LazyColumn(
             modifier = Modifier
                 .padding(

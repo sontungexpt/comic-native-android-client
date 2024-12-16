@@ -64,21 +64,25 @@ fun SignUpScreen(
             verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
             ValidableOutlineTextField(
+                maxLines = 1,
                 shape = MaterialTheme.shapes.medium,
                 state = viewModel.nameState,
                 label = { Text(stringResource(R.string.name)) },
             )
             ValidableOutlineTextField(
+                maxLines = 1,
                 shape = MaterialTheme.shapes.medium,
                 state = viewModel.usernameState,
                 label = { Text(stringResource(R.string.username)) },
             )
             PasswordEditable(
+                maxLines = 1,
                 shape = MaterialTheme.shapes.medium,
                 state = viewModel.passwordState,
             )
 
             ValidableOutlineTextField(
+                maxLines = 1,
                 shape = MaterialTheme.shapes.medium,
                 state = viewModel.matchPasswordState,
                 label = { Text(stringResource(R.string.match_passowrd)) },

@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Header(
+fun ChapterNavigationHeader(
     chapterName: String,
     modifier: Modifier,
 ) {
@@ -28,6 +28,7 @@ fun Header(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
+
         // Previous Chapter Button
         IconButton(
             onClick = { /* Handle Previous Chapter */ },
@@ -40,7 +41,7 @@ fun Header(
                     .size(28.dp),
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Previous Chapter",
-                tint = MaterialTheme.colorScheme.onSurface
+                tint = MaterialTheme.colorScheme.primary
             )
         }
 
@@ -71,7 +72,7 @@ fun Header(
                     .size(28.dp),
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                 contentDescription = "Next Chapter",
-                tint = MaterialTheme.colorScheme.onSurface
+                tint = MaterialTheme.colorScheme.primary
             )
         }
     }

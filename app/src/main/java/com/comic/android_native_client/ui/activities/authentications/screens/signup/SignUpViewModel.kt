@@ -48,7 +48,7 @@ class SignUpViewModel @Inject constructor(
     )
 
     init {
-        passwordState.stateFriends += matchPasswordState
+        passwordState.dependentStates += matchPasswordState
     }
 
     private val fieldWatcher = ValidableTextFieldWatcher(usernameState, passwordState, nameState)

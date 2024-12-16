@@ -1,7 +1,7 @@
 package com.comic.android_native_client.network.constants
 
 object MainEndpoint {
-    const val BASE_URL = "https://f313-14-169-94-210.ngrok-free.app/api/"
+    const val BASE_URL = "https://80c3-14-169-94-210.ngrok-free.app/api/"
 
     const val REFRESH_TOKEN_V1 = "v1/auth/refresh-token"
 

@@ -33,7 +33,7 @@ fun CommentButtonWithModal(
 
     modalVisible: Boolean,
     onDismissModalRequest: () -> Unit,
-    modalSheetState: SheetState = rememberModalBottomSheetState(),
+    modalSheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     modalShape: Shape = BottomSheetDefaults.ExpandedShape,
     modalContainerColor: Color = BottomSheetDefaults.ContainerColor,
     modalContentColor: Color = contentColorFor(modalContainerColor),

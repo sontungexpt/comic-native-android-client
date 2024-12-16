@@ -77,6 +77,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(50.dp))
 
         ValidableOutlineTextField(
+            maxLines = 1,
             state = viewModel.usernameState,
             label = {
                 Text(
@@ -90,6 +91,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         PasswordEditable(
+            maxLines = 1,
             state = viewModel.passwordState,
             shape = MaterialTheme.shapes.medium
         )

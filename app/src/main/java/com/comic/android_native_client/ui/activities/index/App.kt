@@ -133,12 +133,16 @@ fun App(
             composable<Screen.ComicReading> {
                 val currentChapterInfo = it.toRoute<Screen.ComicReading>()
                 ComicReadingScreen(
+                    navController = navController,
                     horizontalPadding = horizontalPadding,
                     currentChapter = currentChapterInfo
                 )
             }
             composable<Screen.Search> {
-                ComicSearchScreen()
+                ComicSearchScreen(
+                    navController = navController,
+                    horizontalPadding = horizontalPadding,
+                )
             }
         }
     }

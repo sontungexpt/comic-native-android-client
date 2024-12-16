@@ -3,12 +3,10 @@ package com.comic.android_native_client.ui.activities.index.screens.reading
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,10 +27,13 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.comic.android_native_client.constants.Screen
 import com.comic.android_native_client.ui.components.CommentButtonWithModal
 import com.comic.android_native_client.ui.components.CommentCard
+import com.comic.android_native_client.ui.components.layout.BackFloatingScreen
 
 val items = listOf(
     "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
@@ -48,36 +49,45 @@ val comments = listOf(
 
     )
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(
+    ExperimentalFoundationApi::class,
+    ExperimentalMaterial3Api::class
+)
 @Composable
 fun ComicReadingScreen(
     horizontalPadding: Dp = 20.dp,
+    navController: NavController,
     currentChapter: Screen.ComicReading,
 ) {
-    Box(
+    BackFloatingScreen(
+        onBackCLick = {
+            navController.popBackStack()
+        },
         modifier = Modifier
     ) {
-
+        ChapterNavigationHeader(
+            chapterName = currentChapter.chapterName,
+            modifier = Modifier
+                .padding(10.dp)
+                .height(64.dp)
+                .fillMaxWidth()
+                .zIndex(100f)
+                .shadow(4.dp, shape = MaterialTheme.shapes.medium)
+                .align(Alignment.BottomCenter)
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceDim,
+                    shape = MaterialTheme.shapes.medium
+                )
+        )
         LazyColumn(
-            modifier = Modifier.padding(top = 10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
+                .padding(top = 10.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            stickyHeader {
-                Header(
-                    chapterName = currentChapter.chapterName,
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .height(64.dp)
-                        .fillMaxWidth()
-                        .shadow(4.dp, shape = MaterialTheme.shapes.medium)
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceDim,
-                            shape = MaterialTheme.shapes.medium
-                        )
-                )
-            }
             items(
-                items = items
+                items = items,
             ) {
                 AsyncImage(
                     model = it,
@@ -98,8 +108,7 @@ fun ComicReadingScreen(
             ),
             modifier = Modifier
                 .size(60.dp)
-                .offset(-14.dp, -14.dp)
-                .align(Alignment.BottomEnd),
+                .align(Alignment.CenterEnd),
             onClick = {
                 modalVisible = true
             },
@@ -137,6 +146,7 @@ fun ComicReadingScreen(
 
                 var comment by remember { mutableStateOf("") }
                 var isSendError by remember { mutableStateOf(false) }
+
                 CommentInput(
                     comment = comment,
                     onCommentChange = {
