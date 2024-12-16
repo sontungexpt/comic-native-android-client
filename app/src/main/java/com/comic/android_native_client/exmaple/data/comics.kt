@@ -1,6 +1,17 @@
 package com.comic.android_native_client.exmaple.data
 
-import com.comic.android_native_client.data.model.Comic
+import com.comic.android_native_client.common.Identifiable
+
+data class Comic(
+    override
+    val id: String,
+    val authors: List<String>,
+    val imageUrl: String,
+    val name: String,
+    val description: String,
+    val rating: UInt,
+    val newChapters: List<String>
+) : Identifiable<String>
 
 val comics = listOf(
     Comic(

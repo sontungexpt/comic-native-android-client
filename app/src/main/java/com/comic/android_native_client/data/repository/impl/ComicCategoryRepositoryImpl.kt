@@ -2,14 +2,17 @@ package com.comic.android_native_client.data.repository.impl
 
 
 import com.comic.android_native_client.common.Result
+import com.comic.android_native_client.constants.HttpStatus
 import com.comic.android_native_client.data.model.ComicCategory
 import com.comic.android_native_client.data.repository.ComicCategoryRepository
+import com.comic.android_native_client.network.dto.request.ComicCategoryRequest
 import com.comic.android_native_client.network.dto.response.toComicCategory
 import com.comic.android_native_client.network.services.ComicCategoryService
 
 class ComicCategoryRepositoryImpl(
     private val comicCategoryService: ComicCategoryService
 ) : ComicCategoryRepository {
+
     override suspend fun getComicCategories(): Result<List<ComicCategory>> {
         return try {
             val response = comicCategoryService.fetchComicCategories()
@@ -34,12 +37,45 @@ class ComicCategoryRepositoryImpl(
             }
 
         } catch (e: Exception) {
-            Result.Error("Exception: ${e.message}")
+            Result.Exception(e)
         }
     }
 
 
-    override suspend fun addComicCategory(comicCategory: ComicCategory) {
-        // Add comic category
+    override suspend fun addComicCategory(comicCategory: ComicCategoryRequest): Result<ComicCategory> {
+        try {
+            val response = comicCategoryService.addComicCategory(comicCategory)
+            when {
+                response.isSuccessful -> {
+                    return response.body()?.let { it.toComicCategory() }?.let { Result.Success(it) }
+                        ?: Result.NoContent
+                }
+
+                else -> {
+                    val code = response.code()
+                    val message = response.message()
+                    when (HttpStatus.from(code)) {
+                        HttpStatus.Conflict -> {
+                            return Result.Error("Conflict: $message", code = code)
+                        }
+
+                        HttpStatus.Forbidden -> {
+                            return Result.Error("Forbidden: $message", code = code)
+                        }
+
+                        HttpStatus.BadRequest -> {
+                            return Result.Error("Bad request: $message", code = code)
+                        }
+
+                        else -> {
+                            return Result.Error("Server error: $message", code = code)
+                        }
+                    }
+
+                }
+            }
+        } catch (e: Exception) {
+            return Result.Exception(e)
+        }
     }
 }

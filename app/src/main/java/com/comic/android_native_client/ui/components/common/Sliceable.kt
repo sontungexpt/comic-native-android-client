@@ -23,10 +23,8 @@ import androidx.compose.ui.unit.dp
 import com.comic.android_native_client.common.Identifiable
 
 
-interface SliceableItem<T> : Identifiable<T>
-
 @Composable
-fun <ID : Any, T : SliceableItem<ID>> Sliceable(
+fun <ID : Any, T : Identifiable<ID>> Sliceable(
     state: LazyListState = rememberLazyListState(),
     reverseLayout: Boolean = false,
 

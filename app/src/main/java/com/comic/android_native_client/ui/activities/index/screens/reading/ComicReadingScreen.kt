@@ -1,9 +1,7 @@
 package com.comic.android_native_client.ui.activities.index.screens.reading
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +13,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +27,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.comic.android_native_client.constants.Screen
@@ -50,12 +50,12 @@ val comments = listOf(
     )
 
 @OptIn(
-    ExperimentalFoundationApi::class,
     ExperimentalMaterial3Api::class
 )
 @Composable
 fun ComicReadingScreen(
     horizontalPadding: Dp = 20.dp,
+    comicReadingViewModel: ComicReadingViewModel = hiltViewModel<ComicReadingViewModel>(),
     navController: NavController,
     currentChapter: Screen.ComicReading,
 ) {
@@ -103,7 +103,7 @@ fun ComicReadingScreen(
         var modalVisible by remember { mutableStateOf(false) }
         CommentButtonWithModal(
             colors = IconButtonDefaults.iconButtonColors(
-                containerColor = MaterialTheme.colorScheme.surfaceBright,
+                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
                 contentColor = MaterialTheme.colorScheme.onSurface,
             ),
             modifier = Modifier
@@ -117,22 +117,48 @@ fun ComicReadingScreen(
                 modalVisible = false
             },
         ) {
-            Column(
-                modifier = Modifier.padding(horizontal = 16.dp),
-            ) {
-                CommentModalHeader(
-                    modifier = Modifier.fillMaxWidth(),
-                    commentCount = comments.size.toLong(),
-                    setModalVisible = { modalVisible = it },
-                )
+            val paddingX = 16.dp
+            Scaffold(
+                topBar = {
+                    CommentModalHeader(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = paddingX),
+                        commentCount = comments.size.toLong(),
+                        setModalVisible = { modalVisible = it },
+                    )
+                },
+                bottomBar = {
+                    var comment by remember { mutableStateOf("") }
+                    var isSendError by remember { mutableStateOf(false) }
+
+                    CommentInput(
+                        comment = comment,
+                        onCommentChange = {
+                            isSendError = false
+                            comment = it
+                        },
+                        isError = isSendError,
+                        onSendComment = {
+                            isSendError = true
+                        },
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.surfaceDim)
+                    )
+                },
+
+                ) { innerPadding ->
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(20.dp),
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .padding(innerPadding)
+                        .padding(top = 10.dp)
                         .weight(1f)
                 ) {
                     items(comments) { (author, content) ->
                         CommentCard(
+                            modifier = Modifier
+                                .padding(horizontal = paddingX),
                             authorName = author,
                             content = content
                         )
@@ -143,24 +169,6 @@ fun ComicReadingScreen(
                         )
                     }
                 }
-
-                var comment by remember { mutableStateOf("") }
-                var isSendError by remember { mutableStateOf(false) }
-
-                CommentInput(
-                    comment = comment,
-                    onCommentChange = {
-                        isSendError = false
-                        comment = it
-                    },
-                    isError = isSendError,
-                    onSendComment = {
-                        isSendError = true
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surfaceBright)
-                )
             }
 
         }

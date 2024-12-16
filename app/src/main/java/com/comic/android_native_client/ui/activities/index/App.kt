@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,6 +24,7 @@ import com.comic.android_native_client.ui.activities.authentications.screens.log
 import com.comic.android_native_client.ui.activities.index.screens.detail.ComicDetailScreen
 import com.comic.android_native_client.ui.activities.index.screens.explore.ExploreScreen
 import com.comic.android_native_client.ui.activities.index.screens.favorite.FavoriteScreen
+import com.comic.android_native_client.ui.activities.index.screens.favorite.FavoriteViewModel
 import com.comic.android_native_client.ui.activities.index.screens.home.HomeScreen
 import com.comic.android_native_client.ui.activities.index.screens.profile.index.ProfileScreen
 import com.comic.android_native_client.ui.activities.index.screens.profile.sub_screens.AboutUsScreen
@@ -56,6 +58,9 @@ fun App(
 ) {
     val navController: NavHostController = rememberNavController()
 
+    // hóist the viewmodel
+    val favoriteViewModel = hiltViewModel<FavoriteViewModel>()
+
     Scaffold(
         bottomBar = {
             BottomNavigationBar(navController)
@@ -79,6 +84,7 @@ fun App(
             }
             composable<Screen.Favorite> {
                 FavoriteScreen(
+                    favoriteViewModel = favoriteViewModel,
                     navController = navController,
                     horizontalPadding = horizontalPadding
                 )

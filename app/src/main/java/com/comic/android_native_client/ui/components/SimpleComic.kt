@@ -24,14 +24,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.comic.android_native_client.data.model.Comic
 import com.comic.shareable_theme.ui.theme.ShareableTheme
-import java.util.UUID
 
 
 @Composable
 fun SimpleComic(
-    comic: Comic,
+    imageUrl: String,
+    name: String,
+
+
     onclick: () -> Unit = {},
     modifier: Modifier,
     enabled: Boolean = true,
@@ -59,7 +60,7 @@ fun SimpleComic(
             },
     ) {
         AsyncImage(
-            model = comic.imageUrl,
+            model = imageUrl,
             contentScale = ContentScale.Crop,
             contentDescription = null,
             modifier = imageModifier
@@ -68,7 +69,7 @@ fun SimpleComic(
                 .weight(1f),
         )
         Text(
-            text = comic.name,
+            text = name,
             maxLines = maxNameLines,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
@@ -91,16 +92,8 @@ fun SimpleComicPreview() {
     ShareableTheme {
         Scaffold { innerPadding ->
             SimpleComic(
-                comic = Comic(
-                    id = UUID.randomUUID().toString(),
-                    authors = listOf("Author"),
-                    imageUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
-                    name = "Ai day han nhu vay tu tien",
-                    description = "Comic description",
-                    rating = 5u,
-                    newChapters = listOf()
-                ),
-
+                name = "Ai day han nhu vay tu tien",
+                imageUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
                 enabled = true,
                 onclick = {},
                 modifier = Modifier

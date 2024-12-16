@@ -4,7 +4,7 @@ import com.comic.android_native_client.data.model.ComicCategory
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ComicCatergoryResponse(
+data class ComicCategoryResponse(
     val id: String,
     val name: String,
     val slug: String,
@@ -12,7 +12,7 @@ data class ComicCatergoryResponse(
     val description: String = "",
 )
 
-fun ComicCatergoryResponse.toComicCategory() = ComicCategory(
+fun ComicCategoryResponse.toComicCategory() = ComicCategory(
     id = id,
     name = name,
     slug = slug,

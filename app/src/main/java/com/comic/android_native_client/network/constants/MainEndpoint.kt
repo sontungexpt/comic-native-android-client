@@ -1,7 +1,7 @@
 package com.comic.android_native_client.network.constants
 
 object MainEndpoint {
-    const val BASE_URL = "https://80c3-14-169-94-210.ngrok-free.app/api/"
+    const val BASE_URL = "https://fb44-14-169-40-6.ngrok-free.app/api/"
 
     const val REFRESH_TOKEN_V1 = "v1/auth/refresh-token"
 
@@ -20,7 +20,7 @@ object MainEndpoint {
     const val REMOVE_FAVORITE_COMIC_V1 = "v1/comics/followed/{comicId}"
 
     // Comic
-    const val SEARCH_V1 = "v1/comics/searching"
+    const val SEARCH_COMICS_V1 = "v1/comics/searching"
     const val GET_COMICS_V1 = "v1/comics"
     const val ADD_COMIC_V1 = "v1/comics"
     const val GET_COMIC_DETAIL_V1 = "v1/comics/{comicId}"
@@ -38,8 +38,8 @@ object MainEndpoint {
 
     // Comment
     const val ADD_COMMENT_V1 = "v1/comments"
-    const val GET_COMMENTS_V1 = "v1/comments/top-level"
-    const val GET_COMMENTS_REPLIES_V1 = "v1/comments/{commentId}/replies/top-level"
+    const val GET_TOP_LEVEL_COMMENTS_V1 = "v1/comments/top-level"
+    const val GET_TOP_LEVEL_REPLIES_V1 = "v1/comments/{commentId}/replies/top-level"
 
     // Chapter
     const val GET_CHAPTERS_V1 = "v1/comics/{comicId}/chapters"

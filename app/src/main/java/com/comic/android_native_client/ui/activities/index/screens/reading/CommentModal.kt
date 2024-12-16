@@ -29,7 +29,9 @@ fun CommentModalHeader(
             text = stringResource(R.string.comment_count, commentCount),
             style = MaterialTheme.typography.titleLarge
         )
-        IconButton(onClick = { setModalVisible(false) }) {
+        IconButton(
+            onClick = { setModalVisible(false) }
+        ) {
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = "Close"

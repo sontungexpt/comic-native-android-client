@@ -35,14 +35,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.comic.android_native_client.data.model.Comic
 import com.comic.shareable_theme.ui.theme.ShareableTheme
-import java.util.UUID
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ComicCard(
-    comic: Comic,
+    imageUrl: String,
+    name: String,
+    authors: List<String>,
+    rating: UInt,
+    newChapters: List<String>,
     modifier: Modifier
 ) {
     Card(
@@ -66,9 +68,9 @@ fun ComicCard(
                     .fillMaxWidth(0.26f)
             ) {
                 AsyncImage(
-                    model = comic.imageUrl,
+                    model = imageUrl,
                     contentScale = ContentScale.Crop,
-                    contentDescription = "Image of ${comic.name}",
+                    contentDescription = "Image of ${name}",
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(RoundedCornerShape(12.dp))
@@ -80,7 +82,7 @@ fun ComicCard(
                         .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.65f))
                 ) {
                     Text(
-                        text = "${comic.rating} ⭐",
+                        text = "${rating} ⭐",
                         modifier = Modifier
                             .padding(top = 2.dp, bottom = 2.dp, start = 4.dp, end = 4.dp),
                         fontSize = 12.sp,
@@ -98,7 +100,7 @@ fun ComicCard(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = comic.name,
+                        text = name,
                         maxLines = 2,
                         textAlign = TextAlign.Justify,
                         overflow = TextOverflow.Ellipsis,
@@ -106,7 +108,7 @@ fun ComicCard(
                         fontSize = 18.sp
                     )
                     Text(
-                        text = "By ${comic.authors.joinToString(", ")}",
+                        text = "By ${authors.joinToString(", ")}",
                         maxLines = 1,
                         textAlign = TextAlign.Start,
                         overflow = TextOverflow.Ellipsis,
@@ -120,7 +122,7 @@ fun ComicCard(
                     maxLines = 1,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    val newChaptersSize = comic.newChapters.size
+                    val newChaptersSize = newChapters.size
                     val loop_times = if (newChaptersSize > 3) {
                         3
                     } else {
@@ -172,16 +174,11 @@ fun ComicCard(
 fun ComicCardPreview() {
     ShareableTheme {
         ComicCard(
-            comic = Comic(
-                id = UUID.randomUUID().toString(),
-                authors = listOf("Author"),
-                imageUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
-                name = "Nam chinh muon ly hon nhung vo anh khong chiu",
-                description = "Comic description",
-                rating = 5u,
-                newChapters = listOf()
-
-            ),
+            name = "Nam chinh muon ly hon nhung vo anh khong chiu",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
+            authors = listOf("Author"),
+            rating = 5u,
+            newChapters = listOf(),
             modifier = Modifier
                 .combinedClickable(
                     enabled = true,

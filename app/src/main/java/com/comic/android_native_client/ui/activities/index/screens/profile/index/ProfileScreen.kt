@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.FormatColorFill
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -51,7 +54,10 @@ fun ProfileScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        item {
+        item(
+            key = "header"
+
+        ) {
             ProfileHeader(
                 username = userState.name,
                 paddingX = paddingX,
@@ -59,7 +65,9 @@ fun ProfileScreen(
             )
         }
 
-        item {
+        item(
+            key = "theme"
+        ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier
@@ -83,7 +91,9 @@ fun ProfileScreen(
 
 
         }
-        item {
+        item(
+            key = "premium"
+        ) {
             PremiumBanner(
                 paddingX = paddingX,
                 height = 200
@@ -91,11 +101,45 @@ fun ProfileScreen(
 
         }
 
-        item {
+        item(
+            key = "infolist"
+        ) {
             InfoList(navController = navController)
         }
+
+        // logout button
+        item(
+            key = "logout"
+        ) {
+            ElevatedButton(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.onError
+                ),
+                shape = MaterialTheme.shapes.medium,
+                elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 4.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = paddingX.dp)
+                    .height(50.dp),
+                onClick = {
+                    profileViewModel.logout {
+                        navController.navigate(Screen.Home)
+                    }
+                }
+            ) {
+                TextWithIcon(
+                    text = "Logout",
+                    prefixIcon = Icons.AutoMirrored.Filled.Logout,
+                    style = MaterialTheme.typography.titleMedium,
+                )
+            }
+        }
+
+
     }
 }
+
 
 
 

@@ -1,4 +1,4 @@
-package com.comic.android_native_client.ui.activities.viewModels
+package com.comic.android_native_client.ui.activities.index.screens.search
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

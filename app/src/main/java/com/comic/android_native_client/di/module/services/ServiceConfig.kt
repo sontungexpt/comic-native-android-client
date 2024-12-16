@@ -6,10 +6,12 @@ import com.comic.android_native_client.di.qualifiers.PublicClient
 import com.comic.android_native_client.di.qualifiers.TokenRefreshClient
 import com.comic.android_native_client.network.services.AuthService
 import com.comic.android_native_client.network.services.ComicCategoryService
+import com.comic.android_native_client.network.services.CommentService
 import com.comic.android_native_client.network.services.FavoriteComicService
 import com.comic.android_native_client.network.services.UserService
 import com.comic.android_native_client.network.services.impl.AuthServiceImpl
 import com.comic.android_native_client.network.services.impl.ComicCategoryServiceImpl
+import com.comic.android_native_client.network.services.impl.CommentServiceImpl
 import com.comic.android_native_client.network.services.impl.FavoriteComicServiceImpl
 import com.comic.android_native_client.network.services.impl.UserServiceImpl
 import dagger.Module
@@ -70,6 +72,19 @@ object ServiceConfig {
     ): FavoriteComicService {
         return FavoriteComicServiceImpl(
             authenticatedRetrofit = authenticatedRetrofit
+        )
+    }
+
+    @[Provides Singleton]
+    fun provideCommentService(
+        @AuthenticatedClient
+        authenticatedRetrofit: Retrofit,
+        @PublicClient
+        publicClientRetrofit: Retrofit
+    ): CommentService {
+        return CommentServiceImpl(
+            authenticatedClientRetrofit = authenticatedRetrofit,
+            publicClientRetrofit = publicClientRetrofit
         )
     }
 }

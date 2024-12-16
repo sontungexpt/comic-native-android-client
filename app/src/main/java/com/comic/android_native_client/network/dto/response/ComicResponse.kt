@@ -1,7 +1,8 @@
 package com.comic.android_native_client.network.dto.response
 
+import com.comic.android_native_client.common.Identifiable
+import com.comic.android_native_client.data.model.Comic
 import com.comic.android_native_client.serialization.serializer.InstantSerializer
-import com.comic.android_native_client.ui.components.common.SliceableItem
 import kotlinx.serialization.Serializable
 import java.time.Instant
 
@@ -34,4 +35,30 @@ data class ComicResponse(
     @Serializable(with = InstantSerializer::class)
     val newChapterUpdatedAt: Instant
 
-) : SliceableItem<String>
+) : Identifiable<String>
+
+
+fun ComicResponse.toComic(): Comic {
+    return Comic(
+        id = id,
+        name = name,
+        slug = slug,
+        status = status,
+        ownerId = ownerId,
+        dailyViews = dailyViews,
+        weeklyViews = weeklyViews,
+        monthlyViews = monthlyViews,
+        yearlyViews = yearlyViews,
+        alternativeNames = alternativeNames,
+        summary = summary,
+        thumbnailUrl = thumbnailUrl,
+        description = description,
+        authors = authors,
+        artists = artists,
+        categoryIds = categoryIds,
+        tags = tags,
+        lastNewChapterCheckAt = lastNewChapterCheckAt,
+        newChapterUpdatedAt = newChapterUpdatedAt,
+        newChapters = emptyList(),
+    )
+}

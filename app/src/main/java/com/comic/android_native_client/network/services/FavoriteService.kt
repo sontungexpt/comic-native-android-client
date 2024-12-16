@@ -6,11 +6,16 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface AuthenticatedFavoriteComicService {
 
     @GET(MainEndpoint.GET_FAVORITE_COMICS_V1)
-    suspend fun fetchFavoriteComics(): Response<ComicResponse>
+    suspend fun fetchFavoriteComics(
+        @Query("page") page: Int,
+        @Query("size") size: Int = 10,
+        @Query("sort") sort: Array<String> = arrayOf("createdAt,desc")
+    ): Response<PageResponse<ComicResponse>>
 
     @POST(MainEndpoint.ADD_FAVORITE_COMIC_V1)
     suspend fun addFavoriteComic(
@@ -26,7 +31,7 @@ interface AuthenticatedFavoriteComicService {
     suspend fun getFavoriteComicStatus(
         @Path("comicId") comicId: String
     ): Response<Nothing>
-    
+
 }
 
 interface FavoriteComicService : AuthenticatedFavoriteComicService

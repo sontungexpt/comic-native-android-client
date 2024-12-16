@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.comic.android_native_client.R
 import com.comic.android_native_client.constants.Screen
-import com.comic.android_native_client.data.model.Comic
 import com.comic.android_native_client.exmaple.data.comics
 import com.comic.android_native_client.ui.components.SimpleComic
 import com.comic.android_native_client.ui.components.common.Sliceable
@@ -85,16 +84,8 @@ fun HomeScreen(
                 itemSpacing = 12.dp,
             ) { index ->
                 SimpleComic(
-                    comic = Comic(
-                        id = "1",
-                        authors = listOf("Author"),
-                        imageUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
-                        name = "Nam chinh muon ly hon nhung vo anh khong chiu",
-                        description = "Comic description",
-                        rating = 5u,
-                        newChapters = listOf()
-
-                    ),
+                    name = "Comic $index",
+                    imageUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
                     enabled = true,
                     nameFontWeight = FontWeight.W500,
                     onclick = { },
@@ -117,7 +108,8 @@ fun HomeScreen(
                 items = comics
             ) {
                 SimpleComic(
-                    comic = it,
+                    name = it.name,
+                    imageUrl = it.imageUrl,
                     enabled = true,
                     nameFontWeight = FontWeight.W500,
                     onclick = {

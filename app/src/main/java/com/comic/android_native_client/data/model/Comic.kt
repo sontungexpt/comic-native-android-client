@@ -1,44 +1,54 @@
 package com.comic.android_native_client.data.model
 
-import com.comic.android_native_client.ui.components.common.SliceableItem
-
-data class Comic(
-    override val id: String = "3",
-    val authors: List<String> = listOf("Author"),
-    val imageUrl: String = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
-    val name: String = "Nam chinh muon ly hon nhung vo anh khong chiu",
-    val description: String = "Comic description",
-    val rating: UInt = 5u,
-    val newChapters: List<Chapter> = listOf()
-) : SliceableItem<String>
+import com.comic.android_native_client.common.Identifiable
+import java.time.Instant
 
 //data class Comic(
-//    override val id: String,
-//    val imageUrl: String,
-//    val name: String,
-//    val alternativeNames: List<String> = emptyList(),
-//    val summary: String = "",
-//    val thumbnailUrl: String,
-//    val slug: String,
-//    val description: String = "",
-//    val rating: UInt,
-//    val status: String,
-//    val dailyViews: Int,
-//    val weeklyViews: Int,
-//    val monthlyViews: Int,
-//    val yearlyViews: Int,
-//    val newChapters: List<Chapter>,
-//    val authors: List<String> = emptyList(),
-//    val artists: List<String> = emptyList(),
-//    val categoryIds: List<String> = emptyList(),
-//    val tags: List<String> = emptyList(),
-//    val lastNewChapterCheckAt: Instant,
-//    val newChapterUpdatedAt: Instant,
-//    val ownerId: String,
+//    override val id: String = "3",
+//    val authors: List<String> = listOf("Author"),
+//    val imageUrl: String = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
+//    val name: String = "Nam chinh muon ly hon nhung vo anh khong chiu",
+//    val description: String = "Comic description",
+//    val rating: UInt = 5u,
+//    val newChapters: List<Chapter> = listOf()
 //) : SliceableItem<String>
 
+data class Comic(
+    override val id: String,
+    val name: String,
+    val alternativeNames: List<String> = emptyList(),
+    val summary: String = "",
+    val thumbnailUrl: String = "",
+    val description: String = "",
+    val slug: String,
+    val status: String,
+    val dailyViews: Int,
+    val weeklyViews: Int,
+    val monthlyViews: Int,
+    val yearlyViews: Int,
+    val newChapters: List<Chapter>,
+    val authors: List<String> = emptyList(),
+    val artists: List<String> = emptyList(),
+    val categoryIds: List<String> = emptyList(),
+    val tags: List<String> = emptyList(),
+    val lastNewChapterCheckAt: Instant,
+    val newChapterUpdatedAt: Instant,
+    val ownerId: String,
+) : Identifiable<String> {
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
 
-//
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        else if (other is Comic) {
+            return id == other.id
+        }
+        return false
+    }
+}
+
+
 //
 //@Schema(
 //    description = "The original source of the comic",
@@ -47,15 +57,15 @@ data class Comic(
 //    requiredMode = RequiredMode.NOT_REQUIRED)
 //private OriginalSource originalSource;
 
-
+//
 //@JsonGetter("newChapters")
 //@Schema(hidden = true)
 //public List<ShortInfoChapter> getNewChaptersInfo() {
 //    if (newChapters == null) return List.of();
 //    return newChapters.stream().sorted((c1, c2) -> c2.getNum().compareTo(c1.getNum())).toList();
 //}
-
-
+//
+//
 //
 //@Schema(
 //    description = "The characters in the comic",
@@ -69,7 +79,7 @@ data class Comic(
 //    exampleClasses = {Translator.class})
 //private List<@Valid Translator> translators;
 //
-
+//
 
 
 

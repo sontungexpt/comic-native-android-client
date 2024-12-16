@@ -8,17 +8,19 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.comic.android_native_client.constants.Screen
-import com.comic.android_native_client.exmaple.data.comics
 import com.comic.android_native_client.ui.components.SimpleComic
 import com.comic.android_native_client.ui.components.common.LoadingCircle
 import com.comic.android_native_client.ui.components.common.TextWithIcon
@@ -31,12 +33,31 @@ fun FavoriteScreen(
     favoriteViewModel: FavoriteViewModel = hiltViewModel<FavoriteViewModel>(),
     horizontalPadding: Dp = 20.dp
 ) {
+    val lazyGridState = rememberLazyGridState()
 
+    LaunchedEffect(lazyGridState) {
+        snapshotFlow { lazyGridState.layoutInfo.visibleItemsInfo }
+            .collect { visibleItems ->
+                val totalItems = lazyGridState.layoutInfo.totalItemsCount
+                val lastVisibleItem = visibleItems.lastOrNull()?.index
+
+                if (favoriteViewModel.nextPageFetching) {
+                    return@collect
+                } else if (!favoriteViewModel.intialized ||
+                    (lastVisibleItem != null
+                            && lastVisibleItem >= totalItems - 1
+                            )
+                ) {
+                    favoriteViewModel.loadMoreComics()
+                }
+            }
+    }
     HeaderScreen(
         contentPadding = horizontalPadding,
         headerText = "Favorite"
     ) {
         LazyVerticalGrid(
+            state = lazyGridState,
             modifier = Modifier.fillMaxWidth(),
             columns = GridCells.Fixed(2),
             horizontalArrangement = Arrangement.spacedBy(24.dp),
@@ -44,19 +65,20 @@ fun FavoriteScreen(
         ) {
 
             items(
-                items = comics,
+                items = favoriteViewModel.favoriteComics,
                 contentType = { it.javaClass },
                 key = { it.id }
             )
             {
                 SimpleComic(
-                    comic = it,
+                    name = it.name,
+                    imageUrl = it.thumbnailUrl,
                     onclick = {
                         navController.navigate(
                             Screen.ComicDetail(
                                 id = it.id,
                                 authors = it.authors,
-                                imageUrl = it.imageUrl,
+                                imageUrl = it.thumbnailUrl,
                                 name = it.name,
                                 description = it.description,
                             )
@@ -78,15 +100,16 @@ fun FavoriteScreen(
                 )
             }
 
-
-            item(
-                key = "Loading Indicator",
-                span = { GridItemSpan(maxLineSpan) })
-            {
-                LoadingCircle(
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(24.dp)
-                )
+            if (favoriteViewModel.nextPageFetching) {
+                item(
+                    key = "Loading Indicator",
+                    span = { GridItemSpan(maxLineSpan) })
+                {
+                    LoadingCircle(
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
             }
         }
 
