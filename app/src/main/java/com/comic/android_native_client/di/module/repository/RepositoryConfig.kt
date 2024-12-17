@@ -1,12 +1,18 @@
 package com.comic.android_native_client.di.module.repository
 
+import com.comic.android_native_client.data.repository.ChapterRepository
 import com.comic.android_native_client.data.repository.ComicCategoryRepository
+import com.comic.android_native_client.data.repository.ComicRepository
 import com.comic.android_native_client.data.repository.CommentRepository
 import com.comic.android_native_client.data.repository.FavoriteRepository
+import com.comic.android_native_client.data.repository.impl.ChapterRepositoryImpl
 import com.comic.android_native_client.data.repository.impl.ComicCategoryRepositoryImpl
+import com.comic.android_native_client.data.repository.impl.ComicRepositoryImpl
 import com.comic.android_native_client.data.repository.impl.CommentRepositoryImpl
 import com.comic.android_native_client.data.repository.impl.FavoriteRepositoryImpl
+import com.comic.android_native_client.network.services.ChapterService
 import com.comic.android_native_client.network.services.ComicCategoryService
+import com.comic.android_native_client.network.services.ComicService
 import com.comic.android_native_client.network.services.CommentService
 import com.comic.android_native_client.network.services.FavoriteComicService
 import dagger.Module
@@ -43,6 +49,24 @@ object RepositoryConfig {
     ): FavoriteRepository {
         return FavoriteRepositoryImpl(
             favoriteComicService = favoriteComicService
+        )
+    }
+
+    @[Provides Singleton]
+    fun provideComicRepository(
+        comicService: ComicService
+    ): ComicRepository {
+        return ComicRepositoryImpl(
+            comicService
+        )
+    }
+
+    @[Provides Singleton]
+    fun provideChapterRepository(
+        chapterService: ChapterService
+    ): ChapterRepository {
+        return ChapterRepositoryImpl(
+            chapterService
         )
     }
 }

@@ -6,12 +6,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.FormatColorFill
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.comic.android_native_client.constants.Screen
+import com.comic.android_native_client.ui.components.common.LoadingIndicatorButton
 import com.comic.android_native_client.ui.components.common.TextWithIcon
 import com.comic.android_native_client.ui.components.layout.UnauthenticatedScreen
 import com.comic.android_native_client.ui.utils.navigateToAuth
@@ -56,7 +57,6 @@ fun ProfileScreen(
     ) {
         item(
             key = "header"
-
         ) {
             ProfileHeader(
                 username = userState.name,
@@ -84,7 +84,7 @@ fun ProfileScreen(
                 RowThemeChoosable(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(60.dp),
+                        .height(50.dp),
                 )
 
             }
@@ -111,13 +111,17 @@ fun ProfileScreen(
         item(
             key = "logout"
         ) {
-            ElevatedButton(
+            LoadingIndicatorButton(
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.error,
                     contentColor = MaterialTheme.colorScheme.onError
                 ),
+                loadingColor = MaterialTheme.colorScheme.onError,
+                loadingModifier = Modifier.size(24.dp),
+                loading = profileViewModel.logouting,
                 shape = MaterialTheme.shapes.medium,
-                elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 4.dp),
+                elevation = ButtonDefaults
+                    .elevatedButtonElevation(defaultElevation = 4.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = paddingX.dp)

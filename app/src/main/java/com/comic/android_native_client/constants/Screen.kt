@@ -4,11 +4,15 @@ package com.comic.android_native_client.constants
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Login
+import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.Details
+import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.comic.android_native_client.R
 import kotlinx.serialization.Serializable
@@ -60,7 +64,12 @@ sealed class Screen(
 
     @Serializable
     object Search : Screen(R.string.search) {
-        override fun icon(): ImageVector = Icons.Filled.Favorite
+        override fun icon(): ImageVector = Icons.Filled.Search
+    }
+
+    @Serializable
+    object NotFound : Screen(R.string.not_found) {
+        override fun icon(): ImageVector = Icons.Filled.ErrorOutline
     }
 
     @Serializable
@@ -96,32 +105,29 @@ sealed class Screen(
         override fun icon(): ImageVector {
             return Icons.Filled.Person
         }
-
-
     }
 
 
     @Serializable
     data class ComicDetail(
         val id: String,
-        val authors: List<String>,
         val imageUrl: String,
         val name: String,
-        val description: String,
+        val genres: List<String>
     ) : DynamicScreen {
         override fun icon(): ImageVector {
-            return Icons.Filled.Info
+            return Icons.Filled.Details
         }
     }
 
     @Serializable
     data class ComicReading(
-        val id: String,
+        val comicId: String,
         val chapterId: String,
         val chapterName: String,
     ) : DynamicScreen {
         override fun icon(): ImageVector {
-            return Icons.Filled.Info
+            return Icons.Filled.Book
         }
     }
 }

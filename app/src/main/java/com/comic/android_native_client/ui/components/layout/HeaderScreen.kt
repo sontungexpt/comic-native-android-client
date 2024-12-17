@@ -22,6 +22,7 @@ fun HeaderScreen(
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     headerText: String = "Header",
     contentPadding: Dp = 12.dp,
+    bottomBar: (@Composable () -> Unit) = {},
     header: (@Composable () -> Unit) = {
         Text(
             text = headerText,
@@ -37,6 +38,7 @@ fun HeaderScreen(
     content: @Composable (ColumnScope.() -> Unit)
 ) {
     Scaffold(
+        bottomBar = bottomBar,
         modifier = modifier,
         topBar = header
     ) { innerPadding ->

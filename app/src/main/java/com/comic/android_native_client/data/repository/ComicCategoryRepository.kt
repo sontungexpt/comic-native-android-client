@@ -9,5 +9,6 @@ interface ComicCategoryRepository {
     suspend fun getComicCategories(): Result<List<ComicCategory>>
 
     suspend fun addComicCategory(comicCategory: ComicCategoryRequest): Result<ComicCategory>
+
 }
 

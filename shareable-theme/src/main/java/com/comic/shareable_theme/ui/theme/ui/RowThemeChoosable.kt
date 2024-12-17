@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Button
@@ -34,7 +33,7 @@ fun RowThemeChoosable(
     onThemeChange: ((state: Boolean) -> Unit)? = null,
     modifier: Modifier = Modifier,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(8.dp),
-    itemShape: Shape = RoundedCornerShape(14.dp),
+    itemShape: Shape = MaterialTheme.shapes.medium,
     itemModifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current

@@ -14,7 +14,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -31,8 +34,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.comic.android_native_client.constants.Screen
+import com.comic.android_native_client.data.model.ComicChapter
+import com.comic.android_native_client.data.model.NovelChapter
+import com.comic.android_native_client.network.dto.response.ResourceInfo
 import com.comic.android_native_client.ui.components.CommentButtonWithModal
 import com.comic.android_native_client.ui.components.CommentCard
+import com.comic.android_native_client.ui.components.common.LoadingCircle
 import com.comic.android_native_client.ui.components.layout.BackFloatingScreen
 
 val items = listOf(
@@ -59,6 +66,21 @@ fun ComicReadingScreen(
     navController: NavController,
     currentChapter: Screen.ComicReading,
 ) {
+
+    LaunchedEffect(currentChapter.chapterId, currentChapter.comicId) {
+        comicReadingViewModel.loadChapter(
+            comicId = currentChapter.comicId,
+            chapterId = currentChapter.chapterId,
+            onNotFound = {
+                navController.navigate(Screen.NotFound) {
+                    popUpTo(Screen.Home) {
+                        inclusive = true
+                    }
+                }
+            }
+        )
+    }
+
     BackFloatingScreen(
         onBackCLick = {
             navController.popBackStack()
@@ -79,25 +101,53 @@ fun ComicReadingScreen(
                     shape = MaterialTheme.shapes.medium
                 )
         )
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.TopCenter)
-                .padding(top = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
-            items(
-                items = items,
-            ) {
-                AsyncImage(
-                    model = it,
-                    contentDescription = "Comic Image",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(MaterialTheme.shapes.medium)
-                )
+        if (comicReadingViewModel.loading) {
+            LoadingCircle(
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        } else if (comicReadingViewModel.chapterDetail == null) {
+            return@BackFloatingScreen
+        } else if (comicReadingViewModel.chapterDetail is NovelChapter) {
+            Text(
+                textAlign = TextAlign.Justify,
+                text = (comicReadingViewModel.chapterDetail as NovelChapter).content,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = horizontalPadding)
+                    .padding(top = 10.dp)
+            )
+        } else if (comicReadingViewModel.chapterDetail is ComicChapter) {
+            val comicChapter = comicReadingViewModel.chapterDetail as ComicChapter
+            val baseUrl = if (comicChapter.resourceInfo is ResourceInfo.Relative) {
+                comicChapter.resourceInfo.baseUrl + "/"
+            } else {
+                ""
             }
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.TopCenter)
+                    .padding(top = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                items(
+                    key = { it.number },
+                    contentType = { it.javaClass },
+                    items = comicChapter.imagePages,
+                ) {
+                    AsyncImage(
+                        model = baseUrl + it.path,
+                        contentDescription = "Comic Image",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(MaterialTheme.shapes.medium)
+                    )
+                }
+            }
+
         }
 
         var modalVisible by remember { mutableStateOf(false) }

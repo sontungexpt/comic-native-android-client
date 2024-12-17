@@ -35,7 +35,7 @@ class FavoriteComicServiceImpl(
         return favoriteComicServiceAuthenticated.removeFavoriteComic(comicId)
     }
 
-    override suspend fun getFavoriteComicStatus(comicId: String): Response<Nothing> {
+    override suspend fun getFavoriteComicStatus(comicId: String): Response<Boolean> {
         return favoriteComicServiceAuthenticated.getFavoriteComicStatus(comicId)
     }
 

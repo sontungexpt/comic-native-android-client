@@ -21,7 +21,7 @@ private val BOTTOM_TAB_SCREENS = setOf(
     Screen.Home,
     Screen.Explore,
     Screen.Favorite,
-    Screen.ProfileGraph
+    Screen.ProfileGraph,
 )
 
 @Composable

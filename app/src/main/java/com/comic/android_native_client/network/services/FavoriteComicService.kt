@@ -30,7 +30,7 @@ interface AuthenticatedFavoriteComicService {
     @GET(MainEndpoint.GET_FAVORITE_COMIC_STATUS_V1)
     suspend fun getFavoriteComicStatus(
         @Path("comicId") comicId: String
-    ): Response<Nothing>
+    ): Response<Boolean>
 
 }
 

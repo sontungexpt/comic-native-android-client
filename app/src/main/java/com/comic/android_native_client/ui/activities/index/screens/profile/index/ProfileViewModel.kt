@@ -1,5 +1,8 @@
 package com.comic.android_native_client.ui.activities.index.screens.profile.index
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.comic.android_native_client.data.repository.JwtRepository
@@ -19,10 +22,15 @@ class ProfileViewModel @Inject constructor(
         get() = sharedUserState.userState
     val isLoggedIn
         get() = sharedUserState.loggedIn
+    private var _logouting by mutableStateOf(false)
+
+    val logouting: Boolean
+        get() = _logouting
 
     fun logout(navigateToHome: () -> Unit) {
         viewModelScope.launch {
             try {
+                _logouting = true
                 val response = authService.logout()
                 if (response.isSuccessful) {
                     jwtRepository.clearAllTokens()
@@ -32,6 +40,7 @@ class ProfileViewModel @Inject constructor(
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+            _logouting = false
 
         }
     }

@@ -3,9 +3,7 @@ package com.comic.android_native_client.network.dto.response
 import com.comic.android_native_client.common.Identifiable
 import com.comic.android_native_client.data.model.Comment
 import com.comic.android_native_client.data.model.CommentAuthor
-import com.comic.android_native_client.serialization.serializer.InstantSerializer
-import kotlinx.serialization.Serializable
-import java.time.Instant
+import kotlinx.datetime.Instant
 
 data class CommentAuthorResponse(
     val pubId: String,
@@ -32,7 +30,6 @@ data class CommentResponse(
     val totalReplies: Int,
     val content: String,
 
-    @Serializable(with = InstantSerializer::class)
     val updatedAt: Instant,
 
     val replies: List<CommentResponse> = emptyList(),

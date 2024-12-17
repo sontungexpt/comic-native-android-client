@@ -21,6 +21,7 @@ import androidx.navigation.toRoute
 import com.comic.android_native_client.constants.IScreen
 import com.comic.android_native_client.constants.Screen
 import com.comic.android_native_client.ui.activities.authentications.screens.login.LoginScreen
+import com.comic.android_native_client.ui.activities.index.screens.NotFoundScreen
 import com.comic.android_native_client.ui.activities.index.screens.detail.ComicDetailScreen
 import com.comic.android_native_client.ui.activities.index.screens.explore.ExploreScreen
 import com.comic.android_native_client.ui.activities.index.screens.favorite.FavoriteScreen
@@ -148,6 +149,13 @@ fun App(
                 ComicSearchScreen(
                     navController = navController,
                     horizontalPadding = horizontalPadding,
+                )
+            }
+
+            composable<Screen.NotFound> {
+                NotFoundScreen(
+                    navController = navController,
+                    horizontalPadding = horizontalPadding
                 )
             }
         }

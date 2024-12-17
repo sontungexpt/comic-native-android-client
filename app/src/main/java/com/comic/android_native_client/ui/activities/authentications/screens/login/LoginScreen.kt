@@ -112,11 +112,10 @@ fun LoginScreen(
 
         LoadingIndicatorTextButton(
             onClick = {
-                viewModel.login({
+                viewModel.login {
                     navigateToApp(context)
-                })
+                }
             },
-            loadingModifier = Modifier.size(24.dp),
             loading = viewModel.loginProcessing
         ) {
             Text(

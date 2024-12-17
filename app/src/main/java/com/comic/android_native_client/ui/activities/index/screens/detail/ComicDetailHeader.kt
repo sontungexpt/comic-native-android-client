@@ -1,12 +1,12 @@
 package com.comic.android_native_client.ui.activities.index.screens.detail
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -19,25 +19,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
-import androidx.navigation.NavController
 import coil3.compose.AsyncImage
-import com.comic.android_native_client.ui.components.common.BackIconButton
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun Header(
+fun ComicDetailHeader(
     comicName: String,
-    genres: List<String>,
-    navController: NavController
+    comicImageUrl: String,
+    comicGenres: List<String>,
 ) {
     Box(
-        modifier = Modifier.height(500.dp)
+        modifier = Modifier.height(570.dp)
     ) {
-        
-
         AsyncImage(
-            model = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
+            model = comicImageUrl,
             contentDescription = "Comic Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -46,8 +41,11 @@ fun Header(
         )
 
         Surface(
+            shape = MaterialTheme.shapes.medium,
             color = MaterialTheme.colorScheme.surfaceDim.copy(alpha = 0.62f),
-            modifier = Modifier.align(Alignment.BottomStart)
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
         ) {
             Column(
                 modifier = Modifier.padding(8.dp),
@@ -63,7 +61,7 @@ fun Header(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    genres.forEach {
+                    comicGenres.forEach {
                         GenreTag(name = it)
                     }
                 }

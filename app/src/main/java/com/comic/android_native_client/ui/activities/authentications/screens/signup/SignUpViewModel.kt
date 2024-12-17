@@ -70,6 +70,13 @@ class SignUpViewModel @Inject constructor(
                 )
                 if (response.isSuccessful) {
                     navController.navigate(Screen.Login)
+                    val msg = "Registration successful"
+                    
+                    Toast.makeText(
+                        context,
+                        msg,
+                        msg.length
+                    ).show()
                 } else {
                     when (response.code()) {
                         409 -> {

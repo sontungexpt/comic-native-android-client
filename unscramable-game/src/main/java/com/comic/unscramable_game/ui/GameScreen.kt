@@ -44,6 +44,7 @@ import com.comic.unscramable_game.R
 
 @Composable
 fun GameScreen(
+    modifier: Modifier = Modifier,
     gameViewModel: GameViewModel = viewModel(
         factory = GameViewModelFactory(stringArrayResource(R.array.word_list).toHashSet())
     )
@@ -52,7 +53,7 @@ fun GameScreen(
     val mediumPadding = dimensionResource(R.dimen.padding_medium)
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .statusBarsPadding()
             .verticalScroll(rememberScrollState())
             .safeDrawingPadding()

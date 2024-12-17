@@ -5,11 +5,15 @@ import com.comic.android_native_client.di.qualifiers.AuthenticatedClient
 import com.comic.android_native_client.di.qualifiers.PublicClient
 import com.comic.android_native_client.di.qualifiers.TokenRefreshClient
 import com.comic.android_native_client.network.services.AuthService
+import com.comic.android_native_client.network.services.ChapterService
 import com.comic.android_native_client.network.services.ComicCategoryService
+import com.comic.android_native_client.network.services.ComicService
 import com.comic.android_native_client.network.services.CommentService
 import com.comic.android_native_client.network.services.FavoriteComicService
 import com.comic.android_native_client.network.services.UserService
+import com.comic.android_native_client.network.services.auth.ComicServiceImpl
 import com.comic.android_native_client.network.services.impl.AuthServiceImpl
+import com.comic.android_native_client.network.services.impl.ChapterServiceImpl
 import com.comic.android_native_client.network.services.impl.ComicCategoryServiceImpl
 import com.comic.android_native_client.network.services.impl.CommentServiceImpl
 import com.comic.android_native_client.network.services.impl.FavoriteComicServiceImpl
@@ -84,6 +88,26 @@ object ServiceConfig {
     ): CommentService {
         return CommentServiceImpl(
             authenticatedClientRetrofit = authenticatedRetrofit,
+            publicClientRetrofit = publicClientRetrofit
+        )
+    }
+
+    @[Provides Singleton]
+    fun provideComicService(
+        @PublicClient
+        publicClientRetrofit: Retrofit
+    ): ComicService {
+        return ComicServiceImpl(
+            publicClientRetrofit = publicClientRetrofit
+        )
+    }
+
+    @[Provides Singleton]
+    fun provideChapterService(
+        @PublicClient
+        publicClientRetrofit: Retrofit
+    ): ChapterService {
+        return ChapterServiceImpl(
             publicClientRetrofit = publicClientRetrofit
         )
     }

@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class ResourceInfo {
     @Serializable
-    data class Absolute(val url: String) : ResourceInfo()
+    object Absolute : ResourceInfo()
 
     @Serializable
-    data class Relative(val baseUrl: String, val path: String) : ResourceInfo()
+    data class Relative(val baseUrl: String) : ResourceInfo()
 }

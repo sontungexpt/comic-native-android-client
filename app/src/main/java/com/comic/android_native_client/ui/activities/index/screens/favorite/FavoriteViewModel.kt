@@ -1,7 +1,9 @@
 package com.comic.android_native_client.ui.activities.index.screens.favorite
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.comic.android_native_client.common.Result
@@ -21,30 +23,29 @@ class FavoriteViewModel @Inject constructor(
     private var _totalComics: Int = 0
     private var _currentPage: Int = -1
 
-
     var _favoriteComics = mutableStateListOf<Comic>()
     val favoriteComics: List<Comic>
         get() = _favoriteComics
 
-    private var _nextPageFetching = mutableStateOf(false)
-    val nextPageFetching
-        get() = _nextPageFetching.value
+    private var _loadingMore by mutableStateOf(false)
+    val loadingMore
+        get() = _loadingMore
 
     private val mutex = Mutex()
 
     val intialized: Boolean
         get() = _currentPage != -1
 
-    fun hasNextPage(): Boolean = _currentPage == -1
+    fun hasNextPage(): Boolean = !intialized
             || _totalComics > _currentPage
 
     fun loadMoreComics() {
+        if (_loadingMore) return
+        else if (!hasNextPage()) return
+        _loadingMore = true
+
         viewModelScope.launch {
-            mutex.withLock {
-                if (_nextPageFetching.value ||
-                    !hasNextPage()
-                ) return@withLock
-                _nextPageFetching.value = true
+            mutex.withLock(this) {
                 val nextPage = _currentPage + 1
                 when (val result = favoriteRepository.getFavoriteComics(
                     page = nextPage,
@@ -53,19 +54,27 @@ class FavoriteViewModel @Inject constructor(
                 )) {
                     is Result.Success -> {
                         val page = result.data
+                        println(page)
                         _totalComics = page.totalElements.takeIf { _currentPage == -1 }
                             ?: _totalComics
                         _currentPage = nextPage
                         _favoriteComics.addAll(page.content)
                     }
 
-                    is Result.Error -> {}
-                    is Result.Exception -> {}
-                    else -> {}
+                    is Result.Error -> {
+                        println("error")
+                    }
+
+
+                    else -> {
+                        println("else")
+                    }
                 }
-                _nextPageFetching.value = false
+                _loadingMore = false
             }
         }
+
+
     }
 
 
@@ -78,7 +87,6 @@ class FavoriteViewModel @Inject constructor(
                 }
 
                 is Result.Error -> {}
-                is Result.Exception -> {}
                 else -> {}
             }
         }
@@ -93,7 +101,6 @@ class FavoriteViewModel @Inject constructor(
                 }
 
                 is Result.Error -> {}
-                is Result.Exception -> {}
                 else -> {}
             }
         }

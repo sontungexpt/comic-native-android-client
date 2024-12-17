@@ -3,7 +3,6 @@ package com.comic.android_native_client.ui.activities.index.screens.detail
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,18 +31,8 @@ import com.comic.android_native_client.ui.components.ChapterCard
 import com.comic.android_native_client.ui.components.common.ExpandableText
 import com.comic.android_native_client.ui.components.layout.BackFloatingScreen
 
-fun navigateToReadingScreen(
-    navController: NavController,
-    chapterInfo: Screen.ComicReading
-) {
-    navController.navigate(
-        chapterInfo
-    ) {
-    }
 
-}
-
-@OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ComicDetailScreen(
     comicDetailViewModel: ComicDetailViewModel = hiltViewModel<ComicDetailViewModel>(),
@@ -65,14 +54,20 @@ fun ComicDetailScreen(
                 ),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            item(key = "header_section") {
-                Header(
-                    navController = navController,
+            item(
+                contentType = "header_section",
+                key = "header_section"
+            ) {
+                ComicDetailHeader(
                     comicName = currentComic.name,
-                    genres = listOf("Fantasy", "Manhwa", "Action", "Truyện Màu")
+                    comicImageUrl = currentComic.imageUrl,
+                    comicGenres = currentComic.genres
                 )
             }
-            stickyHeader(key = "reading_button_section") {
+            stickyHeader(
+                contentType = "reading_button_section",
+                key = "reading_button_section"
+            ) {
                 Surface(
                     tonalElevation = 4.dp,
                     modifier = Modifier.fillMaxWidth()
@@ -81,8 +76,8 @@ fun ComicDetailScreen(
                         onClick = {
                             navController.navigate(
                                 Screen.ComicReading(
-                                    chapterId = "123",
-                                    id = "123",
+                                    chapterId = "666ef08fa83372074680eb6e",
+                                    comicId = "675055a70a0d7c6accfc6414",
                                     chapterName = "Nhật Ký Từ Chức Cấp S"
                                 )
                             )
@@ -104,7 +99,10 @@ fun ComicDetailScreen(
                 }
             }
 
-            item(key = "comic_stats_section") {
+            item(
+                contentType = "comic_stats_section",
+                key = "comic_stats_section"
+            ) {
                 var favorited = remember { mutableStateOf(false) }
                 ComicStatsSection(
                     views = 100,
@@ -119,7 +117,10 @@ fun ComicDetailScreen(
                 )
             }
 
-            item(key = "comic_information_section") {
+            item(
+                contentType = "comic_information_section",
+                key = "comic_information_section"
+            ) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     modifier = Modifier.padding(bottom = 4.dp),
@@ -128,7 +129,7 @@ fun ComicDetailScreen(
                 )
                 Column {
                     Text(
-                        text = "Tác giả: Đang cập nhật",
+                        text = "Dang cap nhat",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -136,7 +137,10 @@ fun ComicDetailScreen(
                 }
             }
 
-            item(key = "comic_summary_section") {
+            item(
+                contentType = "comic_summary_section",
+                key = "comic_summary_section"
+            ) {
                 Text(
                     text = stringResource(R.string.summary),
                     style = MaterialTheme.typography.titleMedium,
@@ -151,7 +155,10 @@ fun ComicDetailScreen(
             }
 
 
-            item(key = "comic_chapter_title_section") {
+            item(
+                contentType = "comic_chapter_title_section",
+                key = "comic_chapter_title_section"
+            ) {
                 SectionDivider()
                 Text(
                     text = "Danh sách tập",

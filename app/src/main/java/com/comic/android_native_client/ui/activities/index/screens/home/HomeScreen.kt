@@ -116,10 +116,9 @@ fun HomeScreen(
                         navController.navigate(
                             route = Screen.ComicDetail(
                                 id = it.id,
-                                authors = it.authors,
                                 imageUrl = it.imageUrl,
                                 name = it.name,
-                                description = it.description,
+                                genres = emptyList()
                             )
                         )
                     },

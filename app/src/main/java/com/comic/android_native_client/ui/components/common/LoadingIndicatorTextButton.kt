@@ -35,27 +35,28 @@ fun LoadingIndicatorTextButton(
     contentPadding: PaddingValues = ButtonDefaults.TextButtonContentPadding,
     content: @Composable RowScope.() -> Unit
 ) {
-    if (loading) {
-        LoadingCircle(
-            wrapperModifier = loadingWrapperModifier,
-            color = loadingColor,
-            strokeWidth = loadingStrokeWidth,
-            trackColor = loadingTrackColor,
-            strokeCap = loadingstrokeCap,
-            modifier = loadingModifier,
-        )
-    } else {
-        TextButton(
-            onClick = onClick,
-            modifier = modifier,
-            enabled = enabled,
-            shape = shape,
-            colors = colors,
-            elevation = elevation,
-            border = border,
-            contentPadding = contentPadding,
-            content = content
-        )
+    TextButton(
+        onClick = onClick,
+        modifier = modifier,
+        enabled = enabled,
+        shape = shape,
+        colors = colors,
+        elevation = elevation,
+        border = border,
+        contentPadding = contentPadding
+    ) {
+        if (loading) {
+            LoadingCircle(
+                wrapperModifier = loadingWrapperModifier,
+                color = loadingColor,
+                strokeWidth = loadingStrokeWidth,
+                trackColor = loadingTrackColor,
+                strokeCap = loadingstrokeCap,
+                modifier = loadingModifier,
+            )
+        } else {
+            content()
+        }
     }
 }
 

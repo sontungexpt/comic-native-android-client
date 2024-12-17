@@ -14,68 +14,60 @@ class ComicCategoryRepositoryImpl(
 ) : ComicCategoryRepository {
 
     override suspend fun getComicCategories(): Result<List<ComicCategory>> {
-        return try {
-            val response = comicCategoryService.fetchComicCategories()
-            return when {
-                response.isSuccessful -> {
-                    response.body()?.let { categoriesResponse ->
-                        return Result.Success(categoriesResponse.map { it.toComicCategory() })
-                    } ?: Result.NoContent
-                }
-
-                response.code() == 404 -> {
-                    Result.Error("Categories not found", code = 404)
-                }
-
-                response.code() in 400..499 -> {
-                    Result.Error("Client error: ${response.message()}", code = response.code())
-                }
-
-                else -> {
-                    Result.Error("Server error: ${response.message()}", code = response.code())
-                }
+        val response = comicCategoryService.fetchComicCategories()
+        return when {
+            response.isSuccessful -> {
+                response.body()?.let { categoriesResponse ->
+                    return Result.Success(categoriesResponse.map { it.toComicCategory() })
+                } ?: Result.NoContent
             }
 
-        } catch (e: Exception) {
-            Result.Exception(e)
+            else -> {
+                val message = response.message()
+                when (val status = HttpStatus.from(response.code())) {
+                    HttpStatus.NotFound -> {
+                        Result.Error("Categories not found", status)
+                    }
+
+                    else -> {
+                        Result.Error(message, status)
+                    }
+                }
+            }
         }
     }
 
 
     override suspend fun addComicCategory(comicCategory: ComicCategoryRequest): Result<ComicCategory> {
-        try {
-            val response = comicCategoryService.addComicCategory(comicCategory)
-            when {
-                response.isSuccessful -> {
-                    return response.body()?.let { it.toComicCategory() }?.let { Result.Success(it) }
-                        ?: Result.NoContent
-                }
+        val response = comicCategoryService.addComicCategory(comicCategory)
+        when {
+            response.isSuccessful -> {
+                return response.body()?.let { it.toComicCategory() }?.let { Result.Success(it) }
+                    ?: Result.NoContent
+            }
 
-                else -> {
-                    val code = response.code()
-                    val message = response.message()
-                    when (HttpStatus.from(code)) {
-                        HttpStatus.Conflict -> {
-                            return Result.Error("Conflict: $message", code = code)
-                        }
-
-                        HttpStatus.Forbidden -> {
-                            return Result.Error("Forbidden: $message", code = code)
-                        }
-
-                        HttpStatus.BadRequest -> {
-                            return Result.Error("Bad request: $message", code = code)
-                        }
-
-                        else -> {
-                            return Result.Error("Server error: $message", code = code)
-                        }
+            else -> {
+                val message = response.message()
+                when (val status = HttpStatus.from(response.code())) {
+                    HttpStatus.Conflict -> {
+                        return Result.Error("Conflict: $message", status)
                     }
 
+                    HttpStatus.Forbidden -> {
+                        return Result.Error("Forbidden: $message", status)
+                    }
+
+                    HttpStatus.BadRequest -> {
+                        return Result.Error("Bad request: $message", status)
+                    }
+
+                    else -> {
+                        return Result.Error(message, status)
+                    }
                 }
+
             }
-        } catch (e: Exception) {
-            return Result.Exception(e)
         }
+
     }
 }

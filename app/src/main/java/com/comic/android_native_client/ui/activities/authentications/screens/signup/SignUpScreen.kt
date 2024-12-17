@@ -95,7 +95,6 @@ fun SignUpScreen(
             onClick = {
                 viewModel.signUp(navController)
             },
-            loadingModifier = Modifier.size(24.dp),
             loading = viewModel.isLoading
         ) {
             Text(

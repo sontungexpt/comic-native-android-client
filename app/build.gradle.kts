@@ -49,6 +49,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.datetime)
+
     // dependency injection
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.hilt.navigation.fragment)

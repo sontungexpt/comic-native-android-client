@@ -1,9 +1,7 @@
 package com.comic.android_native_client.data.model
 
 import com.comic.android_native_client.common.Identifiable
-import com.comic.android_native_client.serialization.serializer.InstantSerializer
-import kotlinx.serialization.Serializable
-import java.time.Instant
+import kotlinx.datetime.Instant
 
 
 data class CommentAuthor(
@@ -25,7 +23,6 @@ data class Comment(
     val totalReplies: Int,
     val content: String,
 
-    @Serializable(with = InstantSerializer::class)
     val updatedAt: Instant,
 
     val replies: List<Comment> = emptyList(),

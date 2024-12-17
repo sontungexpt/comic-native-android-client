@@ -5,13 +5,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.comic.shareable_theme.ui.theme.ShareableTheme
 import com.comic.unscramable_game.ui.GameScreen
 
-class MainActivity : ComponentActivity() {
+class UnscramableGameActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
@@ -21,7 +22,9 @@ class MainActivity : ComponentActivity() {
             ) {
                 ShareableTheme {
                     Scaffold { innerPadding ->
-                        GameScreen()
+                        GameScreen(
+                            modifier = Modifier.padding(innerPadding)
+                        )
 
                     }
                 }

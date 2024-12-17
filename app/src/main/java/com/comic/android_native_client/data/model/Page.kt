@@ -17,14 +17,12 @@ data class Pageable(
     val offset: Int,
     val paged: Boolean,
     val unpaged: Boolean,
-    val hasPrevious: Boolean,
     val sort: Sort
 )
 
 @Serializable
 data class Page<T>(
     val content: List<T> = emptyList(),
-    val hasContent: Boolean,
     val size: Int,
     val sort: Sort,
     val totalPages: Int,
@@ -34,6 +32,9 @@ data class Page<T>(
     val first: Boolean,
     val last: Boolean,
     val empty: Boolean,
-    val sorted: Boolean,
     val pageable: Pageable
-)
+) {
+    override fun toString(): String {
+        return "Page(content=$content,  size=$size, sort=$sort, totalPages=$totalPages, totalElements=$totalElements, number=$number, numberOfElements=$numberOfElements, first=$first, last=$last, empty=$empty,  pageable=$pageable)"
+    }
+}
