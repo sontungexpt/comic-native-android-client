@@ -17,6 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,8 +67,12 @@ fun ComicReadingScreen(
     navController: NavController,
     currentChapter: Screen.ComicReading,
 ) {
+    val uiState by comicReadingViewModel.uiState.collectAsState()
 
-    LaunchedEffect(currentChapter.chapterId, currentChapter.comicId) {
+    LaunchedEffect(
+        currentChapter.chapterId,
+        currentChapter.comicId
+    ) {
         comicReadingViewModel.loadChapter(
             comicId = currentChapter.comicId,
             chapterId = currentChapter.chapterId,
@@ -82,17 +87,15 @@ fun ComicReadingScreen(
     }
 
     BackFloatingScreen(
-        onBackCLick = {
-            navController.popBackStack()
-        },
+        onBackCLick = { navController.popBackStack() },
         modifier = Modifier.fillMaxSize()
     ) {
         ChapterNavigationBar(
             chapterName = currentChapter.chapterName,
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(10.dp)
                 .height(64.dp)
-                .fillMaxWidth()
                 .zIndex(100f)
                 .shadow(4.dp, shape = MaterialTheme.shapes.medium)
                 .align(Alignment.BottomCenter)
@@ -101,19 +104,18 @@ fun ComicReadingScreen(
                     shape = MaterialTheme.shapes.medium
                 )
         )
-        if (comicReadingViewModel.loading) {
+        if (uiState.chapterLoading) {
             LoadingCircle(
-                modifier = Modifier
-                    .size(30.dp),
+                modifier = Modifier.size(30.dp),
                 wrapperModifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Center)
 
             )
-        } else if (comicReadingViewModel.chapterDetail == null) {
+        } else if (uiState.chapter == null) {
             return@BackFloatingScreen
-        } else if (comicReadingViewModel.chapterDetail is NovelChapter) {
-            val chapter = comicReadingViewModel.chapterDetail as NovelChapter
+        } else if (uiState.chapter is NovelChapter) {
+            val chapter = uiState.chapter as NovelChapter
             Text(
                 text = chapter.name,
                 style = MaterialTheme.typography.titleMedium,
@@ -132,8 +134,8 @@ fun ComicReadingScreen(
                     .padding(horizontal = horizontalPadding)
                     .padding(top = 10.dp)
             )
-        } else if (comicReadingViewModel.chapterDetail is ComicChapter) {
-            val comicChapter = comicReadingViewModel.chapterDetail as ComicChapter
+        } else if (uiState.chapter is ComicChapter) {
+            val comicChapter = uiState.chapter as ComicChapter
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()

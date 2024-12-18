@@ -6,10 +6,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.comic.android_native_client.common.Result
+import com.comic.android_native_client.common.HttpResult
+import com.comic.android_native_client.constants.HttpStatus
 import com.comic.android_native_client.data.model.Comic
 import com.comic.android_native_client.data.repository.FavoriteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -44,7 +46,7 @@ class FavoriteViewModel @Inject constructor(
         else if (!hasNextPage()) return
         _loadingMore = true
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             mutex.withLock(this) {
                 val nextPage = _currentPage + 1
                 when (val result = favoriteRepository.getFavoriteComics(
@@ -52,7 +54,7 @@ class FavoriteViewModel @Inject constructor(
                     size = 10,
                     sort = arrayOf("createdAt,desc")
                 )) {
-                    is Result.Success -> {
+                    is HttpResult.Success -> {
                         val page = result.data
                         println(page)
                         _totalComics = page.totalElements.takeIf { _currentPage == -1 }
@@ -61,7 +63,7 @@ class FavoriteViewModel @Inject constructor(
                         _favoriteComics.addAll(page.content)
                     }
 
-                    is Result.Error -> {
+                    is HttpResult.Error -> {
                         println("error")
                     }
 
@@ -79,30 +81,49 @@ class FavoriteViewModel @Inject constructor(
 
 
     fun favoriteComic(comic: Comic) {
-        viewModelScope.launch {
-            when (val result = favoriteRepository.addFavorite(comic.id)) {
-                is Result.Success -> {
-                    _totalComics++
-                    _favoriteComics.add(comic)
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                when (val result = favoriteRepository.addFavorite(comic.id)) {
+                    is HttpResult.Success -> {
+                        _totalComics++
+                        _favoriteComics.add(comic)
+                    }
 
-                is Result.Error -> {}
-                else -> {}
+                    is HttpResult.Error -> {
+                        when (result.status) {
+                            HttpStatus.Conflict -> {
+
+                            }
+
+                            else -> {}
+                        }
+                    }
+
+                    else -> {}
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
+
         }
     }
 
     fun unfavoriteComic(comic: Comic) {
-        viewModelScope.launch {
-            when (val result = favoriteRepository.removeFavorite(comic.id)) {
-                is Result.Success -> {
-                    _totalComics--
-                    _favoriteComics.remove(comic)
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                when (val result = favoriteRepository.removeFavorite(comic.id)) {
+                    is HttpResult.Success -> {
+                        _totalComics--
+                        _favoriteComics.remove(comic)
+                    }
 
-                is Result.Error -> {}
-                else -> {}
+                    is HttpResult.Error -> {}
+                    else -> {}
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
+
         }
     }
 }

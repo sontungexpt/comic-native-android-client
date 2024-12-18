@@ -2,7 +2,7 @@ package com.comic.android_native_client.ui.activities.index.screens.explore
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.comic.android_native_client.common.Result
+import com.comic.android_native_client.common.HttpResult
 import com.comic.android_native_client.data.model.ComicCategory
 import com.comic.android_native_client.data.repository.ComicCategoryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,14 +35,14 @@ class ExploreViewModel @Inject constructor(
         )
         viewModelScope.launch {
             when (val result = comicCategoryRepository.getComicCategories()) {
-                is Result.Success -> {
+                is HttpResult.Success -> {
                     _screenUiState.value = _screenUiState.value.copy(
                         categories = result.data,
                         categoriesFetching = false
                     )
                 }
 
-                is Result.Error -> {
+                is HttpResult.Error -> {
                     _screenUiState.value = _screenUiState.value.copy(
                         categories = emptyList(),
                         categoriesFetching = false

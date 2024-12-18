@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.comic.android_native_client.data.model.ComicDetail
 import com.comic.android_native_client.data.repository.ComicRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,9 +29,9 @@ class ComicDetailViewModel @Inject constructor(
     fun fetchComicDetail(comicId: String) {
         if (_isLoading) return
         _isLoading = true
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
 
-            
+
             _isLoading = false
         }
 

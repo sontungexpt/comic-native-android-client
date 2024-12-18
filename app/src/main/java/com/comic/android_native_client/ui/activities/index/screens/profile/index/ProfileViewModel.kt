@@ -9,6 +9,7 @@ import com.comic.android_native_client.data.repository.JwtRepository
 import com.comic.android_native_client.network.services.AuthService
 import com.comic.android_native_client.ui.globalState.SharedUserState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,7 +29,7 @@ class ProfileViewModel @Inject constructor(
         get() = _logouting
 
     fun logout(navigateToHome: () -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 _logouting = true
                 val response = authService.logout()

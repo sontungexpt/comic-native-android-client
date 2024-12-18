@@ -1,49 +1,62 @@
 package com.comic.android_native_client.ui.activities.index.screens.reading
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.comic.android_native_client.common.Result
+import com.comic.android_native_client.common.HttpResult
 import com.comic.android_native_client.constants.HttpStatus
 import com.comic.android_native_client.data.model.Chapter
+import com.comic.android_native_client.data.model.Comment
 import com.comic.android_native_client.data.repository.ChapterRepository
 import com.comic.android_native_client.data.repository.CommentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
+data class ChapterUiScreenState(
+    val chapterLoading: Boolean = false,
+    val chapter: Chapter? = null,
+
+    val comments: Map<String, Comment> = emptyMap(),
+    val commentLoading: Boolean = false,
+    val topLevelCommentIds: List<String> = emptyList(),
+
+    val chapterList: List<Chapter> = emptyList(),
+    val chapterListLoading: Boolean = false
+)
 
 @HiltViewModel
 class ComicReadingViewModel @Inject constructor(
     private val chapterRepository: ChapterRepository,
     private val commentRepository: CommentRepository
 ) : ViewModel() {
-    private var _chapterDetail by mutableStateOf<Chapter?>(null)
-    private var _chapterLoading by mutableStateOf(false)
-
-    val chapterDetail: Chapter?
-        get() = _chapterDetail
-
-    val loading: Boolean
-        get() = _chapterLoading
+    private var _uiState = MutableStateFlow(ChapterUiScreenState())
+    val uiState: StateFlow<ChapterUiScreenState> = _uiState
 
     fun loadChapter(
         comicId: String,
         chapterId: String,
         onNotFound: () -> Unit,
     ) {
-        if (_chapterLoading) return
-        _chapterLoading = true
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.update { it.copy(chapterLoading = true) }
             try {
                 when (val result = chapterRepository.getChapter(comicId, chapterId)) {
-                    is Result.Success -> {
-                        _chapterDetail = result.data
+                    is HttpResult.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                chapter = result.data,
+                                chapterLoading = false
+                            )
+                        }
+                        return@launch
                     }
 
-                    is Result.Error -> {
+                    is HttpResult.Error -> {
                         when (result.status) {
                             HttpStatus.NotFound -> {
                                 onNotFound()
@@ -53,24 +66,57 @@ class ComicReadingViewModel @Inject constructor(
                                 onNotFound()
                             }
 
-                            else -> {
-                                TODO()
-                            }
+                            else -> TODO()
                         }
-                    }
-
-                    else -> {
-                        // Handle no content
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
-                _chapterLoading = false
+                _uiState.update { it.copy(chapterLoading = false) }
             }
 
         }
     }
 
+    fun loadAllChapters(
+        comicId: String
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.update { it.copy(chapterListLoading = true) }
+            try {
+                when (val result = chapterRepository.getAllChapters(comicId)) {
+                    is HttpResult.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                chapterList = result.data,
+                                chapterListLoading = false
+                            )
+                        }
+                    }
 
+                    is HttpResult.Error -> {
+                        when (result.status) {
+                            HttpStatus.NotFound -> {
+                                // Handle not found
+                            }
+
+                            HttpStatus.BadRequest -> {
+                                // Handle bad request
+                            }
+
+                            else -> {
+                                // Handle other errors
+                            }
+                        }
+                    }
+
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _uiState.update { it.copy(chapterListLoading = false) }
+            }
+        }
+    }
 }

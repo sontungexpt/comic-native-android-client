@@ -1,19 +1,20 @@
 package com.comic.android_native_client.ui.activities.index.screens.home
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.comic.android_native_client.common.Result
+import com.comic.android_native_client.common.HttpResult
 import com.comic.android_native_client.data.model.Comic
+import com.comic.android_native_client.data.model.Page
 import com.comic.android_native_client.data.repository.ComicRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class ComicsState(
-    var loading: Boolean = false,
-    val comics: List<Comic>
+    var loading: Boolean = true,
+    val comics: List<Comic> = emptyList()
 )
 
 const val TAG = "HomeViewModel"
@@ -24,108 +25,70 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     val OUTSTANDING_KEY = "Outstanding"
 
+
     private var _comicsMap = mutableStateMapOf<String, ComicsState>()
     val comicsMap: Map<String, ComicsState>
         get() = _comicsMap
 
+
     fun initComics(
         genreIds: List<String>
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             launch {
                 loadOutstandingComics()
             }
-
             genreIds.forEach { genreId ->
                 launch {
                     loadGenreComics(genreId)
                 }
             }
         }
-
-
     }
 
     private suspend fun loadOutstandingComics() {
-        Log.d(TAG, "load Outstanding Comics")
-        _comicsMap[OUTSTANDING_KEY] = ComicsState(
-            loading = true,
-            comics = emptyList()
-        )
-        try {
-            val result = comicRepository.getComics(
+        loadComics(OUTSTANDING_KEY) {
+            comicRepository.getComics(
                 page = 0,
-                size = 10,
+                size = 10
             )
-            when (result) {
-                is Result.Success -> {
-                    _comicsMap[OUTSTANDING_KEY] = ComicsState(
-                        loading = false,
-                        comics = result.data.content
-                    )
-                    return
-                }
-
-                is Result.Error -> {
-
-                }
-
-                else -> {
-
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            _comicsMap[OUTSTANDING_KEY] =
-                _comicsMap[OUTSTANDING_KEY]?.copy(loading = false) ?: ComicsState(
-                    loading = false,
-                    comics = emptyList()
-                )
-            Log.d(TAG, "load Outstanding Comics finally")
         }
-
     }
 
     private suspend fun loadGenreComics(genreId: String) {
-        Log.d(TAG, "load Genre Comics $genreId")
-        _comicsMap[genreId] = ComicsState(
-            loading = true,
-            comics = emptyList()
-        )
-
-        try {
-            val result = comicRepository.getComics(
+        loadComics(genreId) {
+            comicRepository.getComics(
                 filterCategoryIds = listOf(genreId),
                 page = 0,
-                size = 10,
+                size = 10
             )
-            when (result) {
-                is Result.Success -> {
-                    _comicsMap[genreId] = ComicsState(
+        }
+    }
+
+    private suspend fun loadComics(
+        key: String,
+        fetch: suspend () -> HttpResult<Page<Comic>>
+    ) {
+        _comicsMap[key] = ComicsState(loading = true, comics = emptyList())
+        try {
+            when (val result = fetch()) {
+                is HttpResult.Success -> {
+                    _comicsMap[key] = ComicsState(
                         loading = false,
                         comics = result.data.content
                     )
-                    return
                 }
 
-                is Result.Error -> {
-
-                }
-
-                else -> {
-
+                is HttpResult.Error -> {
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
-            _comicsMap[genreId] =
-                _comicsMap[genreId]?.copy(loading = false) ?: ComicsState(
-                    loading = false,
-                    comics = emptyList()
-                )
-            Log.d(TAG, "load Genre Comics $genreId finally")
+            _comicsMap[key] = _comicsMap[key]?.copy(loading = false) ?: ComicsState(
+                loading = false,
+                comics = emptyList()
+            )
         }
     }
 }

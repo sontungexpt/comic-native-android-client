@@ -1,6 +1,6 @@
 package com.comic.android_native_client.data.repository.impl
 
-import com.comic.android_native_client.common.Result
+import com.comic.android_native_client.common.HttpResult
 import com.comic.android_native_client.constants.HttpStatus
 import com.comic.android_native_client.data.model.Comic
 import com.comic.android_native_client.data.model.ComicDetail
@@ -19,7 +19,7 @@ class ComicRepositoryImpl(
         page: Int,
         size: Int,
         sort: Array<String>
-    ): Result<Page<Comic>> {
+    ): HttpResult<Page<Comic>> {
         val response = comicService.getComics(
             filterCategoryIds = filterCategoryIds,
             page = page,
@@ -29,22 +29,22 @@ class ComicRepositoryImpl(
 
         return if (response.isSuccessful) {
             response.body()?.let {
-                Result.Success(it.toPage { it.toComic() })
-            } ?: Result.Error("Body is empty")
+                HttpResult.Success(it.toPage { it.toComic() })
+            } ?: HttpResult.Error("Body is empty")
         } else {
-            Result.Error(response.message(), HttpStatus.from(response.code()))
+            HttpResult.Error(response.message(), HttpStatus.from(response.code()))
         }
     }
 
-    override suspend fun getComicDetail(comicId: String): Result<ComicDetail> {
+    override suspend fun getComicDetail(comicId: String): HttpResult<ComicDetail> {
         val response = comicService.getComicDetail(comicId)
 
         return if (response.isSuccessful) {
             response.body()?.let {
-                Result.Success(it.toComicDetail())
-            } ?: Result.Error("Body is empty")
+                HttpResult.Success(it.toComicDetail())
+            } ?: HttpResult.Error("Body is empty")
         } else {
-            Result.Error(response.message(), HttpStatus.from(response.code()))
+            HttpResult.Error(response.message(), HttpStatus.from(response.code()))
         }
     }
 
@@ -53,7 +53,7 @@ class ComicRepositoryImpl(
         page: Int,
         size: Int,
         sort: Array<String>
-    ): Result<Page<Comic>> {
+    ): HttpResult<Page<Comic>> {
         val response = comicService.searchComic(
             q = q,
             page = page,
@@ -63,10 +63,10 @@ class ComicRepositoryImpl(
 
         return if (response.isSuccessful) {
             response.body()?.let {
-                Result.Success(it.toPage { it.toComic() })
-            } ?: Result.Error("Body is empty")
+                HttpResult.Success(it.toPage { it.toComic() })
+            } ?: HttpResult.Error("Body is empty")
         } else {
-            Result.Error(response.message(), HttpStatus.from(response.code()))
+            HttpResult.Error(response.message(), HttpStatus.from(response.code()))
         }
     }
 }

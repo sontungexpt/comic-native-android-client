@@ -16,6 +16,7 @@ import com.comic.validation_text_field.validator.PasswordValidator
 import com.comic.validation_text_field.validator.RequiredValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -60,7 +61,7 @@ class SignUpViewModel @Inject constructor(
     fun signUp(navController: NavController) {
         if (validateFields()) {
             _isLoading.value = true
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 val response = authService.register(
                     RegisterRequest(
                         username = usernameState.value,
@@ -71,7 +72,7 @@ class SignUpViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     navController.navigate(Screen.Login)
                     val msg = "Registration successful"
-                    
+
                     Toast.makeText(
                         context,
                         msg,

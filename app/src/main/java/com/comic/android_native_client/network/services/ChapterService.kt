@@ -18,6 +18,9 @@ interface PublicChapterService {
         @Path("comicId") comicId: String,
         @Path("chapterId") chapterId: String,
     ): Response<ChapterResponse>
+
+
 }
+
 
 interface ChapterService : PublicChapterService

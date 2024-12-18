@@ -13,6 +13,7 @@ import com.comic.validation_text_field.ValidableTextFieldState
 import com.comic.validation_text_field.ValidableTextFieldWatcher
 import com.comic.validation_text_field.validator.RequiredValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -49,7 +50,7 @@ class LoginViewModel @Inject constructor(
     fun login(navigateToHome: () -> Unit) {
         if (validateFields()) {
             _loginProcessing.value = true
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     val response = authService.login(
                         LoginRequest(
