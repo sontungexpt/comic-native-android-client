@@ -18,7 +18,6 @@ const val TAG = "AuthAuthenticator"
 class AuthAuthenticator @Inject constructor(
     private val jwtRepository: JwtRepository,
     private val sharedUserState: SharedUserState,
-
     @TokenRefreshClient
     private val refrshTokenClientRetrofit: Retrofit,
 ) : Authenticator {

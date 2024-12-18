@@ -5,9 +5,26 @@ import com.comic.android_native_client.data.model.ComicChapter
 import com.comic.android_native_client.data.model.ImagePage
 import com.comic.android_native_client.data.model.NovelChapter
 import kotlinx.datetime.Instant
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+
+@OptIn(ExperimentalSerializationApi::class)
+
+//object ChapterResponseSerializer :
+//    JsonContentPolymorphicSerializer<ChapterResponse>(ChapterResponse::class) {
+//    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out ChapterResponse> {
+//        val jsonObject = element.jsonObject
+//
+//        // Xác định lớp con dựa trên các trường JSON cụ thể
+//        return when {
+//            "imagePages" in jsonObject -> ComicChapterResponse.serializer()
+//            "content" in jsonObject -> NovelChapterResponse.serializer()
+//            else -> throw IllegalArgumentException("Unknown ChapterResponse type")
+//        }
+//    }
+//}
 
 @Polymorphic
 abstract class ChapterResponse {
@@ -131,7 +148,7 @@ data class ComicChapterResponse(
     override val chapter: String,
     val imagePages: List<ImagePageResponse>,
     @Polymorphic
-    val resourceInfo: ResourceInfoResponse
+    val resourceInfo: ResourceInfoResponse,
 ) : ChapterResponse()
 
 fun ComicChapterResponse.toChapter(): ComicChapter {
@@ -140,6 +157,7 @@ fun ComicChapterResponse.toChapter(): ComicChapter {
         comicId = comicId,
         thumbnailUrl = thumbnailUrl,
         num = num,
+        type = "COMIC",
         name = name,
         description = description,
         originalSource = originalSource.toOriginalSource(),
@@ -161,7 +179,7 @@ class NovelChapterResponse(
     override val originalSource: OriginalSourceResponse,
     override val updatedDate: Instant?,
     override val chapter: String,
-    val content: String
+    val content: String,
 ) : ChapterResponse()
 
 fun NovelChapterResponse.toChapter(): NovelChapter {
@@ -170,6 +188,7 @@ fun NovelChapterResponse.toChapter(): NovelChapter {
         comicId = comicId,
         thumbnailUrl = thumbnailUrl,
         num = num,
+        type = "NOVEL",
         name = name,
         description = description,
         originalSource = originalSource.toOriginalSource(),

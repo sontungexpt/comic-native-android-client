@@ -11,7 +11,7 @@ import retrofit2.http.Query
 interface PublicComicService {
     @GET(MainEndpoint.GET_COMICS_V1)
     suspend fun getComics(
-        @Query("filterCategoryIds") filterCategoryIds: List<String> = emptyList(),
+        @Query("filterCategoryIds") filterCategoryIds: List<String>? = null,
         @Query("page") page: Int,
         @Query("size") size: Int = 10,
         @Query("sort") sort: Array<String> = arrayOf("createdAt"),

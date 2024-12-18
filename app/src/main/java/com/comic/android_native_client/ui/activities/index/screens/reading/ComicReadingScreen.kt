@@ -85,9 +85,9 @@ fun ComicReadingScreen(
         onBackCLick = {
             navController.popBackStack()
         },
-        modifier = Modifier
+        modifier = Modifier.fillMaxSize()
     ) {
-        ChapterNavigationHeader(
+        ChapterNavigationBar(
             chapterName = currentChapter.chapterName,
             modifier = Modifier
                 .padding(10.dp)
@@ -104,14 +104,29 @@ fun ComicReadingScreen(
         if (comicReadingViewModel.loading) {
             LoadingCircle(
                 modifier = Modifier
+                    .size(30.dp),
+                wrapperModifier = Modifier
                     .fillMaxWidth()
+                    .align(Alignment.Center)
+
             )
         } else if (comicReadingViewModel.chapterDetail == null) {
             return@BackFloatingScreen
         } else if (comicReadingViewModel.chapterDetail is NovelChapter) {
+            val chapter = comicReadingViewModel.chapterDetail as NovelChapter
+            Text(
+                text = chapter.name,
+                style = MaterialTheme.typography.titleMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = horizontalPadding)
+                    .padding(top = 10.dp)
+            )
+
             Text(
                 textAlign = TextAlign.Justify,
-                text = (comicReadingViewModel.chapterDetail as NovelChapter).content,
+                text = chapter.content,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = horizontalPadding)
@@ -119,12 +134,6 @@ fun ComicReadingScreen(
             )
         } else if (comicReadingViewModel.chapterDetail is ComicChapter) {
             val comicChapter = comicReadingViewModel.chapterDetail as ComicChapter
-            val baseUrl = if (comicChapter.resourceInfo is ResourceInfo.Relative) {
-                comicChapter.resourceInfo.baseUrl + "/"
-            } else {
-                ""
-            }
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -137,8 +146,11 @@ fun ComicReadingScreen(
                     contentType = { it.javaClass },
                     items = comicChapter.imagePages,
                 ) {
+                    val imagePath = if (comicChapter.resourceInfo is ResourceInfo.Relative)
+                        comicChapter.resourceInfo.baseUrl + "/" + it.path
+                    else it.path
                     AsyncImage(
-                        model = baseUrl + it.path,
+                        model = imagePath,
                         contentDescription = "Comic Image",
                         contentScale = ContentScale.Fit,
                         modifier = Modifier

@@ -10,11 +10,11 @@ data class LoginResponse(
     val jwt: JwtTokenResponse,
 
     @SerialName("name")
-    val name: String
+    val name: String,
 
+    val avatar: String = ""
 ) {
     override fun toString(): String {
-        return "LoginResponse(jwt=$jwt, name='$name')"
-
+        return "LoginResponse(jwt=$jwt, name='$name', avatar='$avatar')"
     }
 }

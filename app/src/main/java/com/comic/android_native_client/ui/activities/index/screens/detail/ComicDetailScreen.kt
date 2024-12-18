@@ -40,6 +40,7 @@ fun ComicDetailScreen(
     navController: NavController,
     currentComic: Screen.ComicDetail,
 ) {
+
     BackFloatingScreen(
         onBackCLick = {
             navController.popBackStack()
@@ -107,7 +108,7 @@ fun ComicDetailScreen(
                 ComicStatsSection(
                     views = 100,
                     rating = "200",
-                    favorited = favorited.value,
+                    favorited = comicDetailViewModel.comicDetail?.favorited ?: true,
                     modifier = Modifier
                         .padding(vertical = 20.dp)
                         .fillMaxWidth(),

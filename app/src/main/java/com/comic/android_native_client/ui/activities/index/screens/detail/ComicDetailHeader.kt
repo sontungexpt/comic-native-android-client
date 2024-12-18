@@ -62,7 +62,10 @@ fun ComicDetailHeader(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     comicGenres.forEach {
-                        GenreTag(name = it)
+                        GenreTag(
+                            modifier = Modifier,
+                            name = it
+                        )
                     }
                 }
             }

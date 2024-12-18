@@ -1,4 +1,4 @@
-package com.comic.android_native_client.network.services.auth
+package com.comic.android_native_client.network.services.impl
 
 import com.comic.android_native_client.network.dto.response.ComicDetailResponse
 import com.comic.android_native_client.network.dto.response.ComicResponse
@@ -18,7 +18,7 @@ class ComicServiceImpl @Inject constructor(
     }
 
     override suspend fun getComics(
-        filterCategoryIds: List<String>,
+        filterCategoryIds: List<String>?,
         page: Int,
         size: Int,
         sort: Array<String>

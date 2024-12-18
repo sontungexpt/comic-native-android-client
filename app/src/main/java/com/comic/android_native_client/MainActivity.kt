@@ -26,7 +26,6 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var sharedUserState: SharedUserState
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate Called")

@@ -11,10 +11,10 @@ import com.comic.android_native_client.network.services.ComicService
 import com.comic.android_native_client.network.services.CommentService
 import com.comic.android_native_client.network.services.FavoriteComicService
 import com.comic.android_native_client.network.services.UserService
-import com.comic.android_native_client.network.services.auth.ComicServiceImpl
 import com.comic.android_native_client.network.services.impl.AuthServiceImpl
 import com.comic.android_native_client.network.services.impl.ChapterServiceImpl
 import com.comic.android_native_client.network.services.impl.ComicCategoryServiceImpl
+import com.comic.android_native_client.network.services.impl.ComicServiceImpl
 import com.comic.android_native_client.network.services.impl.CommentServiceImpl
 import com.comic.android_native_client.network.services.impl.FavoriteComicServiceImpl
 import com.comic.android_native_client.network.services.impl.UserServiceImpl

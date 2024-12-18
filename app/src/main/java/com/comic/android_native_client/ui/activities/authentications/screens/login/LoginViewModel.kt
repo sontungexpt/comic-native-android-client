@@ -20,8 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authService: AuthService,
     private val sharedUserState: SharedUserState,
+    private val authService: AuthService,
 ) : ViewModel() {
     private val requiredValidator = RequiredValidator()
     val usernameState = ValidableTextFieldState(
@@ -58,14 +58,18 @@ class LoginViewModel @Inject constructor(
                         )
                     )
                     if (response.isSuccessful) {
-                        sharedUserState.setUser(
-                            UserState(
-                                name = usernameState.value,
-                                avatar = ""
+                        response.body()?.let {
+                            sharedUserState.setUser(
+                                UserState(
+                                    name = it.name,
+                                    avatar = it.avatar
+                                )
                             )
-                        )
-                        _error.emit("")
-                        navigateToHome()
+                            _error.emit("")
+                            navigateToHome()
+                        }
+
+
                     } else {
                         val errorMessage = when (HttpStatus.from(response.code())) {
                             HttpStatus.NotFound -> "User not found"

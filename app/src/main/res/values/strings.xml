@@ -91,6 +91,8 @@
     <string name="title_activity_app">App</string>
     <string name="back">Back</string>
     <string name="not_found">Not Found</string>
+    <string name="see_all">See All</string>
+    <string name="manga">Manga</string>
 
 
 </resources>

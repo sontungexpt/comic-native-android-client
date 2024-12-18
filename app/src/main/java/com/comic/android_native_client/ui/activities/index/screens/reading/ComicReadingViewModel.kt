@@ -9,6 +9,7 @@ import com.comic.android_native_client.common.Result
 import com.comic.android_native_client.constants.HttpStatus
 import com.comic.android_native_client.data.model.Chapter
 import com.comic.android_native_client.data.repository.ChapterRepository
+import com.comic.android_native_client.data.repository.CommentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,25 +17,25 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ComicReadingViewModel @Inject constructor(
-    private val chapterRepository: ChapterRepository
+    private val chapterRepository: ChapterRepository,
+    private val commentRepository: CommentRepository
 ) : ViewModel() {
     private var _chapterDetail by mutableStateOf<Chapter?>(null)
-    private var _loading by mutableStateOf(false)
+    private var _chapterLoading by mutableStateOf(false)
 
     val chapterDetail: Chapter?
         get() = _chapterDetail
 
     val loading: Boolean
-        get() = _loading
+        get() = _chapterLoading
 
     fun loadChapter(
         comicId: String,
         chapterId: String,
         onNotFound: () -> Unit,
     ) {
-        if (_loading) return
-        _loading = true
-
+        if (_chapterLoading) return
+        _chapterLoading = true
         viewModelScope.launch {
             try {
                 when (val result = chapterRepository.getChapter(comicId, chapterId)) {
@@ -53,6 +54,7 @@ class ComicReadingViewModel @Inject constructor(
                             }
 
                             else -> {
+                                TODO()
                             }
                         }
                     }
@@ -64,7 +66,7 @@ class ComicReadingViewModel @Inject constructor(
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
-                _loading = false
+                _chapterLoading = false
             }
 
         }

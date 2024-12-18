@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material3.Card
@@ -19,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -30,14 +30,18 @@ fun ChapterCard(
     number: String,
     imageUrl: String,
     updateDate: String,
+    onClick: () -> Unit = { },
+    border: BorderStroke = BorderStroke(
+        1.dp, MaterialTheme.colorScheme.outline,
+    ),
+    shape: Shape = MaterialTheme.shapes.small,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = { }
 ) {
     Card(
         onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-        shape = RoundedCornerShape(16.dp),
+        modifier = Modifier.fillMaxWidth(),
+        border = border,
+        shape = shape,
         elevation = CardDefaults.cardElevation(12.dp),
         colors = CardDefaults.cardColors(
             contentColor = MaterialTheme.colorScheme.onSurface,

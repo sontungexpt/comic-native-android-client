@@ -25,10 +25,11 @@ fun SectionDivider() {
 
 @Composable
 fun GenreTag(
+    modifier: Modifier = Modifier,
     name: String,
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(12.dp))
             .padding(horizontal = 12.dp, vertical = 6.dp)
     ) {
