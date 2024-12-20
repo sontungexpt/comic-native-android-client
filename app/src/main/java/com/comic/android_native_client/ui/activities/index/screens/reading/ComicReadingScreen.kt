@@ -90,7 +90,6 @@ fun ComicReadingScreen(
         )
         comicReadingViewModel.loadAllChapters(
             comicId = currentChapter.comicId,
-            currentChapterId = currentChapter.chapterId,
             onNotFound = { handleNotFound() }
         )
 

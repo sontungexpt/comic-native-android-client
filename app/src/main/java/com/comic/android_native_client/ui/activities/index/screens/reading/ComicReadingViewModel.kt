@@ -37,10 +37,10 @@ class ComicReadingViewModel @Inject constructor(
     private val commentRepository: CommentRepository
 ) : ViewModel() {
     private var _currChapterIndex = -1
-
+    private var _currChapter = ""
+    
     private var _uiState = MutableStateFlow(ChapterUiScreenState())
     val uiState: StateFlow<ChapterUiScreenState> = _uiState
-
 
     fun loadChapter(
         comicId: String,
@@ -48,6 +48,7 @@ class ComicReadingViewModel @Inject constructor(
         onNotFound: () -> Unit,
         onSuccess: () -> Unit = {}
     ) {
+        _currChapter = chapterId
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update { it.copy(chapterLoading = true) }
             try {
@@ -87,11 +88,10 @@ class ComicReadingViewModel @Inject constructor(
 
     fun lazyLoadAllChapters(
         comicId: String,
-        currentChapterId: String,
         onNotFound: () -> Unit,
     ) {
         if (_uiState.value.chapterList == null) {
-            loadAllChapters(comicId, currentChapterId, onNotFound)
+            loadAllChapters(comicId, onNotFound)
         }
     }
 
@@ -101,12 +101,12 @@ class ComicReadingViewModel @Inject constructor(
         onNotFound: () -> Unit,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            lazyLoadAllChapters(comicId, _uiState.value.chapter!!.id, onNotFound)
+            lazyLoadAllChapters(comicId, onNotFound)
 
             if (_uiState.value.chapterListLoading) return@launch
             else if (_currChapterIndex == -1 || _uiState.value.chapterList == null) return@launch
             else if (_currChapterIndex + 1 >= _uiState.value.chapterList!!.size) {
-                loadAllChapters(comicId, _uiState.value.chapter!!.id, onNotFound)
+                loadAllChapters(comicId, onNotFound)
                 if (_currChapterIndex + 1 >= _uiState.value.chapterList!!.size) {
                     return@launch
                 }
@@ -138,7 +138,7 @@ class ComicReadingViewModel @Inject constructor(
         onNotFound: () -> Unit,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            lazyLoadAllChapters(comicId, _uiState.value.chapter!!.id, onNotFound)
+            lazyLoadAllChapters(comicId, onNotFound)
             if (_uiState.value.chapterListLoading) return@launch
             else if (_currChapterIndex < 1) return@launch
 
@@ -161,7 +161,6 @@ class ComicReadingViewModel @Inject constructor(
 
     fun loadAllChapters(
         comicId: String,
-        currentChapterId: String,
         onNotFound: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -171,8 +170,7 @@ class ComicReadingViewModel @Inject constructor(
                 when (val result = chapterRepository.getAllChapters(comicId)) {
                     is Result.Success -> {
                         val chapterList = result.data
-                        _currChapterIndex = chapterList.indexOfFirst { it.id == currentChapterId }
-
+                        _currChapterIndex = chapterList.indexOfFirst { it.id == _currChapter }
                         _uiState.update {
                             it.copy(
                                 chapterList = chapterList,
@@ -181,6 +179,8 @@ class ComicReadingViewModel @Inject constructor(
                                 hasPrev = _currChapterIndex > 0
                             )
                         }
+
+
                     }
 
                     is Result.Error -> {
