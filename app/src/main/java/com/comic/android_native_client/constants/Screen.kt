@@ -145,6 +145,7 @@ sealed class Screen(
         val comicId: String,
         val chapterId: String,
         val chapterName: String,
+        val chapterNumber: Double
     ) : DynamicScreen {
         override fun icon(): ImageVector {
             return Icons.Filled.Book

@@ -123,7 +123,7 @@ class ComicDetailViewModel @Inject constructor(
                     size = 10,
                 )) {
                     is Result.Success -> {
-                        _comicDetailUIState.value = _comicDetailUIState.value.copy(
+                        _comicDetailUIState.value = ComicDetailUIState(
                             comicDetail = result.data,
                             initializing = false,
                             chapters = result.data.chapters.content,

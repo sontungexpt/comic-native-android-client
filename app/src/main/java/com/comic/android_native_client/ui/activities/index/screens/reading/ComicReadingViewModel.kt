@@ -25,7 +25,7 @@ data class ChapterUiScreenState(
     val commentLoading: Boolean = false,
     val topLevelCommentIds: List<String> = emptyList(),
 
-    val chapterList: List<Chapter> = emptyList(),
+    val chapterList: List<Chapter>? = null,
     val chapterListLoading: Boolean = false
 )
 
@@ -34,8 +34,22 @@ class ComicReadingViewModel @Inject constructor(
     private val chapterRepository: ChapterRepository,
     private val commentRepository: CommentRepository
 ) : ViewModel() {
+    private var _currChapterIndex = -1
+
     private var _uiState = MutableStateFlow(ChapterUiScreenState())
     val uiState: StateFlow<ChapterUiScreenState> = _uiState
+
+    fun lazyInitChapterIndex(): Int {
+        if (_currChapterIndex != -1) {
+            return _currChapterIndex
+        } else if (_uiState.value.chapterList != null && _uiState.value.chapter != null) {
+            _currChapterIndex =
+                _uiState.value.chapterList!!.indexOfFirst {
+                    it.id == _uiState.value.chapter!!.id
+                }
+        }
+        return _currChapterIndex
+    }
 
     fun loadChapter(
         comicId: String,
@@ -79,9 +93,40 @@ class ComicReadingViewModel @Inject constructor(
         }
     }
 
+    fun lazyLoadAllChapters(
+        comicId: String,
+        onNotFound: () -> Unit,
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (_uiState.value.chapterList == null) {
+                loadAllChapters(comicId)
+            }
+        }
+    }
+
+    fun getNextChapter(
+        comicId: String,
+        onNotFound: () -> Unit,
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            lazyLoadAllChapters(comicId, onNotFound)
+            lazyInitChapterIndex()
+            if (_currChapterIndex == -1) {
+                return@launch
+            } else if (_currChapterIndex + 1 >= _uiState.value.chapterList!!.size) {
+                return@launch
+            }
+
+
+        }
+    }
+
     fun loadAllChapters(
         comicId: String
     ) {
+        if (_uiState.value.chapterListLoading) {
+            return
+        }
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update { it.copy(chapterListLoading = true) }
             try {

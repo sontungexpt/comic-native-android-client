@@ -43,11 +43,6 @@ import com.comic.android_native_client.ui.components.CommentCard
 import com.comic.android_native_client.ui.components.common.LoadingCircle
 import com.comic.android_native_client.ui.components.layout.BackFloatingScreen
 
-val items = listOf(
-    "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
-    "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
-    "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png"
-)
 val comments = listOf(
     Pair("Quang Sáng", "ném trong .env github nó tự xóa mà"),
     Pair("kietphamtan7777", "Bạn quăng thêm 100 cái api key nữa lừa hack"),
@@ -68,6 +63,9 @@ fun ComicReadingScreen(
     currentChapter: Screen.ComicReading,
 ) {
     val uiState by comicReadingViewModel.uiState.collectAsState()
+    val chapterName = if (currentChapter.chapterName.isNotBlank())
+        "Chapter ${currentChapter.chapterNumber}: ${currentChapter.chapterName}"
+    else "Chapter ${currentChapter.chapterNumber}"
 
     LaunchedEffect(
         currentChapter.chapterId,
@@ -86,12 +84,15 @@ fun ComicReadingScreen(
         )
     }
 
+
     BackFloatingScreen(
         onBackCLick = { navController.popBackStack() },
         modifier = Modifier.fillMaxSize()
     ) {
+
+
         ChapterNavigationBar(
-            chapterName = currentChapter.chapterName,
+            chapterName = chapterName,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
@@ -117,7 +118,7 @@ fun ComicReadingScreen(
         } else if (uiState.chapter is NovelChapter) {
             val chapter = uiState.chapter as NovelChapter
             Text(
-                text = chapter.name,
+                text = chapterName,
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier

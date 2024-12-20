@@ -1,7 +1,6 @@
 package com.comic.android_native_client.ui.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,7 +29,7 @@ fun ChapterCard(
     number: String,
     imageUrl: String,
     updateDate: String,
-    onClick: () -> Unit = { },
+    onClick: () -> Unit,
     border: BorderStroke = BorderStroke(
         1.dp, MaterialTheme.colorScheme.outline,
     ),
@@ -50,9 +49,7 @@ fun ChapterCard(
     ) {
         Row(
             modifier = modifier
-                .padding(12.dp)
-                .clickable {
-                },
+                .padding(12.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {

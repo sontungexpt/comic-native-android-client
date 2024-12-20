@@ -95,13 +95,7 @@ fun ComicDetailScreen(
                 ) {
                     Button(
                         onClick = {
-                            navController.navigate(
-                                Screen.ComicReading(
-                                    chapterId = "666ef08fa83372074680eb6e",
-                                    comicId = "675055a70a0d7c6accfc6414",
-                                    chapterName = "Nhật Ký Từ Chức Cấp S"
-                                )
-                            )
+
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -208,6 +202,16 @@ fun ComicDetailScreen(
                 contentType = { it.javaClass }
             ) {
                 ChapterCard(
+                    onClick = {
+                        navController.navigate(
+                            Screen.ComicReading(
+                                chapterId = it.id,
+                                comicId = currentComic.id,
+                                chapterName = it.name,
+                                chapterNumber = it.num
+                            )
+                        )
+                    },
                     name = it.name,
                     number = it.num.toString(),
                     imageUrl = if (!it.thumbnailUrl.isNullOrBlank()) {
