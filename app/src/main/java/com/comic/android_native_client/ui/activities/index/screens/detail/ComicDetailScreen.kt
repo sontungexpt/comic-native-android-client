@@ -207,8 +207,6 @@ fun ComicDetailScreen(
                             Screen.ComicReading(
                                 chapterId = it.id,
                                 comicId = currentComic.id,
-                                chapterName = it.name,
-                                chapterNumber = it.num
                             )
                         )
                     },

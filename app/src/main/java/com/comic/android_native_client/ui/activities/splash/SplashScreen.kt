@@ -50,7 +50,8 @@ fun SplashScreen(
                 .size(200.dp)
                 .border(
                     width = 4.dp,
-                    color = MaterialTheme.colorScheme.secondary
+                    color = MaterialTheme.colorScheme.secondary,
+                    CircleShape
                 )
                 .clip(CircleShape)
         )

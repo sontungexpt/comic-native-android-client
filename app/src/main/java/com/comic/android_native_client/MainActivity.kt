@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
+import com.comic.android_native_client.constants.DYNAMIC_THEME
 import com.comic.android_native_client.network.services.UserService
 import com.comic.android_native_client.ui.activities.splash.SplashScreen
 import com.comic.android_native_client.ui.globalState.SharedUserState
@@ -34,7 +35,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            ShareableTheme {
+            ShareableTheme(dynamicColor = DYNAMIC_THEME) {
                 SplashScreen(
                     delayTimeMs = 5000
                 )

@@ -21,6 +21,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ChapterNavigationBar(
     chapterName: String,
+    hasNext: Boolean,
+    hasPrev: Boolean,
+    onClickNext: () -> Unit,
+    onClickPrev: () -> Unit,
+    onClickName: () -> Unit,
     modifier: Modifier,
 ) {
     Row(
@@ -31,7 +36,8 @@ fun ChapterNavigationBar(
 
         // Previous Chapter Button
         IconButton(
-            onClick = { /* Handle Previous Chapter */ },
+            enabled = hasPrev,
+            onClick = onClickPrev,
             modifier = Modifier
                 .size(48.dp)  // Larger buttons for better tap area
                 .padding(start = 12.dp)
@@ -41,14 +47,15 @@ fun ChapterNavigationBar(
                     .size(28.dp),
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Previous Chapter",
-                tint = MaterialTheme.colorScheme.primary
+                tint = if (hasPrev) MaterialTheme.colorScheme.primary
+                else MaterialTheme.colorScheme.outlineVariant
             )
         }
 
         // Chapter Name in the Center with ellipsis for overflow
         TextButton(
             modifier = Modifier.weight(1f),  // This ensures the text button takes up available space
-            onClick = { /* Handle Chapter Selection */ }
+            onClick = onClickName
         ) {
             Text(
                 text = chapterName,
@@ -62,7 +69,8 @@ fun ChapterNavigationBar(
 
         // Next Chapter Button
         IconButton(
-            onClick = { /* Handle Next Chapter */ },
+            enabled = hasNext,
+            onClick = onClickNext,
             modifier = Modifier
                 .size(48.dp)  // Larger buttons for better tap area
                 .padding(end = 12.dp)
@@ -72,7 +80,9 @@ fun ChapterNavigationBar(
                     .size(28.dp),
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                 contentDescription = "Next Chapter",
-                tint = MaterialTheme.colorScheme.primary
+                tint = if (hasNext) MaterialTheme.colorScheme.primary
+                else MaterialTheme.colorScheme.outlineVariant
+
             )
         }
     }

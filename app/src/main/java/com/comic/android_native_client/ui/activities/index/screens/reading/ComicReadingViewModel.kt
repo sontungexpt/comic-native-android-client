@@ -25,6 +25,8 @@ data class ChapterUiScreenState(
     val commentLoading: Boolean = false,
     val topLevelCommentIds: List<String> = emptyList(),
 
+    val hasPrev: Boolean = false,
+    val hasNext: Boolean = false,
     val chapterList: List<Chapter>? = null,
     val chapterListLoading: Boolean = false
 )
@@ -39,22 +41,12 @@ class ComicReadingViewModel @Inject constructor(
     private var _uiState = MutableStateFlow(ChapterUiScreenState())
     val uiState: StateFlow<ChapterUiScreenState> = _uiState
 
-    fun lazyInitChapterIndex(): Int {
-        if (_currChapterIndex != -1) {
-            return _currChapterIndex
-        } else if (_uiState.value.chapterList != null && _uiState.value.chapter != null) {
-            _currChapterIndex =
-                _uiState.value.chapterList!!.indexOfFirst {
-                    it.id == _uiState.value.chapter!!.id
-                }
-        }
-        return _currChapterIndex
-    }
 
     fun loadChapter(
         comicId: String,
         chapterId: String,
         onNotFound: () -> Unit,
+        onSuccess: () -> Unit = {}
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update { it.copy(chapterLoading = true) }
@@ -67,6 +59,7 @@ class ComicReadingViewModel @Inject constructor(
                                 chapterLoading = false
                             )
                         }
+                        onSuccess()
                         return@launch
                     }
 
@@ -89,53 +82,103 @@ class ComicReadingViewModel @Inject constructor(
             } finally {
                 _uiState.update { it.copy(chapterLoading = false) }
             }
-
         }
     }
 
     fun lazyLoadAllChapters(
         comicId: String,
+        currentChapterId: String,
         onNotFound: () -> Unit,
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            if (_uiState.value.chapterList == null) {
-                loadAllChapters(comicId)
-            }
+        if (_uiState.value.chapterList == null) {
+            loadAllChapters(comicId, currentChapterId, onNotFound)
         }
     }
 
-    fun getNextChapter(
+
+    fun nextChapter(
         comicId: String,
         onNotFound: () -> Unit,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            lazyLoadAllChapters(comicId, onNotFound)
-            lazyInitChapterIndex()
-            if (_currChapterIndex == -1) {
-                return@launch
-            } else if (_currChapterIndex + 1 >= _uiState.value.chapterList!!.size) {
-                return@launch
+            lazyLoadAllChapters(comicId, _uiState.value.chapter!!.id, onNotFound)
+
+            if (_uiState.value.chapterListLoading) return@launch
+            else if (_currChapterIndex == -1 || _uiState.value.chapterList == null) return@launch
+            else if (_currChapterIndex + 1 >= _uiState.value.chapterList!!.size) {
+                loadAllChapters(comicId, _uiState.value.chapter!!.id, onNotFound)
+                if (_currChapterIndex + 1 >= _uiState.value.chapterList!!.size) {
+                    return@launch
+                }
             }
 
+            loadChapter(
+                comicId = comicId,
+                chapterId = _uiState.value.chapterList!![_currChapterIndex + 1].id,
+                onNotFound = onNotFound,
+                onSuccess = {
+                    _currChapterIndex++
+                    _uiState.update {
+                        it.copy(
+                            hasNext = _currChapterIndex < _uiState.value.chapterList!!.size - 1,
+                            hasPrev = _currChapterIndex > 0
+                        )
+                    }
+
+                }
+
+            )
 
         }
     }
 
-    fun loadAllChapters(
-        comicId: String
+
+    fun prevChapter(
+        comicId: String,
+        onNotFound: () -> Unit,
     ) {
-        if (_uiState.value.chapterListLoading) {
-            return
-        }
         viewModelScope.launch(Dispatchers.IO) {
+            lazyLoadAllChapters(comicId, _uiState.value.chapter!!.id, onNotFound)
+            if (_uiState.value.chapterListLoading) return@launch
+            else if (_currChapterIndex < 1) return@launch
+
+            loadChapter(
+                comicId = comicId,
+                chapterId = _uiState.value.chapterList!![_currChapterIndex - 1].id,
+                onNotFound = onNotFound,
+                onSuccess = {
+                    _currChapterIndex--
+                    _uiState.update {
+                        it.copy(
+                            hasNext = _currChapterIndex < _uiState.value.chapterList!!.size - 1,
+                            hasPrev = _currChapterIndex > 0
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+    fun loadAllChapters(
+        comicId: String,
+        currentChapterId: String,
+        onNotFound: () -> Unit
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (_uiState.value.chapterListLoading) return@launch
             _uiState.update { it.copy(chapterListLoading = true) }
             try {
                 when (val result = chapterRepository.getAllChapters(comicId)) {
                     is Result.Success -> {
+                        val chapterList = result.data
+                        _currChapterIndex = chapterList.indexOfFirst { it.id == currentChapterId }
+
                         _uiState.update {
                             it.copy(
-                                chapterList = result.data,
-                                chapterListLoading = false
+                                chapterList = chapterList,
+                                chapterListLoading = false,
+                                hasNext = _currChapterIndex < chapterList.size - 1,
+                                hasPrev = _currChapterIndex > 0
                             )
                         }
                     }
@@ -143,7 +186,7 @@ class ComicReadingViewModel @Inject constructor(
                     is Result.Error -> {
                         when (result.status) {
                             HttpStatus.NotFound -> {
-                                // Handle not found
+                                onNotFound()
                             }
 
                             HttpStatus.BadRequest -> {

@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.comic.android_native_client.constants.DYNAMIC_THEME
 import com.comic.android_native_client.constants.IScreen
 import com.comic.android_native_client.constants.Screen
 import com.comic.android_native_client.ui.activities.authentications.screens.login.LoginScreen
@@ -32,7 +33,7 @@ class AuthActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            ShareableTheme {
+            ShareableTheme(dynamicColor = DYNAMIC_THEME) {
                 AuthApp()
             }
         }

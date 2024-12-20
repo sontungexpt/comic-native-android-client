@@ -63,9 +63,21 @@ fun ComicReadingScreen(
     currentChapter: Screen.ComicReading,
 ) {
     val uiState by comicReadingViewModel.uiState.collectAsState()
-    val chapterName = if (currentChapter.chapterName.isNotBlank())
-        "Chapter ${currentChapter.chapterNumber}: ${currentChapter.chapterName}"
-    else "Chapter ${currentChapter.chapterNumber}"
+
+    val chapterName = if (uiState.chapter != null) {
+        if (uiState.chapter!!.name.isNotBlank())
+            "Chapter ${uiState.chapter!!.num}: ${uiState.chapter!!.name}"
+        else "Chapter ${uiState.chapter!!.num}"
+    } else ""
+
+
+    fun handleNotFound() {
+        navController.navigate(Screen.NotFound) {
+            popUpTo(Screen.Home) {
+                inclusive = true
+            }
+        }
+    }
 
     LaunchedEffect(
         currentChapter.chapterId,
@@ -74,14 +86,14 @@ fun ComicReadingScreen(
         comicReadingViewModel.loadChapter(
             comicId = currentChapter.comicId,
             chapterId = currentChapter.chapterId,
-            onNotFound = {
-                navController.navigate(Screen.NotFound) {
-                    popUpTo(Screen.Home) {
-                        inclusive = true
-                    }
-                }
-            }
+            onNotFound = { handleNotFound() }
         )
+        comicReadingViewModel.loadAllChapters(
+            comicId = currentChapter.comicId,
+            currentChapterId = currentChapter.chapterId,
+            onNotFound = { handleNotFound() }
+        )
+
     }
 
 
@@ -89,10 +101,23 @@ fun ComicReadingScreen(
         onBackCLick = { navController.popBackStack() },
         modifier = Modifier.fillMaxSize()
     ) {
-
-
         ChapterNavigationBar(
             chapterName = chapterName,
+            hasNext = uiState.hasNext,
+            hasPrev = uiState.hasPrev,
+            onClickNext = {
+                comicReadingViewModel.nextChapter(
+                    comicId = currentChapter.comicId,
+                    onNotFound = { handleNotFound() }
+                )
+            },
+            onClickPrev = {
+                comicReadingViewModel.prevChapter(
+                    comicId = currentChapter.comicId,
+                    onNotFound = { handleNotFound() }
+                )
+            },
+            onClickName = {},
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)

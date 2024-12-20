@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import com.comic.android_native_client.constants.DYNAMIC_THEME
 import com.comic.android_native_client.constants.IScreen
 import com.comic.android_native_client.constants.Screen
 import com.comic.android_native_client.ui.activities.index.screens.ErrorScreen
@@ -48,7 +49,7 @@ class AppActivity : ComponentActivity() {
         Log.d(TAG, "onCreate Called")
         setContent {
             ShareableTheme(
-                dynamicColor = false
+                dynamicColor = DYNAMIC_THEME
             ) {
                 App()
             }
