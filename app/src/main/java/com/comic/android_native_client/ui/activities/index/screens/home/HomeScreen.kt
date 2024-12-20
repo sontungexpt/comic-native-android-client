@@ -84,12 +84,14 @@ fun HomeScreen(
                 id = comic.id,
                 imageUrl = comic.thumbnailUrl,
                 name = comic.name,
+                sourceName = comic.originalSource.name,
                 genres = comic.categories.map { it.name }
             )
         )
     }
 
     val carouselState = rememberCarouselState { 10 }
+    
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(32.dp),
         modifier = modifier

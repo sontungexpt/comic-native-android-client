@@ -8,38 +8,57 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.comic.android_native_client.R
 import com.comic.android_native_client.constants.Screen
+import com.comic.android_native_client.ui.activities.index.screens.favorite.FavoriteViewModel
 import com.comic.android_native_client.ui.components.ChapterCard
 import com.comic.android_native_client.ui.components.common.ExpandableText
+import com.comic.android_native_client.ui.components.common.LoadingCircle
 import com.comic.android_native_client.ui.components.layout.BackFloatingScreen
+import com.comic.android_native_client.ui.utils.formatTimeAgo
+import com.comic.android_native_client.ui.utils.stripHtmlTags
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ComicDetailScreen(
-    comicDetailViewModel: ComicDetailViewModel = hiltViewModel<ComicDetailViewModel>(),
+    favoriteViewModel: FavoriteViewModel,
+    comicDetailViewModel: ComicDetailViewModel,
     horizontalPadding: Dp = 16.dp,
     navController: NavController,
     currentComic: Screen.ComicDetail,
 ) {
+
+    val uiState by comicDetailViewModel.comicDetailUIState.collectAsState()
+    val lazyListState = rememberLazyListState()
+
+    LaunchedEffect(currentComic.id) {
+        comicDetailViewModel.initialize(
+            currentComic.id,
+            currentComic.sourceName
+        )
+    }
+
+
 
     BackFloatingScreen(
         onBackCLick = {
@@ -48,6 +67,7 @@ fun ComicDetailScreen(
         backButtonModifier = Modifier.offset(x = 24.dp, y = 24.dp),
     ) {
         LazyColumn(
+            state = lazyListState,
             modifier = Modifier
                 .padding(
                     horizontal = horizontalPadding,
@@ -104,16 +124,23 @@ fun ComicDetailScreen(
                 contentType = "comic_stats_section",
                 key = "comic_stats_section"
             ) {
-                var favorited = remember { mutableStateOf(false) }
                 ComicStatsSection(
                     views = 100,
                     rating = "200",
-                    favorited = comicDetailViewModel.comicDetail?.favorited ?: true,
+                    favorited = uiState.comicDetail?.followed ?: false,
                     modifier = Modifier
                         .padding(vertical = 20.dp)
                         .fillMaxWidth(),
                     onToggleFavorited = {
-                        favorited.value = !favorited.value
+                        comicDetailViewModel.updateFavoriteStatus(
+                            it,
+                            {
+                                favoriteViewModel.favoriteComic(it)
+                            },
+                            {
+                                favoriteViewModel.favoriteComic(it)
+                            }
+                        )
                     }
                 )
             }
@@ -147,11 +174,18 @@ fun ComicDetailScreen(
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
-                ExpandableText(
-                    text = "Yoon Sdddd eora là một công chức thdkf df d df d fdf df dafdaf d fdf adf adfd fadf da fda fdfd adfd  sdf s dsf ds fds fds df s d fsfds d df d f ffdf df df dfsdf dfd fdfjdkfd jfdkf djfdk fdfjd kfdf jdf df ...",
-                    textAlign = TextAlign.Justify,
-                    collapsedMaxLines = 5
-                )
+                if (uiState.initializing) {
+                    LoadingCircle(
+                        wrapperModifier = Modifier.fillMaxWidth(),
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                } else {
+                    ExpandableText(
+                        text = stripHtmlTags(uiState.comicDetail?.summary ?: ""),
+                        textAlign = TextAlign.Justify,
+                        collapsedMaxLines = 5
+                    )
+                }
 
             }
 
@@ -162,28 +196,58 @@ fun ComicDetailScreen(
             ) {
                 SectionDivider()
                 Text(
-                    text = "Danh sách tập",
+                    text = stringResource(R.string.chapter_list),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
             }
-            val chapters = listOf(
-                "Nhật Ký Từ Chức Cấp S cua anh chang ngu dot",
-                "Nhật Ký Từ Chức Cấp S"
-            )
 
             items(
-                items = chapters,
-                key = { it },
+                items = uiState.chapters,
+                key = { it.id },
                 contentType = { it.javaClass }
             ) {
                 ChapterCard(
-                    name = it,
-                    number = "1",
-                    imageUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
-                    updateDate = "2021-09-01"
+                    name = it.name,
+                    number = it.num.toString(),
+                    imageUrl = if (!it.thumbnailUrl.isNullOrBlank()) {
+                        it.thumbnailUrl
+                    } else {
+                        currentComic.imageUrl
+                    },
+                    updateDate = if (it.updatedDate != null) {
+                        formatTimeAgo(
+                            context = navController.context,
+                            dateAgo = it.updatedDate
+                        )
+                    } else {
+                        stringResource(R.string.on_updating)
+                    },
                 )
             }
+
+            if (comicDetailViewModel.noMoreChapter) return@LazyColumn
+            item(
+                contentType = "loading_more_chapter",
+                key = "loading_more_chapter"
+            ) {
+                LaunchedEffect(true) {
+                    if (!uiState.loadingMoreChapter) {
+                        comicDetailViewModel.loadMoreChapter()
+                    }
+                }
+
+                LoadingCircle(
+                    loading = uiState.loadingMoreChapter,
+                    wrapperModifier = Modifier
+                        .height(32.dp)
+                        .fillMaxWidth(),
+                    modifier = Modifier.size(28.dp),
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+            }
+
         }
     }
 

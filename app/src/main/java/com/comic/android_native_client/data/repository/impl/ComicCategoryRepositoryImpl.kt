@@ -1,7 +1,7 @@
 package com.comic.android_native_client.data.repository.impl
 
 
-import com.comic.android_native_client.common.HttpResult
+import com.comic.android_native_client.common.Result
 import com.comic.android_native_client.constants.HttpStatus
 import com.comic.android_native_client.data.model.ComicCategory
 import com.comic.android_native_client.data.repository.ComicCategoryRepository
@@ -13,24 +13,24 @@ class ComicCategoryRepositoryImpl(
     private val comicCategoryService: ComicCategoryService
 ) : ComicCategoryRepository {
 
-    override suspend fun getComicCategories(): HttpResult<List<ComicCategory>> {
+    override suspend fun getComicCategories(): Result<List<ComicCategory>> {
         val response = comicCategoryService.fetchComicCategories()
         return when {
             response.isSuccessful -> {
                 response.body()?.let { categoriesResponse ->
-                    return HttpResult.Success(categoriesResponse.map { it.toComicCategory() })
-                } ?: HttpResult.Error("Error fetching categories", HttpStatus.InternalServerError)
+                    return Result.Success(categoriesResponse.map { it.toComicCategory() })
+                } ?: Result.Error("Error fetching categories", HttpStatus.InternalServerError)
             }
 
             else -> {
                 val message = response.message()
                 when (val status = HttpStatus.from(response.code())) {
                     HttpStatus.NotFound -> {
-                        HttpResult.Error("Categories not found", status)
+                        Result.Error("Categories not found", status)
                     }
 
                     else -> {
-                        HttpResult.Error(message, status)
+                        Result.Error(message, status)
                     }
                 }
             }
@@ -38,31 +38,31 @@ class ComicCategoryRepositoryImpl(
     }
 
 
-    override suspend fun addComicCategory(comicCategory: ComicCategoryRequest): HttpResult<ComicCategory> {
+    override suspend fun addComicCategory(comicCategory: ComicCategoryRequest): Result<ComicCategory> {
         val response = comicCategoryService.addComicCategory(comicCategory)
         when {
             response.isSuccessful -> {
-                return response.body()?.let { it.toComicCategory() }?.let { HttpResult.Success(it) }
-                    ?: HttpResult.Error("Error adding category", HttpStatus.InternalServerError)
+                return response.body()?.let { it.toComicCategory() }?.let { Result.Success(it) }
+                    ?: Result.Error("Error adding category", HttpStatus.InternalServerError)
             }
 
             else -> {
                 val message = response.message()
                 when (val status = HttpStatus.from(response.code())) {
                     HttpStatus.Conflict -> {
-                        return HttpResult.Error("Conflict: $message", status)
+                        return Result.Error("Conflict: $message", status)
                     }
 
                     HttpStatus.Forbidden -> {
-                        return HttpResult.Error("Forbidden: $message", status)
+                        return Result.Error("Forbidden: $message", status)
                     }
 
                     HttpStatus.BadRequest -> {
-                        return HttpResult.Error("Bad request: $message", status)
+                        return Result.Error("Bad request: $message", status)
                     }
 
                     else -> {
-                        return HttpResult.Error(message, status)
+                        return Result.Error(message, status)
                     }
                 }
 

@@ -8,7 +8,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +26,7 @@ fun LoadingIndicatorButton(
     loadingWrapperModifier: Modifier = Modifier,
     loadingModifier: Modifier = Modifier,
     loadingPropagateMinConstraints: Boolean = false,
-    loadingColor: Color = MaterialTheme.colorScheme.primary,
+    loadingColor: Color = ProgressIndicatorDefaults.circularColor,
     loadingStrokeWidth: Dp = ProgressIndicatorDefaults.CircularStrokeWidth,
     loadingTrackColor: Color = ProgressIndicatorDefaults.circularIndeterminateTrackColor,
     loadingStrokeCap: StrokeCap = ProgressIndicatorDefaults.CircularIndeterminateStrokeCap,

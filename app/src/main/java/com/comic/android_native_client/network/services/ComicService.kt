@@ -20,6 +20,10 @@ interface PublicComicService {
     @GET(MainEndpoint.GET_COMIC_DETAIL_V1)
     suspend fun getComicDetail(
         @Path("comicId") comicId: String,
+        @Query("sourceName") sourceName: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int = 10,
+        @Query("sort") sort: Array<String>? = null,
     ): Response<ComicDetailResponse>
 
     @GET(MainEndpoint.SEARCH_COMICS_V1)

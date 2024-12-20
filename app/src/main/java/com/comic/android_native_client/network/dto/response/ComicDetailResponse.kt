@@ -24,7 +24,8 @@ data class ComicDetailResponse(
     val originalSource: OriginalSourceResponse,
     val characters: List<PersonResponse> = emptyList(),
     val newChapterUpdatedAt: Instant,
-    val chapters: PageResponse<ShortInfoChapterResponse>
+    val chapters: PageResponse<ShortInfoChapterResponse>,
+    val followed: Boolean = false
 ) : Identifiable<String>
 
 fun ComicDetailResponse.toComicDetail(): ComicDetail {
@@ -44,6 +45,7 @@ fun ComicDetailResponse.toComicDetail(): ComicDetail {
         originalSource = originalSource.toOriginalSource(),
         newChapterUpdatedAt = newChapterUpdatedAt,
         characters = characters.map { it.toPerson() },
+        followed = followed,
         chapters = chapters.toPage { it.toChapter() }
     )
 }

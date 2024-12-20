@@ -15,10 +15,11 @@ import androidx.compose.ui.unit.Dp
 fun LoadingCircle(
     wrapperModifier: Modifier = Modifier,
     modifier: Modifier = Modifier,
+    loading: Boolean = true,
     propagateMinConstraints: Boolean = false,
     color: Color = ProgressIndicatorDefaults.circularColor,
     strokeWidth: Dp = ProgressIndicatorDefaults.CircularStrokeWidth,
-    trackColor: Color = ProgressIndicatorDefaults.circularTrackColor,
+    trackColor: Color = ProgressIndicatorDefaults.circularIndeterminateTrackColor,
     strokeCap: StrokeCap = ProgressIndicatorDefaults.CircularIndeterminateStrokeCap,
 ) {
     Box(
@@ -26,6 +27,7 @@ fun LoadingCircle(
         propagateMinConstraints = propagateMinConstraints,
         contentAlignment = Center
     ) {
+        if (!loading) return@Box
         CircularProgressIndicator(
             color = color,
             strokeWidth = strokeWidth,

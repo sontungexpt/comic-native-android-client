@@ -59,10 +59,12 @@ object HttpRequestConfig {
 
     @[Provides Singleton PublicClient]
     fun provideUnauthenticatedOkHttpClient(
+        authAuthenticator: AuthAuthenticator,
         optionalAccessTokenInterceptor: OptionalAccessTokenInterceptor
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .addInterceptor(optionalAccessTokenInterceptor)
+        .authenticator(authAuthenticator)
         .build()
 
 

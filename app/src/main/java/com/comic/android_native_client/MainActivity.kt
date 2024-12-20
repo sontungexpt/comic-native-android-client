@@ -52,7 +52,8 @@ class MainActivity : ComponentActivity() {
                         sharedUserState.setUser(
                             UserState(
                                 name = it.name,
-                                avatar = it.avatar
+                                avatar = it.avatar,
+                                introduction = it.introduction
                             )
                         )
                     }

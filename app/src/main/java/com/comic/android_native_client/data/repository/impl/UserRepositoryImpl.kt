@@ -18,7 +18,8 @@ class UserRepositoryImpl(
                 response.body()?.let {
                     return User(
                         name = it.name,
-                        avatar = it.avatar
+                        avatar = it.avatar,
+                        introduction = it.introduction
                     )
                 }
             }

@@ -2,7 +2,7 @@ package com.comic.android_native_client.ui.activities.index.screens.reading
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.comic.android_native_client.common.HttpResult
+import com.comic.android_native_client.common.Result
 import com.comic.android_native_client.constants.HttpStatus
 import com.comic.android_native_client.data.model.Chapter
 import com.comic.android_native_client.data.model.Comment
@@ -46,7 +46,7 @@ class ComicReadingViewModel @Inject constructor(
             _uiState.update { it.copy(chapterLoading = true) }
             try {
                 when (val result = chapterRepository.getChapter(comicId, chapterId)) {
-                    is HttpResult.Success -> {
+                    is Result.Success -> {
                         _uiState.update {
                             it.copy(
                                 chapter = result.data,
@@ -56,7 +56,7 @@ class ComicReadingViewModel @Inject constructor(
                         return@launch
                     }
 
-                    is HttpResult.Error -> {
+                    is Result.Error -> {
                         when (result.status) {
                             HttpStatus.NotFound -> {
                                 onNotFound()
@@ -86,7 +86,7 @@ class ComicReadingViewModel @Inject constructor(
             _uiState.update { it.copy(chapterListLoading = true) }
             try {
                 when (val result = chapterRepository.getAllChapters(comicId)) {
-                    is HttpResult.Success -> {
+                    is Result.Success -> {
                         _uiState.update {
                             it.copy(
                                 chapterList = result.data,
@@ -95,7 +95,7 @@ class ComicReadingViewModel @Inject constructor(
                         }
                     }
 
-                    is HttpResult.Error -> {
+                    is Result.Error -> {
                         when (result.status) {
                             HttpStatus.NotFound -> {
                                 // Handle not found

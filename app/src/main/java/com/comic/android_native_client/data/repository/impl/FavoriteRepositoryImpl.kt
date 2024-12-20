@@ -1,6 +1,6 @@
 package com.comic.android_native_client.data.repository.impl
 
-import com.comic.android_native_client.common.HttpResult
+import com.comic.android_native_client.common.Result
 import com.comic.android_native_client.constants.HttpStatus
 import com.comic.android_native_client.data.model.Comic
 import com.comic.android_native_client.data.model.Page
@@ -16,8 +16,8 @@ class FavoriteRepositoryImpl(
     override suspend fun getFavoriteComics(
         page: Int,
         size: Int,
-        sort: Array<String>
-    ): HttpResult<Page<Comic>> {
+        sort: Array<String>?
+    ): Result<Page<Comic>> {
         val response = favoriteComicService.fetchFavoriteComics(
             page = page,
             size = size,
@@ -26,57 +26,57 @@ class FavoriteRepositoryImpl(
         return when {
             response.isSuccessful -> {
                 response.body()?.let {
-                    HttpResult.Success(it.toPage { it.toComic() })
-                } ?: HttpResult.Error(
+                    Result.Success(it.toPage { it.toComic() })
+                } ?: Result.Error(
                     "Error fetching favorite comics",
                     HttpStatus.InternalServerError
                 )
             }
 
             else -> {
-                HttpResult.Error(response.message(), HttpStatus.from(response.code()))
+                Result.Error(response.message(), HttpStatus.from(response.code()))
             }
         }
 
     }
 
 
-    override suspend fun addFavorite(comicId: String): HttpResult<Unit> {
+    override suspend fun addFavorite(comicId: String): Result<Unit> {
         val response = favoriteComicService.addFavoriteComic(comicId)
         return when {
             response.isSuccessful -> {
-                HttpResult.Success(Unit)
+                Result.Success(Unit)
             }
 
             else -> {
-                HttpResult.Error(response.message(), HttpStatus.from(response.code()))
+                Result.Error(response.message(), HttpStatus.from(response.code()))
             }
         }
     }
 
-    override suspend fun removeFavorite(comicId: String): HttpResult<Unit> {
+    override suspend fun removeFavorite(comicId: String): Result<Unit> {
         val response = favoriteComicService.removeFavoriteComic(comicId)
         return when {
             response.isSuccessful -> {
-                HttpResult.Success(Unit)
+                Result.Success(Unit)
             }
 
             else -> {
-                HttpResult.Error(response.message(), HttpStatus.from(response.code()))
+                Result.Error(response.message(), HttpStatus.from(response.code()))
             }
         }
 
     }
 
-    override suspend fun isFavorite(comicId: String): HttpResult<Boolean> {
+    override suspend fun isFavorite(comicId: String): Result<Boolean> {
         val response = favoriteComicService.getFavoriteComicStatus(comicId)
         return when {
             response.isSuccessful -> {
-                HttpResult.Success(response.body()!!)
+                Result.Success(response.body()!!)
             }
 
             else -> {
-                HttpResult.Error(response.message(), HttpStatus.from(response.code()))
+                Result.Error(response.message(), HttpStatus.from(response.code()))
             }
         }
 

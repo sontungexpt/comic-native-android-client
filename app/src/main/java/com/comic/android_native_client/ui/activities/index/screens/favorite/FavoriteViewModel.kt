@@ -6,15 +6,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.comic.android_native_client.common.HttpResult
+import com.comic.android_native_client.common.Result
 import com.comic.android_native_client.constants.HttpStatus
 import com.comic.android_native_client.data.model.Comic
 import com.comic.android_native_client.data.repository.FavoriteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 
 
@@ -25,53 +23,52 @@ class FavoriteViewModel @Inject constructor(
     private var _totalComics: Int = 0
     private var _currentPage: Int = -1
 
-    var _favoriteComics = mutableStateListOf<Comic>()
-    val favoriteComics: List<Comic>
+    private var _favoriteComics = mutableStateListOf<Comic>()
+    private var _loadingMore by mutableStateOf(false)
+
+    val comics: List<Comic>
         get() = _favoriteComics
 
-    private var _loadingMore by mutableStateOf(false)
     val loadingMore
         get() = _loadingMore
-
-    private val mutex = Mutex()
 
     val intialized: Boolean
         get() = _currentPage != -1
 
+
     fun hasNextPage(): Boolean = !intialized
-            || _totalComics > _currentPage
+            || _totalComics > _favoriteComics.size
 
     fun loadMoreComics() {
-        if (_loadingMore) return
-        else if (!hasNextPage()) return
-        _loadingMore = true
-
         viewModelScope.launch(Dispatchers.IO) {
-            mutex.withLock(this) {
-                val nextPage = _currentPage + 1
+            if (_loadingMore) return@launch
+            else if (!hasNextPage()) return@launch
+            _loadingMore = true
+            val nextPage = _currentPage + 1
+            println(nextPage)
+            try {
                 when (val result = favoriteRepository.getFavoriteComics(
                     page = nextPage,
                     size = 10,
-                    sort = arrayOf("createdAt,desc")
                 )) {
-                    is HttpResult.Success -> {
+                    is Result.Success -> {
                         val page = result.data
-                        println(page)
-                        _totalComics = page.totalElements.takeIf { _currentPage == -1 }
-                            ?: _totalComics
+                        if (!intialized) _totalComics = page.totalElements
                         _currentPage = nextPage
                         _favoriteComics.addAll(page.content)
                     }
 
-                    is HttpResult.Error -> {
-                        println("error")
+                    is Result.Error -> {
+                        when (result.status) {
+                            HttpStatus.NotFound -> {}
+                            else -> {}
+                        }
                     }
 
-
-                    else -> {
-                        println("else")
-                    }
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
                 _loadingMore = false
             }
         }
@@ -80,16 +77,18 @@ class FavoriteViewModel @Inject constructor(
     }
 
 
-    fun favoriteComic(comic: Comic) {
+    fun favoriteComic(
+        comic: Comic
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 when (val result = favoriteRepository.addFavorite(comic.id)) {
-                    is HttpResult.Success -> {
+                    is Result.Success -> {
                         _totalComics++
                         _favoriteComics.add(comic)
                     }
 
-                    is HttpResult.Error -> {
+                    is Result.Error -> {
                         when (result.status) {
                             HttpStatus.Conflict -> {
 
@@ -98,8 +97,6 @@ class FavoriteViewModel @Inject constructor(
                             else -> {}
                         }
                     }
-
-                    else -> {}
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -112,13 +109,12 @@ class FavoriteViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 when (val result = favoriteRepository.removeFavorite(comic.id)) {
-                    is HttpResult.Success -> {
+                    is Result.Success -> {
                         _totalComics--
                         _favoriteComics.remove(comic)
                     }
 
-                    is HttpResult.Error -> {}
-                    else -> {}
+                    is Result.Error -> {}
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

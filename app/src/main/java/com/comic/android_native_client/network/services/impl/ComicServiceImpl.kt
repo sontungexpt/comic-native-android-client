@@ -28,8 +28,20 @@ class ComicServiceImpl @Inject constructor(
         )
     }
 
-    override suspend fun getComicDetail(comicId: String): Response<ComicDetailResponse> {
-        return publicComicService.getComicDetail(comicId)
+    override suspend fun getComicDetail(
+        comicId: String,
+        sourceName: String,
+        page: Int,
+        size: Int,
+        sort: Array<String>?
+    ): Response<ComicDetailResponse> {
+        return publicComicService.getComicDetail(
+            comicId,
+            sourceName,
+            page,
+            size,
+            sort
+        )
     }
 
     override suspend fun searchComic(

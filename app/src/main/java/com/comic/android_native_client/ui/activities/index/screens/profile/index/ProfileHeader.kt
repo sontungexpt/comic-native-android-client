@@ -41,9 +41,13 @@ import com.comic.android_native_client.ui.components.Avatar
 
 @Composable
 fun ProfileHeader(
+    onEditProfile: () -> Unit,
+    onSettingsClick: () -> Unit,
+
     userBackgroundUrl: String? = null,
     avatarUrl: String? = null,
     username: String = "User",
+    introduction: String = "",
 
     imageHeight: Int = 240,
     paddingX: Int = 16,
@@ -79,7 +83,9 @@ fun ProfileHeader(
 
             // Settings Button
             IconButton(
-                onClick = { },
+                onClick = {
+                    onSettingsClick()
+                },
                 colors = IconButtonColors(
                     containerColor = MaterialTheme.colorScheme.surface,
                     contentColor = MaterialTheme.colorScheme.onSurface,
@@ -130,7 +136,9 @@ fun ProfileHeader(
             )
 
             Button(
-                onClick = { },
+                onClick = {
+                    onEditProfile()
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
@@ -170,12 +178,22 @@ fun ProfileHeader(
                 )
             }
 
-            Text(
-                text = "Toi la mot nguoi nang dongo yeu truyen tranh va thich doc cac the loai truyen cung nhu sang tac ra nhung cuon truyen tranh moi",
-                style = MaterialTheme.typography.titleSmall,
-                textAlign = TextAlign.Justify,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+            if (introduction.isNotEmpty()) {
+                Text(
+                    text = introduction,
+                    style = MaterialTheme.typography.titleSmall,
+                    textAlign = TextAlign.Justify,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            } else {
+                Text(
+                    modifier = Modifier.align(Alignment.Start),
+                    text = "No introduction yet",
+                    style = MaterialTheme.typography.titleSmall,
+                    textAlign = TextAlign.Justify,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
 
         }

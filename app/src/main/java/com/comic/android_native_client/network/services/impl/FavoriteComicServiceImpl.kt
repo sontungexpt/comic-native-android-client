@@ -18,7 +18,7 @@ class FavoriteComicServiceImpl(
     override suspend fun fetchFavoriteComics(
         page: Int,
         size: Int,
-        sort: Array<String>
+        sort: Array<String>?
     ): Response<PageResponse<ComicResponse>> {
         return favoriteComicServiceAuthenticated.fetchFavoriteComics(
             page = page,
@@ -27,11 +27,11 @@ class FavoriteComicServiceImpl(
         )
     }
 
-    override suspend fun addFavoriteComic(comicId: String): Response<Nothing> {
+    override suspend fun addFavoriteComic(comicId: String): Response<Unit> {
         return favoriteComicServiceAuthenticated.addFavoriteComic(comicId)
     }
 
-    override suspend fun removeFavoriteComic(comicId: String): Response<Nothing> {
+    override suspend fun removeFavoriteComic(comicId: String): Response<Unit> {
         return favoriteComicServiceAuthenticated.removeFavoriteComic(comicId)
     }
 

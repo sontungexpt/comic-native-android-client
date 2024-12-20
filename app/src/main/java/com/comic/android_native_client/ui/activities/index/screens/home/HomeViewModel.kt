@@ -3,7 +3,7 @@ package com.comic.android_native_client.ui.activities.index.screens.home
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.comic.android_native_client.common.HttpResult
+import com.comic.android_native_client.common.Result
 import com.comic.android_native_client.data.model.Comic
 import com.comic.android_native_client.data.model.Page
 import com.comic.android_native_client.data.repository.ComicRepository
@@ -67,19 +67,19 @@ class HomeViewModel @Inject constructor(
 
     private suspend fun loadComics(
         key: String,
-        fetch: suspend () -> HttpResult<Page<Comic>>
+        fetch: suspend () -> Result<Page<Comic>>
     ) {
         _comicsMap[key] = ComicsState(loading = true, comics = emptyList())
         try {
             when (val result = fetch()) {
-                is HttpResult.Success -> {
+                is Result.Success -> {
                     _comicsMap[key] = ComicsState(
                         loading = false,
                         comics = result.data.content
                     )
                 }
 
-                is HttpResult.Error -> {
+                is Result.Error -> {
                 }
             }
         } catch (e: Exception) {

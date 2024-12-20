@@ -50,6 +50,7 @@ fun ProfileScreen(
 
     val userState by profileViewModel.userState.collectAsState()
     val paddingX = 16
+
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(30.dp),
         modifier = Modifier
@@ -61,7 +62,15 @@ fun ProfileScreen(
             ProfileHeader(
                 username = userState.name,
                 paddingX = paddingX,
+                introduction = userState.introduction,
                 imageHeight = 300,
+                onEditProfile = {
+                    navController.navigate(
+                        Screen.ProfileGraph.EditProfile
+                    )
+                },
+                onSettingsClick = {
+                },
             )
         }
 

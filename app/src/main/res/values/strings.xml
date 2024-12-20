@@ -52,7 +52,14 @@
     <string name="login_failed">"Login failed"</string>
     <string name="welcome_back">Welcome Back</string>
     <string name="comic_detail">Comic Detail</string>
-
+    <string name="time_seconds_ago">%1$d giây trước</string>
+    <string name="time_minutes_ago">%1$d phút trước</string>
+    <string name="time_hours_ago">%1$d giờ trước</string>
+    <string name="time_days_ago">%1$d ngày trước</string>
+    <string name="time_months_ago">%1$d tháng trước</string>
+    <string name="time_years_ago">%1$d năm trước</string>
+    <string name="time_unknown">Không xác định</string>
+    <string name="time_date_format">dd/MM/yyyy</string>
 
     <!-- error message-->
     <string name="validatation_text_field_invalid_email_address_msg">"The string %s is not a valid email address"</string>
@@ -93,6 +100,9 @@
     <string name="not_found">Not Found</string>
     <string name="see_all">See All</string>
     <string name="manga">Manga</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="on_updating">On Updating</string>
+    <string name="chapter_list">Chapter List</string>
 
 
 </resources>

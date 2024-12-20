@@ -20,15 +20,18 @@ import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.comic.android_native_client.constants.IScreen
 import com.comic.android_native_client.constants.Screen
-import com.comic.android_native_client.ui.activities.authentications.screens.login.LoginScreen
+import com.comic.android_native_client.ui.activities.index.screens.ErrorScreen
 import com.comic.android_native_client.ui.activities.index.screens.NotFoundScreen
 import com.comic.android_native_client.ui.activities.index.screens.detail.ComicDetailScreen
+import com.comic.android_native_client.ui.activities.index.screens.detail.ComicDetailViewModel
 import com.comic.android_native_client.ui.activities.index.screens.explore.ExploreScreen
+import com.comic.android_native_client.ui.activities.index.screens.explore.ExploreViewModel
 import com.comic.android_native_client.ui.activities.index.screens.favorite.FavoriteScreen
 import com.comic.android_native_client.ui.activities.index.screens.favorite.FavoriteViewModel
 import com.comic.android_native_client.ui.activities.index.screens.home.HomeScreen
 import com.comic.android_native_client.ui.activities.index.screens.profile.index.ProfileScreen
 import com.comic.android_native_client.ui.activities.index.screens.profile.sub_screens.AboutUsScreen
+import com.comic.android_native_client.ui.activities.index.screens.profile.sub_screens.EditProfileScreen
 import com.comic.android_native_client.ui.activities.index.screens.profile.sub_screens.PrivacyPolicyScreen
 import com.comic.android_native_client.ui.activities.index.screens.profile.sub_screens.TermsScreen
 import com.comic.android_native_client.ui.activities.index.screens.reading.ComicReadingScreen
@@ -44,7 +47,9 @@ class AppActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate Called")
         setContent {
-            ShareableTheme {
+            ShareableTheme(
+                dynamicColor = false
+            ) {
                 App()
             }
         }
@@ -61,6 +66,7 @@ fun App(
 
     // hóist the viewmodel
     val favoriteViewModel = hiltViewModel<FavoriteViewModel>()
+    val exploreViewModel = hiltViewModel<ExploreViewModel>()
 
     Scaffold(
         bottomBar = {
@@ -80,6 +86,7 @@ fun App(
             }
             composable<Screen.Explore> {
                 ExploreScreen(
+                    exploreViewModel = exploreViewModel,
                     horizontalPadding = horizontalPadding
                 )
             }
@@ -100,6 +107,13 @@ fun App(
                         horizontalPadding = horizontalPadding
                     )
                 }
+                composable<Screen.ProfileGraph.EditProfile> {
+                    EditProfileScreen(
+                        navController = navController,
+                        horizontalPadding = horizontalPadding
+                    )
+                }
+
                 composable<Screen.ProfileGraph.PrivacyPolicy> {
                     PrivacyPolicyScreen(
                         navController = navController,
@@ -121,20 +135,17 @@ fun App(
                 }
             }
 
-            composable<Screen.Search> {
-                LoginScreen(
-                    navController = navController,
-                    horizontalPadding = horizontalPadding
-                )
-            }
 
             // hidden screen
             composable<Screen.ComicDetail> {
                 val currentComic = it.toRoute<Screen.ComicDetail>()
+                val comicDetailViewModel = hiltViewModel<ComicDetailViewModel>()
                 ComicDetailScreen(
+                    comicDetailViewModel = comicDetailViewModel,
                     horizontalPadding = horizontalPadding,
                     currentComic = currentComic,
-                    navController = navController
+                    navController = navController,
+                    favoriteViewModel = favoriteViewModel
                 )
             }
             composable<Screen.ComicReading> {
@@ -152,10 +163,31 @@ fun App(
                 )
             }
 
+            composable<Screen.Error> {
+                val error = it.toRoute<Screen.Error>()
+                ErrorScreen(
+                    error = error,
+                    horizontalPadding = horizontalPadding,
+                    navigateToHome = {
+                        navController.navigate(Screen.Home) {
+                            popUpTo(Screen.Home) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
+            }
+
             composable<Screen.NotFound> {
                 NotFoundScreen(
-                    navController = navController,
-                    horizontalPadding = horizontalPadding
+                    horizontalPadding = horizontalPadding,
+                    navigateToHome = {
+                        navController.navigate(Screen.Home) {
+                            popUpTo(Screen.Home) {
+                                inclusive = true
+                            }
+                        }
+                    }
                 )
             }
         }

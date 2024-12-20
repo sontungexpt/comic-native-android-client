@@ -18,7 +18,7 @@ class ComicDetail(
     newChapters: List<Chapter> = emptyList(),
     characters: List<Person> = emptyList(),
 
-    val favorited: Boolean = false,
+    var followed: Boolean = false,
     val summary: String = "",
     val chapters: Page<Chapter>
 ) : Comic(

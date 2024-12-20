@@ -1,6 +1,6 @@
 package com.comic.android_native_client.data.repository.impl
 
-import com.comic.android_native_client.common.HttpResult
+import com.comic.android_native_client.common.Result
 import com.comic.android_native_client.constants.HttpStatus
 import com.comic.android_native_client.data.model.Comment
 import com.comic.android_native_client.data.model.Page
@@ -20,7 +20,7 @@ class CommentRepositoryImpl(
         page: Int,
         size: Int,
         sort: Array<String>
-    ): HttpResult<Page<Comment>> {
+    ): Result<Page<Comment>> {
         val response = commentService.getTopLevelComments(
             comicId = comicId,
             chapterId = chapterId,
@@ -34,14 +34,14 @@ class CommentRepositoryImpl(
             response.isSuccessful -> {
                 val body = response.body()
                 return if (body != null) {
-                    HttpResult.Success(body.toPage { it.toComment() })
+                    Result.Success(body.toPage { it.toComment() })
                 } else {
-                    HttpResult.Error("Body is null")
+                    Result.Error("Body is null")
                 }
             }
 
             else -> {
-                return HttpResult.Error(response.message(), HttpStatus.from(response.code()))
+                return Result.Error(response.message(), HttpStatus.from(response.code()))
             }
 
         }
@@ -52,7 +52,7 @@ class CommentRepositoryImpl(
         page: Int,
         size: Int,
         commentId: String
-    ): HttpResult<Page<Comment>> {
+    ): Result<Page<Comment>> {
         val response = commentService.getTopLevelReplies(
             sort = arrayOf("updatedAt"),
             page = page,
@@ -64,34 +64,34 @@ class CommentRepositoryImpl(
             response.isSuccessful -> {
                 val body = response.body()
                 return if (body != null) {
-                    HttpResult.Success(body.toPage { it.toComment() })
+                    Result.Success(body.toPage { it.toComment() })
                 } else {
-                    HttpResult.Error("Body is null")
+                    Result.Error("Body is null")
                 }
             }
 
             else -> {
-                return HttpResult.Error(response.message(), HttpStatus.from(response.code()))
+                return Result.Error(response.message(), HttpStatus.from(response.code()))
             }
 
         }
     }
 
-    override suspend fun addComment(comicId: String, comment: CommentRequest): HttpResult<Comment> {
+    override suspend fun addComment(comicId: String, comment: CommentRequest): Result<Comment> {
         val response = commentService.addComment(comment)
 
         when {
             response.isSuccessful -> {
                 val body = response.body()
                 return if (body != null) {
-                    HttpResult.Success(body.toComment())
+                    Result.Success(body.toComment())
                 } else {
-                    HttpResult.Error("Body is null")
+                    Result.Error("Body is null")
                 }
             }
 
             else -> {
-                return HttpResult.Error(response.message(), HttpStatus.from(response.code()))
+                return Result.Error(response.message(), HttpStatus.from(response.code()))
             }
 
         }

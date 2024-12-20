@@ -18,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -70,7 +71,9 @@ class SignUpViewModel @Inject constructor(
                     )
                 )
                 if (response.isSuccessful) {
-                    navController.navigate(Screen.Login)
+                    withContext(Dispatchers.Main) {
+                        navController.navigate(Screen.Login)
+                    }
                     val msg = "Registration successful"
 
                     Toast.makeText(

@@ -6,6 +6,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Login
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Details
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Favorite
@@ -18,6 +20,7 @@ import com.comic.android_native_client.R
 import kotlinx.serialization.Serializable
 
 interface IScreen {
+    fun toRoute(): String? = this::class.qualifiedName
     fun icon(): ImageVector
 }
 
@@ -89,6 +92,11 @@ sealed class Screen(
         }
 
         @Serializable
+        object EditProfile : Screen(R.string.edit_profile) {
+            override fun icon(): ImageVector = Icons.Filled.Edit
+        }
+
+        @Serializable
         object AboutUs : Screen(R.string.about_us) {
             override fun icon(): ImageVector = Icons.Filled.Info
         }
@@ -107,12 +115,24 @@ sealed class Screen(
         }
     }
 
+    @Serializable
+    data class Error(
+        val code: Int,
+        val shortMessage: String,
+        val longMessage: String
+    ) : DynamicScreen {
+        override fun icon(): ImageVector {
+            return Icons.Filled.Error
+        }
+    }
+
 
     @Serializable
     data class ComicDetail(
         val id: String,
         val imageUrl: String,
         val name: String,
+        val sourceName: String,
         val genres: List<String>
     ) : DynamicScreen {
         override fun icon(): ImageVector {

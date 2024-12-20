@@ -14,18 +14,18 @@ interface AuthenticatedFavoriteComicService {
     suspend fun fetchFavoriteComics(
         @Query("page") page: Int,
         @Query("size") size: Int = 10,
-        @Query("sort") sort: Array<String> = arrayOf("createdAt,desc")
+        @Query("sort") sort: Array<String>? = null
     ): Response<PageResponse<ComicResponse>>
 
     @POST(MainEndpoint.ADD_FAVORITE_COMIC_V1)
     suspend fun addFavoriteComic(
         @Path("comicId") comicId: String
-    ): Response<Nothing>
+    ): Response<Unit>
 
     @POST(MainEndpoint.REMOVE_FAVORITE_COMIC_V1)
     suspend fun removeFavoriteComic(
         @Path("comicId") comicId: String
-    ): Response<Nothing>
+    ): Response<Unit>
 
     @GET(MainEndpoint.GET_FAVORITE_COMIC_STATUS_V1)
     suspend fun getFavoriteComicStatus(
