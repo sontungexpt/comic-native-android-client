@@ -3,6 +3,7 @@ package com.comic.android_native_client.network.services
 import com.comic.android_native_client.network.constants.MainEndpoint
 import com.comic.android_native_client.network.dto.response.ComicResponse
 import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -22,7 +23,7 @@ interface AuthenticatedFavoriteComicService {
         @Path("comicId") comicId: String
     ): Response<Unit>
 
-    @POST(MainEndpoint.REMOVE_FAVORITE_COMIC_V1)
+    @DELETE(MainEndpoint.REMOVE_FAVORITE_COMIC_V1)
     suspend fun removeFavoriteComic(
         @Path("comicId") comicId: String
     ): Response<Unit>

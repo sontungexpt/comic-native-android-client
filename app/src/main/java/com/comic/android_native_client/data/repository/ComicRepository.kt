@@ -25,6 +25,6 @@ interface ComicRepository {
         q: String,
         page: Int,
         size: Int = 10,
-        sort: Array<String> = arrayOf("createdAt"),
+        sort: Array<String>? = null,
     ): Result<Page<Comic>>
 }

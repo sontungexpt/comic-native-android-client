@@ -43,7 +43,6 @@ fun ComicCard(
     imageUrl: String,
     name: String,
     authors: List<String>,
-    rating: UInt,
     newChapters: List<String>,
     modifier: Modifier
 ) {
@@ -62,34 +61,17 @@ fun ComicCard(
                 .padding(4.dp)
                 .fillMaxSize()
         ) {
-            Box(
+
+            AsyncImage(
+                model = imageUrl,
+                contentScale = ContentScale.Crop,
+                contentDescription = "Image of ${name}",
                 modifier = Modifier
                     .fillMaxHeight(0.9f)
-                    .fillMaxWidth(0.26f)
-            ) {
-                AsyncImage(
-                    model = imageUrl,
-                    contentScale = ContentScale.Crop,
-                    contentDescription = "Image of ${name}",
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(12.dp))
-                )
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(topStart = 12.dp, bottomEnd = 12.dp))
-                        .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.65f))
-                ) {
-                    Text(
-                        text = "${rating} ⭐",
-                        modifier = Modifier
-                            .padding(top = 2.dp, bottom = 2.dp, start = 4.dp, end = 4.dp),
-                        fontSize = 12.sp,
-                    )
+                    .fillMaxWidth(0.23f)
+                    .clip(RoundedCornerShape(12.dp))
+            )
 
-                }
-            }
             Column(
                 modifier = Modifier
                     .padding(8.dp)
@@ -177,7 +159,6 @@ fun ComicCardPreview() {
             name = "Nam chinh muon ly hon nhung vo anh khong chiu",
             imageUrl = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png",
             authors = listOf("Author"),
-            rating = 5u,
             newChapters = listOf(),
             modifier = Modifier
                 .combinedClickable(

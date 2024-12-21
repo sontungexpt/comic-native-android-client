@@ -33,11 +33,10 @@ fun FavoriteIconToggleable(
     tint: Color? = null,
 ) {
 
-
     IconToggleButton(
         checked = favorited,
         onCheckedChange = onToggleFavorited,
-        modifier = modifier.size(iconSize),
+        modifier = modifier,
         enabled = enabled,
         colors = colors,
         interactionSource = interactionSource

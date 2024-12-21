@@ -31,13 +31,12 @@ import com.comic.shareable_theme.ui.theme.ShareableTheme
 fun SimpleComic(
     imageUrl: String,
     name: String,
-
-
     onclick: () -> Unit = {},
     modifier: Modifier,
     enabled: Boolean = true,
     shape: CornerBasedShape = MaterialTheme.shapes.large,
     maxNameLines: Int = 1,
+    nameTextAlign: TextAlign = TextAlign.Left,
     nameFontSize: TextUnit = TextUnit.Unspecified,
     nameStyle: TextStyle = MaterialTheme.typography.titleMedium,
     nameFontFamily: FontFamily? = null,
@@ -57,7 +56,8 @@ fun SimpleComic(
                 if (enabled) {
                     onclick()
                 }
-            },
+            }
+
     ) {
         AsyncImage(
             model = imageUrl,
@@ -72,7 +72,7 @@ fun SimpleComic(
             text = name,
             maxLines = maxNameLines,
             overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Center,
+            textAlign = nameTextAlign,
             style = nameStyle,
             fontSize = nameFontSize,
             fontWeight = nameFontWeight,

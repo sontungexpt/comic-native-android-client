@@ -91,7 +91,7 @@ fun HomeScreen(
     }
 
     val carouselState = rememberCarouselState { 10 }
-    
+
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(32.dp),
         modifier = modifier
@@ -129,20 +129,24 @@ fun HomeScreen(
                     modifier = Modifier,
                     itemSpacing = 12.dp,
                 ) { index ->
-                    homeViewModel.comicsMap[OUTSTANDING_KEY]?.comics?.get(index)?.let {
-                        SimpleComic(
-                            name = it.name,
-                            imageUrl = it.thumbnailUrl,
-                            enabled = true,
-                            nameFontWeight = FontWeight.W500,
-                            onclick = {
-                                handleComicClick(it)
-                            },
-                            modifier = Modifier
-                                .maskClip(MaterialTheme.shapes.small)
-                                .width(310.dp)
-                                .height(268.dp)
-                        )
+                    val comics = homeViewModel.comicsMap[OUTSTANDING_KEY]?.comics
+                    if (index < comics?.size ?: 0) {
+                        comics?.get(index)?.let {
+                            SimpleComic(
+                                name = it.name,
+                                imageUrl = it.thumbnailUrl,
+                                enabled = true,
+                                nameFontWeight = FontWeight.W500,
+                                onclick = {
+                                    handleComicClick(it)
+                                },
+                                modifier = Modifier
+                                    .maskClip(MaterialTheme.shapes.small)
+                                    .width(310.dp)
+                                    .height(268.dp)
+                            )
+                        }
+
                     }
                 }
 

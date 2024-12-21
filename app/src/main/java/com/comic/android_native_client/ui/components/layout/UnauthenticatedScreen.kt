@@ -31,8 +31,9 @@ fun UnauthenticatedScreen(
     onHomeClick: () -> Unit,
     modifier: Modifier = Modifier.padding(16.dp),
     title: String = "Welcome to Comic",
+    message: String = "Please log in to continue or explore the app."
 
-    ) {
+) {
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -51,7 +52,7 @@ fun UnauthenticatedScreen(
 
         // Subtitle
         Text(
-            text = "Please log in to continue or explore the app.",
+            text = message,
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = androidx.compose.ui.text.style.TextAlign.Center

@@ -32,6 +32,7 @@ class FavoriteViewModel @Inject constructor(
     val loadingMore
         get() = _loadingMore
 
+
     val intialized: Boolean
         get() = _currentPage != -1
 
@@ -45,7 +46,6 @@ class FavoriteViewModel @Inject constructor(
             else if (!hasNextPage()) return@launch
             _loadingMore = true
             val nextPage = _currentPage + 1
-            println(nextPage)
             try {
                 when (val result = favoriteRepository.getFavoriteComics(
                     page = nextPage,
@@ -105,16 +105,28 @@ class FavoriteViewModel @Inject constructor(
         }
     }
 
-    fun unfavoriteComic(comic: Comic) {
+    fun unfavoriteComic(
+        comic: Comic,
+        onSuccess: () -> Unit = {},
+        onError: (HttpStatus) -> Unit = {}
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 when (val result = favoriteRepository.removeFavorite(comic.id)) {
                     is Result.Success -> {
                         _totalComics--
                         _favoriteComics.remove(comic)
+                        onSuccess()
                     }
 
-                    is Result.Error -> {}
+                    is Result.Error -> {
+                        when (result.status) {
+                            else -> {
+
+                            }
+                        }
+                        result.status?.let { onError(it) }
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

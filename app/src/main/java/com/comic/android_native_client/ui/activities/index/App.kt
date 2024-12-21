@@ -31,6 +31,7 @@ import com.comic.android_native_client.ui.activities.index.screens.favorite.Favo
 import com.comic.android_native_client.ui.activities.index.screens.favorite.FavoriteViewModel
 import com.comic.android_native_client.ui.activities.index.screens.home.HomeScreen
 import com.comic.android_native_client.ui.activities.index.screens.profile.index.ProfileScreen
+import com.comic.android_native_client.ui.activities.index.screens.profile.index.ProfileViewModel
 import com.comic.android_native_client.ui.activities.index.screens.profile.sub_screens.AboutUsScreen
 import com.comic.android_native_client.ui.activities.index.screens.profile.sub_screens.EditProfileScreen
 import com.comic.android_native_client.ui.activities.index.screens.profile.sub_screens.PrivacyPolicyScreen
@@ -68,6 +69,7 @@ fun App(
     // hóist the viewmodel
     val favoriteViewModel = hiltViewModel<FavoriteViewModel>()
     val exploreViewModel = hiltViewModel<ExploreViewModel>()
+    val profileViewModel = hiltViewModel<ProfileViewModel>()
 
     Scaffold(
         bottomBar = {
@@ -87,6 +89,7 @@ fun App(
             }
             composable<Screen.Explore> {
                 ExploreScreen(
+                    navController = navController,
                     exploreViewModel = exploreViewModel,
                     horizontalPadding = horizontalPadding
                 )
@@ -95,7 +98,8 @@ fun App(
                 FavoriteScreen(
                     favoriteViewModel = favoriteViewModel,
                     navController = navController,
-                    horizontalPadding = horizontalPadding
+                    profileViewModel = profileViewModel,
+                    horizontalPadding = horizontalPadding,
                 )
             }
 
@@ -104,6 +108,7 @@ fun App(
             ) {
                 composable<Screen.ProfileGraph.Profile> {
                     ProfileScreen(
+                        profileViewModel = profileViewModel,
                         navController = navController,
                         horizontalPadding = horizontalPadding
                     )

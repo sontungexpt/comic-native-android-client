@@ -69,7 +69,7 @@ class HomeViewModel @Inject constructor(
         key: String,
         fetch: suspend () -> Result<Page<Comic>>
     ) {
-        _comicsMap[key] = ComicsState(loading = true, comics = emptyList())
+        _comicsMap[key] = ComicsState(loading = true)
         try {
             when (val result = fetch()) {
                 is Result.Success -> {
@@ -87,7 +87,6 @@ class HomeViewModel @Inject constructor(
         } finally {
             _comicsMap[key] = _comicsMap[key]?.copy(loading = false) ?: ComicsState(
                 loading = false,
-                comics = emptyList()
             )
         }
     }

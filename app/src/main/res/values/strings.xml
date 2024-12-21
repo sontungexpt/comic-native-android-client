@@ -103,6 +103,13 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="on_updating">On Updating</string>
     <string name="chapter_list">Chapter List</string>
+    <string name="unfavorite">Unfavorite</string>
+    <string name="cancel">Cancel</string>
+    <string name="unfavorite_message">Are you sure you want to unfavorite this comic?</string>
+    <string name="favorite_comic">Favorite Comic</string>
+    <string name="favorite_screen_login_ask">Please login to view your favorite comics</string>
+    <string name="input_comic_name">Input comic name</string>
+    <string name="category">Category</string>
 
 
 </resources>

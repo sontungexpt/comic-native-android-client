@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.comic.android_native_client.ui.components.Avatar
 import com.comic.android_native_client.ui.components.common.LoadingIndicatorButton
+import com.comic.android_native_client.ui.components.layout.BackFloatingScreen
 
 @Composable
 fun EditProfileScreen(
@@ -32,73 +33,79 @@ fun EditProfileScreen(
     horizontalPadding: Dp,
     modifier: Modifier = Modifier
 ) {
-
-
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 16.dp, horizontal = horizontalPadding),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .size(120.dp)
-                .clip(CircleShape)
-                .clickable(onClick = {
-                    TODO()
-                })
-        ) {
-            Avatar(
-                imageUrl = editProfileViewModel.avatar,
-                modifier = Modifier.fillMaxSize()
-            )
+    BackFloatingScreen(
+        onBackCLick = {
+            navController.popBackStack()
         }
-
-        OutlinedTextField(
-            isError = false,
-            value = editProfileViewModel.name,
-            onValueChange = {
-                editProfileViewModel.updateName(it)
-            },
-            label = {
-                Text("Username")
-            },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        OutlinedTextField(
-            value = editProfileViewModel.introduction,
-            onValueChange = {
-                editProfileViewModel.updateIntroduction(it)
-            },
-            label = { Text("Introduction") },
-            placeholder = { Text("Introduce yourself") },
-            modifier = Modifier
+    ) {
+        Column(
+            modifier = modifier
                 .fillMaxWidth()
-                .height(120.dp),
-            maxLines = 5
-        )
-
-        LoadingIndicatorButton(
-            onClick = {
-                editProfileViewModel.updateProfile {
-                    navController.popBackStack()
-                }
-            },
-            shape = MaterialTheme.shapes.medium,
-            loading = editProfileViewModel.loading,
-            loadingColor = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier
-                .height(50.dp)
-                .fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            )
+                .padding(vertical = 16.dp, horizontal = horizontalPadding),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text("Save Changes")
+            Box(
+                modifier = Modifier
+                    .size(120.dp)
+                    .clip(CircleShape)
+                    .clickable(onClick = {
+                        TODO()
+                    })
+            ) {
+                Avatar(
+                    imageUrl = editProfileViewModel.avatar,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+
+            OutlinedTextField(
+                isError = false,
+                value = editProfileViewModel.name,
+                onValueChange = {
+                    editProfileViewModel.updateName(it)
+                },
+                label = {
+                    Text("Username")
+                },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextField(
+                value = editProfileViewModel.introduction,
+                onValueChange = {
+                    editProfileViewModel.updateIntroduction(it)
+                },
+                label = { Text("Introduction") },
+                placeholder = { Text("Introduce yourself") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp),
+                maxLines = 5
+            )
+
+            LoadingIndicatorButton(
+                onClick = {
+                    editProfileViewModel.updateProfile {
+                        navController.popBackStack()
+                    }
+                },
+                shape = MaterialTheme.shapes.medium,
+                loading = editProfileViewModel.loading,
+                loadingColor = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .height(50.dp)
+                    .fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Text("Save Changes")
+            }
         }
     }
+
+
 }
