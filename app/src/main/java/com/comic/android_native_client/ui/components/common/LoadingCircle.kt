@@ -1,6 +1,7 @@
 package com.comic.android_native_client.ui.components.common
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
@@ -16,7 +17,9 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun LoadingCircle(
-    wrapperModifier: Modifier = Modifier.height(32.dp),
+    wrapperModifier: Modifier = Modifier
+        .fillMaxWidth()
+        .height(32.dp),
     modifier: Modifier = Modifier.size(28.dp),
     loading: Boolean = true,
     propagateMinConstraints: Boolean = false,

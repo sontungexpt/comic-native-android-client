@@ -63,7 +63,7 @@ class ComicRepositoryImpl(
         q: String,
         page: Int,
         size: Int,
-        sort: Array<String>
+        sort: Array<String>?
     ): Result<Page<Comic>> {
         val response = comicService.searchComic(
             q = q,

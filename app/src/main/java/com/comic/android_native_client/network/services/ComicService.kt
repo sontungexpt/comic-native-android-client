@@ -31,7 +31,7 @@ interface PublicComicService {
         @Query("q") q: String,
         @Query("page") page: Int,
         @Query("size") size: Int = 10,
-        @Query("sort") sort: Array<String> = arrayOf("createdAt"),
+        @Query("sort") sort: Array<String>?,
     ): Response<PageResponse<ComicResponse>>
 }
 

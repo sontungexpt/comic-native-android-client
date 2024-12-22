@@ -110,6 +110,7 @@
     <string name="favorite_screen_login_ask">Please login to view your favorite comics</string>
     <string name="input_comic_name">Input comic name</string>
     <string name="category">Category</string>
+    <string name="no_comic_found">No Comics Found</string>
 
 
 </resources>

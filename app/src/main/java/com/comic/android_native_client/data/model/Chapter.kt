@@ -11,6 +11,7 @@ open class Chapter(
     val num: Double = 0.0,
     val name: String = "",
     val description: String = "",
+    val chapter: String = "",
     val originalSource: OriginalSource,
     val updatedDate: Instant?
 )
@@ -21,6 +22,7 @@ class ComicChapter(
     comicId: String = "",
     type: String = "",
     thumbnailUrl: String = "",
+    chapter: String = "",
     num: Double = 0.0,
     name: String = "",
     description: String = "",
@@ -28,7 +30,18 @@ class ComicChapter(
     updatedDate: Instant?,
     val imagePages: List<ImagePage>,
     val resourceInfo: ResourceInfo
-) : Chapter(id, comicId, type, thumbnailUrl, num, name, description, originalSource, updatedDate)
+) : Chapter(
+    id,
+    comicId,
+    type,
+    thumbnailUrl,
+    num,
+    name,
+    description,
+    chapter,
+    originalSource,
+    updatedDate
+)
 
 class NovelChapter(
     id: String = "",
@@ -38,7 +51,10 @@ class NovelChapter(
     num: Double = 0.0,
     name: String = "",
     description: String = "",
+    chapter: String = "",
     originalSource: OriginalSource,
     updatedDate: Instant?,
     val content: String
-) : Chapter(id, comicId, type, thumbnailUrl, num, name, description, originalSource, updatedDate)
+) : Chapter(
+    id, comicId, type, thumbnailUrl, num, name, description, chapter, originalSource, updatedDate
+)

@@ -166,19 +166,27 @@ fun HomeScreen(
                 items = homeViewModel.comicsMap[it.mapId]?.comics ?: emptyList(),
                 loading = homeViewModel.comicsMap[it.mapId]?.loading ?: true,
                 header = {
+                    val title = stringResource(it.title)
                     Row(
                         modifier = Modifier.fillMaxSize(),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = stringResource(it.title),
+                            text = title,
                             style = MaterialTheme.typography.titleLarge.copy(
                                 fontWeight = FontWeight.W600
                             ),
                         )
                         TextButton(
-                            onClick = { /* Handle See All */ },
+                            onClick = {
+                                navController.navigate(
+                                    Screen.ComicByCategory(
+                                        id = it.mapId,
+                                        name = title
+                                    )
+                                )
+                            },
                             modifier = Modifier.padding(start = 8.dp)
                         ) {
                             Text(

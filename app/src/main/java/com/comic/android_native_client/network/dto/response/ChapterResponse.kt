@@ -76,6 +76,7 @@ fun ShortInfoChapterResponse.toChapter(): Chapter {
             description = description,
             originalSource = originalSource.toOriginalSource(),
             updatedDate = updatedDate,
+            chapter = chapter,
             imagePages = emptyList(),
             resourceInfo = ResourceInfo.Absolute
         )
@@ -88,6 +89,7 @@ fun ShortInfoChapterResponse.toChapter(): Chapter {
             num = num,
             name = name,
             description = description,
+            chapter = chapter,
             originalSource = originalSource.toOriginalSource(),
             updatedDate = updatedDate,
             content = ""
@@ -157,6 +159,7 @@ fun ComicChapterResponse.toChapter(): ComicChapter {
         comicId = comicId,
         thumbnailUrl = thumbnailUrl,
         num = num,
+        chapter = chapter,
         type = "COMIC",
         name = name,
         description = description,
@@ -188,6 +191,7 @@ fun NovelChapterResponse.toChapter(): NovelChapter {
         comicId = comicId,
         thumbnailUrl = thumbnailUrl,
         num = num,
+        chapter = chapter,
         type = "NOVEL",
         name = name,
         description = description,

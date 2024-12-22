@@ -10,6 +10,9 @@ import com.comic.android_native_client.common.Result
 import com.comic.android_native_client.data.model.Comic
 import com.comic.android_native_client.data.repository.ComicRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,7 +20,7 @@ import javax.inject.Inject
 class ComicSearchViewModel @Inject constructor(
     private val comicRepository: ComicRepository
 ) : ViewModel() {
-
+    private var searchJob: Job? = null
     private var _currPage = -1
     private var _lastPageReached = false
 
@@ -34,14 +37,36 @@ class ComicSearchViewModel @Inject constructor(
     val foundComics: List<Comic>
         get() = _foundComics
 
+
     fun updateSearchQuery(value: String) {
         _searchQuery = value
     }
+
+    val lastPageReached: Boolean
+        get() = _lastPageReached
 
     fun loadMore() {
         if (_lastPageReached || _loading) return
         fetchComics(reset = false)
     }
+
+    fun resetQuery() {
+        _searchQuery = ""
+        clearSearch()
+    }
+
+    fun clearSearch() {
+        _foundComics.clear()
+    }
+
+    fun debounceSearch() {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch(Dispatchers.IO) {
+            delay(300)
+            initSearch()
+        }
+    }
+
 
     fun initSearch() {
         if (_loading) return
@@ -50,9 +75,12 @@ class ComicSearchViewModel @Inject constructor(
     }
 
     private fun fetchComics(reset: Boolean) {
+        if (reset) _foundComics.clear()
+        if (_searchQuery.isBlank()) return
         _loading = true
 
-        viewModelScope.launch {
+
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val pageToLoad = if (reset) 0 else _currPage + 1
                 val result = comicRepository.searchComic(
@@ -67,8 +95,10 @@ class ComicSearchViewModel @Inject constructor(
                         if (comics.isEmpty()) {
                             _lastPageReached = true
                         } else {
-                            if (reset) _foundComics.clear()
-                            _foundComics.addAll(comics)
+                            val set = _foundComics.toMutableSet()
+                            set.addAll(comics)
+                            _foundComics.clear()
+                            _foundComics.addAll(set)
                             _currPage = pageToLoad
                         }
                     }

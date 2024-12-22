@@ -19,10 +19,20 @@ import com.comic.android_native_client.ui.components.common.BackIconButton
 fun BackFloatingScreen(
     onBackCLick: () -> Unit,
     modifier: Modifier = Modifier.fillMaxSize(),
-    backFloat: (@Composable BoxScope.() -> Unit)? = null,
     backButtonModifier: Modifier = Modifier
         .offset(x = 12.dp, y = 18.dp),
     backIconButtonModifier: Modifier = Modifier,
+    backFloat: (@Composable BoxScope.() -> Unit) = {
+        BackIconButton(
+            iconModifier = backIconButtonModifier,
+            onBackClick = onBackCLick,
+            modifier = backButtonModifier
+                .align(Alignment.TopStart)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.8f))
+                .zIndex(1000f),
+        )
+    },
     content: @Composable BoxScope.() -> Unit,
 ) {
     Box(
@@ -30,22 +40,7 @@ fun BackFloatingScreen(
             .background(MaterialTheme.colorScheme.background)
     ) {
         content()
-
-        if (backFloat != null) {
-            backFloat()
-        } else {
-            BackIconButton(
-                iconModifier = backIconButtonModifier,
-                onBackClick = onBackCLick,
-                modifier = backButtonModifier
-                    .align(Alignment.TopStart)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.8f))
-                    .zIndex(1000f),
-            )
-        }
-
-
+        backFloat()
     }
 }
 

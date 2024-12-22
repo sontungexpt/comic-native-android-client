@@ -23,6 +23,7 @@ import com.comic.android_native_client.constants.IScreen
 import com.comic.android_native_client.constants.Screen
 import com.comic.android_native_client.ui.activities.index.screens.ErrorScreen
 import com.comic.android_native_client.ui.activities.index.screens.NotFoundScreen
+import com.comic.android_native_client.ui.activities.index.screens.comics_by_category.ComicsByCategoryScreen
 import com.comic.android_native_client.ui.activities.index.screens.detail.ComicDetailScreen
 import com.comic.android_native_client.ui.activities.index.screens.detail.ComicDetailViewModel
 import com.comic.android_native_client.ui.activities.index.screens.explore.ExploreScreen
@@ -38,6 +39,7 @@ import com.comic.android_native_client.ui.activities.index.screens.profile.sub_s
 import com.comic.android_native_client.ui.activities.index.screens.profile.sub_screens.TermsScreen
 import com.comic.android_native_client.ui.activities.index.screens.reading.ComicReadingScreen
 import com.comic.android_native_client.ui.activities.index.screens.search.ComicSearchScreen
+import com.comic.android_native_client.ui.activities.index.screens.search.ComicSearchViewModel
 import com.comic.shareable_theme.ui.theme.ShareableTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -70,7 +72,7 @@ fun App(
     val favoriteViewModel = hiltViewModel<FavoriteViewModel>()
     val exploreViewModel = hiltViewModel<ExploreViewModel>()
     val profileViewModel = hiltViewModel<ProfileViewModel>()
-
+    val searchViewModel = hiltViewModel<ComicSearchViewModel>()
     Scaffold(
         bottomBar = {
             BottomNavigationBar(navController)
@@ -91,6 +93,7 @@ fun App(
                 ExploreScreen(
                     navController = navController,
                     exploreViewModel = exploreViewModel,
+                    searchViewModel = searchViewModel,
                     horizontalPadding = horizontalPadding
                 )
             }
@@ -164,6 +167,16 @@ fun App(
             }
             composable<Screen.Search> {
                 ComicSearchScreen(
+                    searchViewModel = searchViewModel,
+                    navController = navController,
+                    horizontalPadding = horizontalPadding,
+                )
+            }
+
+            composable<Screen.ComicByCategory> {
+                val currentCategory = it.toRoute<Screen.ComicByCategory>()
+                ComicsByCategoryScreen(
+                    currentCategory = currentCategory,
                     navController = navController,
                     horizontalPadding = horizontalPadding,
                 )

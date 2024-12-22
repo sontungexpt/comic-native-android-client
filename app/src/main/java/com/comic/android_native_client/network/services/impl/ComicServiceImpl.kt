@@ -48,7 +48,7 @@ class ComicServiceImpl @Inject constructor(
         q: String,
         page: Int,
         size: Int,
-        sort: Array<String>
+        sort: Array<String>?
     ): Response<PageResponse<ComicResponse>> {
         return publicComicService.searchComic(q, page, size, sort)
     }

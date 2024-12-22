@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Login
 import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Details
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Error
@@ -137,6 +138,16 @@ sealed class Screen(
     ) : DynamicScreen {
         override fun icon(): ImageVector {
             return Icons.Filled.Details
+        }
+    }
+
+    @Serializable
+    data class ComicByCategory(
+        val id: String,
+        val name: String,
+    ) : DynamicScreen {
+        override fun icon(): ImageVector {
+            return Icons.Filled.Category
         }
     }
 
