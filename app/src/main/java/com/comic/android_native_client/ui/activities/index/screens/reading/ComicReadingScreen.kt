@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -43,6 +44,7 @@ import com.comic.android_native_client.ui.components.CommentButtonWithModal
 import com.comic.android_native_client.ui.components.CommentCard
 import com.comic.android_native_client.ui.components.common.LoadingCircle
 import com.comic.android_native_client.ui.components.layout.BackFloatingScreen
+import com.comic.android_native_client.ui.utils.formatTimeAgo
 
 
 @OptIn(
@@ -56,6 +58,7 @@ fun ComicReadingScreen(
     navController: NavController,
     currentChapter: Screen.ComicReading,
 ) {
+    val context = LocalContext.current
     val uiState by comicReadingViewModel.uiState.collectAsState()
 
     val chapterName = if (uiState.chapter != null) {
@@ -86,8 +89,13 @@ fun ComicReadingScreen(
             comicId = currentChapter.comicId,
             onNotFound = { handleNotFound() }
         )
-
+        commentViewModel.fetchTopLevelComments(
+            comicId = currentChapter.comicId,
+            chapterId = currentChapter.chapterId
+        )
     }
+
+
 
     BackFloatingScreen(
         onBackCLick = { navController.popBackStack() },
@@ -198,12 +206,7 @@ fun ComicReadingScreen(
                 modalVisible = false
             },
         ) {
-            LaunchedEffect(Unit) {
-                commentViewModel.fetchTopLevelComments(
-                    comicId = currentChapter.comicId,
-                    chapterId = currentChapter.chapterId
-                )
-            }
+
 
             val paddingX = 16
             Scaffold(
@@ -211,7 +214,10 @@ fun ComicReadingScreen(
                     CommentModalHeader(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = paddingX.dp),
+                            .padding(
+                                vertical = 8.dp,
+                                horizontal = paddingX.dp
+                            ),
                         commentCount = commentViewModel.comments[commentViewModel.TOP_LEVEL_ID]!!.total,
                         setModalVisible = { modalVisible = it },
                     )
@@ -234,7 +240,9 @@ fun ComicReadingScreen(
                             )
                         },
                         replyingTo = commentViewModel.replyingToAuthor,
-                        modifier = Modifier.background(MaterialTheme.colorScheme.surfaceDim)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.surfaceDim)
                     )
                 },
 
@@ -246,36 +254,59 @@ fun ComicReadingScreen(
                         .padding(top = 10.dp)
                         .weight(1f)
                 ) {
-                    fun recusiveComment(comment: Comment, depth: Int = 1) {
+                    fun recusiveComment(comment: Comment, depth: Int = 0) {
+                        val id = comment.id
                         item(
-                            key = comment.id,
+                            key = id,
                             contentType = comment.javaClass
                         ) {
+                            
+
                             CommentCard(
                                 modifier = Modifier
                                     .padding(
                                         end = paddingX.dp,
-                                        start = (paddingX + depth * 4).dp
+                                        start = (paddingX + depth * 32).dp
                                     ),
+                                updatedAt = formatTimeAgo(context, comment.updatedAt),
+                                numberOfReplies = comment.totalReplies,
                                 authorName = comment.author.name,
-                                content = comment.content
-                            )
-                            HorizontalDivider(
-                                modifier = Modifier.padding(top = 14.dp),
-                                thickness = 2.dp,
-                                color = MaterialTheme.colorScheme.outlineVariant
+                                content = comment.content,
+                                authorAvatar = comment.author.avatar,
+                                onReplyClick = {
+                                    commentViewModel.replyingTo(comment.id, comment.author.name)
+                                },
+                                onShowReplies = {
+                                    println("fetch replies")
+                                    commentViewModel.fetchReplies(parentCommentId = id)
+                                }
                             )
                         }
-
-                        commentViewModel.comments.get(comment.id)?.let {
+                        commentViewModel.comments.get(id)?.let {
                             for (reply in it.items) {
                                 recusiveComment(reply, depth + 1)
                             }
                         }
                     }
+
                     for (comment in commentViewModel.comments[commentViewModel.TOP_LEVEL_ID]!!.items) {
                         recusiveComment(comment, 0)
+
+                        item(
+                            key = "bottomDivider ${comment.id}",
+                            contentType = "bottomDivider"
+                        ) {
+                            HorizontalDivider(
+                                modifier = Modifier.padding(
+                                    top = 10.dp
+                                ),
+                                thickness = 2.dp,
+                                color = MaterialTheme.colorScheme.outline
+                            )
+                        }
                     }
+
+
                 }
             }
         }

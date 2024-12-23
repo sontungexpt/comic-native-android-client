@@ -1,7 +1,6 @@
 package com.comic.android_native_client.ui.activities.index.screens.reading
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -25,10 +24,10 @@ class CommentViewModel @Inject constructor(
     val PAGE_SIZE = 10
 
     data class Comments(
-        val items: List<Comment> = mutableStateListOf(),
+        val items: List<Comment> = listOf(),
         var loading: Boolean = false,
         var currentPage: Int = -1,
-        var total: Int = -1
+        var total: Int = 0
     )
 
     private var _comments = mutableStateMapOf<String, Comments>(
@@ -44,7 +43,6 @@ class CommentViewModel @Inject constructor(
     val commentMsg get() = _commentMsg
     val isCommentAdding get() = _isCommentAdding
     val isCommentSentError get() = _isCommentSentError
-    val replyingToId get() = _replyingToId
     val replyingToAuthor get() = _replyingToAuthor
 
     fun replyingTo(commentId: String, commentAuthor: String) {
@@ -82,12 +80,12 @@ class CommentViewModel @Inject constructor(
             return
         } else if (_isCommentAdding) return
         _isCommentAdding = true
-
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 when (val result = commentRepository.addComment(
                     CommentRequest(
-                        content = commentMsg,
+                        content = _commentMsg,
+                        replyingTo = _replyingToId,
                         chapterId = chapterId,
                         comicId = comicId
                     )
@@ -95,13 +93,13 @@ class CommentViewModel @Inject constructor(
                     is Result.Success -> {
                         val newComment = result.data
                         val mapId = _replyingToId ?: TOP_LEVEL_ID
-                        _comments[mapId] =
-                            (_comments[mapId] ?: Comments()).let {
-                                it.copy(
-                                    items = it.items + newComment,
-                                    total = it.total + 1
-                                )
-                            }
+                        val current = _comments[mapId] ?: Comments()
+
+                        _comments[mapId] = current.copy(
+                            items = current.items + newComment,
+                            total = current.total + 1
+                        )
+
 
                         resetCommentMsg()
                         return@launch
@@ -112,6 +110,8 @@ class CommentViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
                 _isCommentAdding = false
             }
         }
@@ -155,6 +155,7 @@ class CommentViewModel @Inject constructor(
     fun fetchReplies(parentCommentId: String) {
         if (comments[parentCommentId]?.loading == true) return
         comments[parentCommentId] = (comments[parentCommentId] ?: Comments()).copy(loading = true)
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val nextPage = (comments[parentCommentId]?.currentPage ?: -1) + 1

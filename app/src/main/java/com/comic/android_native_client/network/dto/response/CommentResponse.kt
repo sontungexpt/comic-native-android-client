@@ -4,7 +4,10 @@ import com.comic.android_native_client.common.Identifiable
 import com.comic.android_native_client.data.model.Comment
 import com.comic.android_native_client.data.model.CommentAuthor
 import kotlinx.datetime.Instant
+import kotlinx.serialization.Serializable
 
+
+@Serializable
 data class CommentAuthorResponse(
     val pubId: String,
     val name: String,
@@ -20,13 +23,13 @@ fun CommentAuthorResponse.toCommentAuthor(): CommentAuthor = CommentAuthor(
     avatar = avatar
 )
 
+@Serializable
 data class CommentResponse(
     override val id: String,
     val parentId: String?,
     val comicId: String,
     val chapterId: String,
 
-    val depth: Int,
     val totalReplies: Int,
     val content: String,
 
@@ -43,7 +46,6 @@ fun CommentResponse.toComment(): Comment = Comment(
     parentId = parentId,
     comicId = comicId,
     chapterId = chapterId,
-    depth = depth,
     totalReplies = totalReplies,
     content = content,
     updatedAt = updatedAt,

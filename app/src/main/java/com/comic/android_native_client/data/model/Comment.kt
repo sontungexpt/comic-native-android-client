@@ -19,7 +19,6 @@ data class Comment(
     val comicId: String,
     val chapterId: String,
 
-    val depth: Int,
     val totalReplies: Int,
     val content: String,
 

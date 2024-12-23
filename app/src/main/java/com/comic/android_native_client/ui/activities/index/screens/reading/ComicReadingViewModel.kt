@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -60,11 +61,15 @@ class ComicReadingViewModel @Inject constructor(
                     is Result.Error -> {
                         when (result.status) {
                             HttpStatus.NotFound -> {
-                                onNotFound()
+                                withContext(Dispatchers.Main) {
+                                    onNotFound()
+                                }
                             }
 
                             HttpStatus.BadRequest -> {
-                                onNotFound()
+                                withContext(Dispatchers.Main) {
+                                    onNotFound()
+                                }
                             }
 
                             else -> TODO()
@@ -178,7 +183,9 @@ class ComicReadingViewModel @Inject constructor(
                     is Result.Error -> {
                         when (result.status) {
                             HttpStatus.NotFound -> {
-                                onNotFound()
+                                withContext(Dispatchers.Main) {
+                                    onNotFound()
+                                }
                             }
 
                             HttpStatus.BadRequest -> {

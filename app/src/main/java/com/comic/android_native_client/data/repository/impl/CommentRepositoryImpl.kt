@@ -51,9 +51,8 @@ class CommentRepositoryImpl(
         parentId: String?,
         page: Int,
         size: Int,
-        sort: Array<String>?,
-
-        ): Result<Page<Comment>> {
+        sort: Array<String>?
+    ): Result<Page<Comment>> {
         val response = commentService.getTopLevelReplies(
             sort = arrayOf("updatedAt"),
             page = page,
