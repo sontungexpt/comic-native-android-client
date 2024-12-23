@@ -20,8 +20,8 @@ interface CommentRepository {
         parentId: String? = null,
         page: Int,
         size: Int = 10,
-        commentId: String
+        sort: Array<String>? = null
     ): Result<Page<Comment>>
 
-    suspend fun addComment(comicId: String, comment: CommentRequest): Result<Comment>
+    suspend fun addComment(comment: CommentRequest): Result<Comment>
 }

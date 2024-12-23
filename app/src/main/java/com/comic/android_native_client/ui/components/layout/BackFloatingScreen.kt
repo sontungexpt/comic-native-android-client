@@ -25,7 +25,7 @@ fun BackFloatingScreen(
     backFloat: (@Composable BoxScope.() -> Unit) = {
         BackIconButton(
             iconModifier = backIconButtonModifier,
-            onBackClick = onBackCLick,
+            onClick = onBackCLick,
             modifier = backButtonModifier
                 .align(Alignment.TopStart)
                 .clip(CircleShape)

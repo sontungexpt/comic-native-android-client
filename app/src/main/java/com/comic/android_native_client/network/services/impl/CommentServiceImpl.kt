@@ -41,13 +41,13 @@ class CommentServiceImpl @Inject constructor(
     }
 
     override suspend fun getTopLevelReplies(
-        commentId: String,
+        parentId: String?,
         page: Int,
         size: Int,
         sort: Array<String>
     ): Response<PageResponse<CommentResponse>> {
         return publicCommentService.getTopLevelReplies(
-            commentId = commentId,
+            parentId = parentId,
             page = page,
             size = size,
             sort = sort

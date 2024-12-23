@@ -24,7 +24,7 @@ interface PublicCommentService {
 
     @GET(MainEndpoint.GET_TOP_LEVEL_REPLIES_V1)
     suspend fun getTopLevelReplies(
-        @Path("commentId") commentId: String,
+        @Path("parentId") parentId: String? = null,
         @Query("page") page: Int,
         @Query("size") size: Int = 10,
         @Query("sort") sort: Array<String> = arrayOf("updatedAt"),
@@ -48,7 +48,7 @@ interface AuthenticatedCommentService {
     suspend fun addComment(
         @Body commentRequest: CommentRequest
     ): Response<CommentResponse>
-    
+
 }
 
 

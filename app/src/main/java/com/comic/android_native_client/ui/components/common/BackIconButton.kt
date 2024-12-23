@@ -12,12 +12,12 @@ import com.comic.android_native_client.R
 
 @Composable
 fun BackIconButton(
-    onBackClick: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier
 ) {
     IconButton(
-        onClick = onBackClick,
+        onClick = onClick,
         modifier = modifier
     ) {
         Icon(

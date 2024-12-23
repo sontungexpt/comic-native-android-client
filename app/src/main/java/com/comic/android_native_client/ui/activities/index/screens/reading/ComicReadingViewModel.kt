@@ -5,9 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.comic.android_native_client.common.Result
 import com.comic.android_native_client.constants.HttpStatus
 import com.comic.android_native_client.data.model.Chapter
-import com.comic.android_native_client.data.model.Comment
 import com.comic.android_native_client.data.repository.ChapterRepository
-import com.comic.android_native_client.data.repository.CommentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,10 +19,6 @@ data class ChapterUiScreenState(
     val chapterLoading: Boolean = false,
     val chapter: Chapter? = null,
 
-    val comments: Map<String, Comment> = emptyMap(),
-    val commentLoading: Boolean = false,
-    val topLevelCommentIds: List<String> = emptyList(),
-
     val hasPrev: Boolean = false,
     val hasNext: Boolean = false,
     val chapterList: List<Chapter>? = null,
@@ -34,11 +28,10 @@ data class ChapterUiScreenState(
 @HiltViewModel
 class ComicReadingViewModel @Inject constructor(
     private val chapterRepository: ChapterRepository,
-    private val commentRepository: CommentRepository
 ) : ViewModel() {
     private var _currChapterIndex = -1
     private var _currChapter = ""
-    
+
     private var _uiState = MutableStateFlow(ChapterUiScreenState())
     val uiState: StateFlow<ChapterUiScreenState> = _uiState
 
@@ -131,7 +124,6 @@ class ComicReadingViewModel @Inject constructor(
 
         }
     }
-
 
     fun prevChapter(
         comicId: String,

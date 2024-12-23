@@ -17,7 +17,7 @@ import com.comic.android_native_client.R
 @Composable
 fun CommentModalHeader(
     modifier: Modifier = Modifier,
-    commentCount: Long,
+    commentCount: Int,
     setModalVisible: (Boolean) -> Unit
 ) {
     Row(
@@ -29,13 +29,16 @@ fun CommentModalHeader(
             text = stringResource(R.string.comment_count, commentCount),
             style = MaterialTheme.typography.titleLarge
         )
+
         IconButton(
             onClick = { setModalVisible(false) }
         ) {
+
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = "Close"
             )
+
         }
     }
 }

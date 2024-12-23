@@ -36,6 +36,7 @@ import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.comic.android_native_client.constants.Screen
 import com.comic.android_native_client.data.model.ComicChapter
+import com.comic.android_native_client.data.model.Comment
 import com.comic.android_native_client.data.model.NovelChapter
 import com.comic.android_native_client.network.dto.response.ResourceInfo
 import com.comic.android_native_client.ui.components.CommentButtonWithModal
@@ -43,14 +44,6 @@ import com.comic.android_native_client.ui.components.CommentCard
 import com.comic.android_native_client.ui.components.common.LoadingCircle
 import com.comic.android_native_client.ui.components.layout.BackFloatingScreen
 
-val comments = listOf(
-    Pair("Quang Sáng", "ném trong .env github nó tự xóa mà"),
-    Pair("kietphamtan7777", "Bạn quăng thêm 100 cái api key nữa lừa hack"),
-    Pair("aubur", "là sao vậy ạ?"),
-    Pair("Quang Sáng", "ném trong .env github nó tự xóa mà"),
-    Pair("Quang Sáng", "ném trong .env github nó tự xóa mà"),
-
-    )
 
 @OptIn(
     ExperimentalMaterial3Api::class
@@ -58,6 +51,7 @@ val comments = listOf(
 @Composable
 fun ComicReadingScreen(
     horizontalPadding: Dp = 20.dp,
+    commentViewModel: CommentViewModel = hiltViewModel<CommentViewModel>(),
     comicReadingViewModel: ComicReadingViewModel = hiltViewModel<ComicReadingViewModel>(),
     navController: NavController,
     currentChapter: Screen.ComicReading,
@@ -95,7 +89,6 @@ fun ComicReadingScreen(
 
     }
 
-
     BackFloatingScreen(
         onBackCLick = { navController.popBackStack() },
         modifier = Modifier.fillMaxSize()
@@ -129,6 +122,7 @@ fun ComicReadingScreen(
                     shape = MaterialTheme.shapes.medium
                 )
         )
+
         if (uiState.chapterLoading) {
             LoadingCircle(
                 modifier = Modifier.size(30.dp),
@@ -147,17 +141,17 @@ fun ComicReadingScreen(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = horizontalPadding)
-                    .padding(top = 10.dp)
+                    .padding(
+                        vertical = 10.dp,
+                        horizontal = horizontalPadding
+                    )
             )
 
             Text(
                 textAlign = TextAlign.Justify,
                 text = chapter.content,
                 modifier = Modifier
-                    .fillMaxSize()
                     .padding(horizontal = horizontalPadding)
-                    .padding(top = 10.dp)
             )
         } else if (uiState.chapter is ComicChapter) {
             val comicChapter = uiState.chapter as ComicChapter
@@ -173,11 +167,10 @@ fun ComicReadingScreen(
                     contentType = { it.javaClass },
                     items = comicChapter.imagePages,
                 ) {
-                    val imagePath = if (comicChapter.resourceInfo is ResourceInfo.Relative)
-                        comicChapter.resourceInfo.baseUrl + "/" + it.path
-                    else it.path
                     AsyncImage(
-                        model = imagePath,
+                        model = if (comicChapter.resourceInfo is ResourceInfo.Relative)
+                            comicChapter.resourceInfo.baseUrl + "/" + it.path
+                        else it.path,
                         contentDescription = "Comic Image",
                         contentScale = ContentScale.Fit,
                         modifier = Modifier
@@ -186,7 +179,6 @@ fun ComicReadingScreen(
                     )
                 }
             }
-
         }
 
         var modalVisible by remember { mutableStateOf(false) }
@@ -206,33 +198,43 @@ fun ComicReadingScreen(
                 modalVisible = false
             },
         ) {
-            val paddingX = 16.dp
+            LaunchedEffect(Unit) {
+                commentViewModel.fetchTopLevelComments(
+                    comicId = currentChapter.comicId,
+                    chapterId = currentChapter.chapterId
+                )
+            }
+
+            val paddingX = 16
             Scaffold(
                 topBar = {
                     CommentModalHeader(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = paddingX),
-                        commentCount = comments.size.toLong(),
+                            .padding(horizontal = paddingX.dp),
+                        commentCount = commentViewModel.comments[commentViewModel.TOP_LEVEL_ID]!!.total,
                         setModalVisible = { modalVisible = it },
                     )
                 },
                 bottomBar = {
-                    var comment by remember { mutableStateOf("") }
-                    var isSendError by remember { mutableStateOf(false) }
-
                     CommentInput(
-                        comment = comment,
+                        comment = commentViewModel.commentMsg,
                         onCommentChange = {
-                            isSendError = false
-                            comment = it
+                            commentViewModel.updateCommentMsg(it)
                         },
-                        isError = isSendError,
+                        onEmptyBackspace = {
+                            commentViewModel.clearReplyingTo()
+                        },
+                        isError = commentViewModel.isCommentSentError,
+                        sending = commentViewModel.isCommentAdding,
                         onSendComment = {
-                            isSendError = true
+                            commentViewModel.addComment(
+                                chapterId = currentChapter.chapterId,
+                                comicId = currentChapter.comicId
+                            )
                         },
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.surfaceDim)
+                        replyingTo = commentViewModel.replyingToAuthor,
+                        modifier = Modifier.background(MaterialTheme.colorScheme.surfaceDim)
                     )
                 },
 
@@ -244,22 +246,38 @@ fun ComicReadingScreen(
                         .padding(top = 10.dp)
                         .weight(1f)
                 ) {
-                    items(comments) { (author, content) ->
-                        CommentCard(
-                            modifier = Modifier
-                                .padding(horizontal = paddingX),
-                            authorName = author,
-                            content = content
-                        )
-                        HorizontalDivider(
-                            modifier = Modifier.padding(top = 14.dp),
-                            thickness = 2.dp,
-                            color = MaterialTheme.colorScheme.outlineVariant
-                        )
+                    fun recusiveComment(comment: Comment, depth: Int = 1) {
+                        item(
+                            key = comment.id,
+                            contentType = comment.javaClass
+                        ) {
+                            CommentCard(
+                                modifier = Modifier
+                                    .padding(
+                                        end = paddingX.dp,
+                                        start = (paddingX + depth * 4).dp
+                                    ),
+                                authorName = comment.author.name,
+                                content = comment.content
+                            )
+                            HorizontalDivider(
+                                modifier = Modifier.padding(top = 14.dp),
+                                thickness = 2.dp,
+                                color = MaterialTheme.colorScheme.outlineVariant
+                            )
+                        }
+
+                        commentViewModel.comments.get(comment.id)?.let {
+                            for (reply in it.items) {
+                                recusiveComment(reply, depth + 1)
+                            }
+                        }
+                    }
+                    for (comment in commentViewModel.comments[commentViewModel.TOP_LEVEL_ID]!!.items) {
+                        recusiveComment(comment, 0)
                     }
                 }
             }
-
         }
     }
 }

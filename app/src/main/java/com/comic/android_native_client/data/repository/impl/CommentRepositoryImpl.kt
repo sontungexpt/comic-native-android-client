@@ -51,13 +51,14 @@ class CommentRepositoryImpl(
         parentId: String?,
         page: Int,
         size: Int,
-        commentId: String
-    ): Result<Page<Comment>> {
+        sort: Array<String>?,
+
+        ): Result<Page<Comment>> {
         val response = commentService.getTopLevelReplies(
             sort = arrayOf("updatedAt"),
             page = page,
             size = size,
-            commentId = commentId
+            parentId = parentId
         )
 
         when {
@@ -77,7 +78,7 @@ class CommentRepositoryImpl(
         }
     }
 
-    override suspend fun addComment(comicId: String, comment: CommentRequest): Result<Comment> {
+    override suspend fun addComment(comment: CommentRequest): Result<Comment> {
         val response = commentService.addComment(comment)
 
         when {
