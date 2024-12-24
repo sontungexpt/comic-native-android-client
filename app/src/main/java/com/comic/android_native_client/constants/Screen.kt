@@ -132,9 +132,9 @@ sealed class Screen(
     data class ComicDetail(
         val id: String,
         val imageUrl: String,
-        val name: String,
+        val name: String? = null,
         val sourceName: String,
-        val genres: List<String>
+        val genres: List<String>? = null,
     ) : DynamicScreen {
         override fun icon(): ImageVector {
             return Icons.Filled.Details
@@ -155,6 +155,7 @@ sealed class Screen(
     data class ComicReading(
         val comicId: String,
         val chapterId: String,
+        val lastestRead: Boolean,
     ) : DynamicScreen {
         override fun icon(): ImageVector {
             return Icons.Filled.Book

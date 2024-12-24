@@ -80,9 +80,10 @@ fun ComicDetailScreen(
                 key = "header_section"
             ) {
                 ComicDetailHeader(
-                    comicName = currentComic.name,
+                    comicName = currentComic.name ?: uiState.comicDetail?.name ?: "",
                     comicImageUrl = currentComic.imageUrl,
                     comicGenres = currentComic.genres
+                        ?: uiState.comicDetail?.categories?.map { it.name } ?: emptyList(),
                 )
             }
             stickyHeader(
@@ -95,8 +96,15 @@ fun ComicDetailScreen(
                 ) {
                     Button(
                         onClick = {
-
+                            navController.navigate(
+                                Screen.ComicReading(
+                                    chapterId = "",
+                                    comicId = currentComic.id,
+                                    lastestRead = true
+                                )
+                            )
                         },
+                        enabled = uiState.chapters.isNotEmpty(),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 8.dp),
@@ -207,9 +215,11 @@ fun ComicDetailScreen(
                             Screen.ComicReading(
                                 chapterId = it.id,
                                 comicId = currentComic.id,
+                                lastestRead = false
                             )
                         )
                     },
+                    isRead = it.read,
                     name = it.name,
                     number = it.num.toString(),
                     imageUrl = if (!it.thumbnailUrl.isNullOrBlank()) {

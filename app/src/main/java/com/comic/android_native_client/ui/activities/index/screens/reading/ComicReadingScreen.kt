@@ -1,7 +1,9 @@
 package com.comic.android_native_client.ui.activities.index.screens.reading
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,13 +31,16 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.comic.android_native_client.constants.Screen
+import com.comic.android_native_client.data.model.Chapter
 import com.comic.android_native_client.data.model.ComicChapter
 import com.comic.android_native_client.data.model.Comment
 import com.comic.android_native_client.data.model.NovelChapter
@@ -46,6 +51,12 @@ import com.comic.android_native_client.ui.components.common.LoadingCircle
 import com.comic.android_native_client.ui.components.layout.BackFloatingScreen
 import com.comic.android_native_client.ui.utils.formatTimeAgo
 
+
+fun getChapterName(chapter: Chapter): String {
+    return if (chapter.name.isNotBlank())
+        "Chapter ${chapter.num}: ${chapter.name}"
+    else "Chapter ${chapter.num}"
+}
 
 @OptIn(
     ExperimentalMaterial3Api::class
@@ -60,12 +71,11 @@ fun ComicReadingScreen(
 ) {
     val context = LocalContext.current
     val uiState by comicReadingViewModel.uiState.collectAsState()
+    var chapterListDiaglogVisibal by remember { mutableStateOf(false) }
 
-    val chapterName = if (uiState.chapter != null) {
-        if (uiState.chapter!!.name.isNotBlank())
-            "Chapter ${uiState.chapter!!.num}: ${uiState.chapter!!.name}"
-        else "Chapter ${uiState.chapter!!.num}"
-    } else ""
+    val chapterName = if (uiState.chapter != null)
+        getChapterName(uiState.chapter!!)
+    else ""
 
 
     fun handleNotFound() {
@@ -80,27 +90,73 @@ fun ComicReadingScreen(
         currentChapter.chapterId,
         currentChapter.comicId
     ) {
-        comicReadingViewModel.loadChapter(
-            comicId = currentChapter.comicId,
-            chapterId = currentChapter.chapterId,
-            onNotFound = { handleNotFound() }
-        )
+        if (currentChapter.lastestRead) {
+            comicReadingViewModel.loadLastestReadChapter(
+                comicId = currentChapter.comicId,
+                onNotFound = { handleNotFound() }
+            )
+        } else {
+            comicReadingViewModel.loadChapter(
+                comicId = currentChapter.comicId,
+                chapterId = currentChapter.chapterId,
+                onNotFound = { handleNotFound() }
+            )
+        }
+
         comicReadingViewModel.loadAllChapters(
             comicId = currentChapter.comicId,
             onNotFound = { handleNotFound() }
         )
-        commentViewModel.fetchTopLevelComments(
-            comicId = currentChapter.comicId,
-            chapterId = currentChapter.chapterId
-        )
+
+
     }
-
-
 
     BackFloatingScreen(
         onBackCLick = { navController.popBackStack() },
         modifier = Modifier.fillMaxSize()
     ) {
+        if (chapterListDiaglogVisibal) {
+            Dialog(
+                onDismissRequest = {
+                    chapterListDiaglogVisibal = false
+                },
+            ) {
+                LazyColumn(
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .zIndex(1000f)
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.outline,
+                            shape = MaterialTheme.shapes.medium
+                        )
+                        .fillMaxWidth(0.96f)
+                        .background(MaterialTheme.colorScheme.surface)
+                        .align(Alignment.Center)
+                        .defaultMinSize(
+                            minHeight = 200.dp,
+                        )
+                ) {
+                    items(
+                        key = { it.id },
+                        contentType = { it.javaClass },
+                        items = uiState.chapterList
+                    ) {
+                        Text(
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            text = getChapterName(it),
+                        )
+                    }
+                }
+            }
+
+        }
+
+
         ChapterNavigationBar(
             chapterName = chapterName,
             hasNext = uiState.hasNext,
@@ -117,7 +173,11 @@ fun ComicReadingScreen(
                     onNotFound = { handleNotFound() }
                 )
             },
-            onClickName = {},
+            onClickName = {
+                if (uiState.chapterList.isNotEmpty()) {
+                    chapterListDiaglogVisibal = !chapterListDiaglogVisibal
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
@@ -191,9 +251,12 @@ fun ComicReadingScreen(
 
         var modalVisible by remember { mutableStateOf(false) }
         CommentButtonWithModal(
+            enabled = uiState.chapter != null,
             colors = IconButtonDefaults.iconButtonColors(
-                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
-                contentColor = MaterialTheme.colorScheme.onSurface,
+                disabledContainerColor = MaterialTheme.colorScheme.surfaceDim,
+                disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+                contentColor = MaterialTheme.colorScheme.primary,
             ),
             modifier = Modifier
                 .size(60.dp)
@@ -207,6 +270,14 @@ fun ComicReadingScreen(
             },
         ) {
 
+            LaunchedEffect(uiState.chapter?.id, currentChapter.comicId) {
+                if (uiState.chapter != null) {
+                    commentViewModel.fetchTopLevelComments(
+                        comicId = currentChapter.comicId,
+                        chapterId = uiState.chapter!!.id
+                    )
+                }
+            }
 
             val paddingX = 16
             Scaffold(
@@ -260,7 +331,7 @@ fun ComicReadingScreen(
                             key = id,
                             contentType = comment.javaClass
                         ) {
-                            
+
 
                             CommentCard(
                                 modifier = Modifier
@@ -305,8 +376,6 @@ fun ComicReadingScreen(
                             )
                         }
                     }
-
-
                 }
             }
         }

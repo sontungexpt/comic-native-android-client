@@ -19,7 +19,15 @@ interface PublicChapterService {
         @Path("chapterId") chapterId: String,
     ): Response<ChapterResponse>
 
+    @GET(MainEndpoint.GET_LASTEST_READ_CHAPTER)
+    suspend fun getLastestReadChapterDetail(
+        @Path("comicId") comicId: String,
+    ): Response<ChapterResponse>
 
+    @GET(MainEndpoint.GET_FIRST_CHAPTER)
+    suspend fun getFirstChapterDetail(
+        @Path("comicId") comicId: String,
+    ): Response<ChapterResponse>
 }
 
 

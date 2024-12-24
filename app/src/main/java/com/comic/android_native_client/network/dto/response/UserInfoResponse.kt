@@ -6,7 +6,9 @@ import kotlinx.serialization.Serializable
 data class UserInfoResponse(
     val name: String,
 
-    val introduction: String = "",
+    val email: String = "",
+
+    val bio: String = "",
 
     val totalCreatedComics: Long,
 

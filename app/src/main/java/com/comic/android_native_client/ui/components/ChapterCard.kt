@@ -27,6 +27,7 @@ import com.comic.android_native_client.ui.components.common.TextWithIcon
 fun ChapterCard(
     name: String,
     number: String,
+    isRead: Boolean,
     imageUrl: String,
     updateDate: String,
     onClick: () -> Unit,
@@ -70,7 +71,9 @@ fun ChapterCard(
                 Text(
                     text = "Chapter $number",
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = if (isRead) MaterialTheme.colorScheme.primary
+                    else MaterialTheme.colorScheme.onSurfaceVariant
+
                 )
                 if (name.isNotEmpty()) {
                     Text(

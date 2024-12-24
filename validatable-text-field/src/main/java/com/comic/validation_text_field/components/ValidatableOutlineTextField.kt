@@ -6,7 +6,6 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -53,7 +52,6 @@ fun ValidableOutlineTextField(
     trailingIcon: @Composable (() -> Unit)? = null,
     prefix: @Composable (() -> Unit)? = null,
     suffix: @Composable (() -> Unit)? = null,
-    supportingText: @Composable (() -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -65,49 +63,43 @@ fun ValidableOutlineTextField(
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
 ) {
     var context = LocalContext.current
+    val hasError = !state.valid || additionalErrorCondition
 
-    Column(
-        modifier = modifier,
-    ) {
-        val hasError = !state.valid || additionalErrorCondition
-        OutlinedTextField(
-            value = state.value,
-            onValueChange = { newValue ->
-                state.value = newValue
-                onValueChange(newValue)
-                state.validate(context)
-            },
-            enabled = enabled,
-            modifier = textInputModifier.fillMaxWidth(),
-            readOnly = readOnly,
-            textStyle = textStyle,
-            label = label,
-            placeholder = placeholder,
-            leadingIcon = leadingIcon,
-            trailingIcon = trailingIcon,
-            prefix = prefix,
-            suffix = suffix,
-            supportingText = supportingText,
-            isError = hasError,
-            visualTransformation = visualTransformation,
-            keyboardOptions = keyboardOptions,
-            keyboardActions = keyboardActions,
-            singleLine = singleLine,
-            maxLines = maxLines,
-            minLines = minLines,
-            interactionSource = interactionSource,
-            shape = shape,
-            colors = colors,
-        )
-
-        AnimatedVisibility(
-            enter = enterErrorTransition,
-            exit = exitErrorTransition,
-            visible = hasError,
-        ) {
-            errorField(state.errorMessage)
+    OutlinedTextField(
+        value = state.value,
+        onValueChange = { newValue ->
+            state.value = newValue
+            onValueChange(newValue)
+            state.validate(context)
+        },
+        enabled = enabled,
+        modifier = modifier.fillMaxWidth(),
+        readOnly = readOnly,
+        textStyle = textStyle,
+        label = label,
+        placeholder = placeholder,
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        prefix = prefix,
+        suffix = suffix,
+        isError = hasError,
+        visualTransformation = visualTransformation,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        singleLine = singleLine,
+        maxLines = maxLines,
+        minLines = minLines,
+        interactionSource = interactionSource,
+        shape = shape,
+        colors = colors,
+        supportingText = {
+            AnimatedVisibility(
+                enter = enterErrorTransition,
+                exit = exitErrorTransition,
+                visible = hasError,
+            ) {
+                errorField(state.errorMessage)
+            }
         }
-    }
-
-
+    )
 }

@@ -39,4 +39,35 @@ class ChapterRepositoryImpl(
             }
         }
     }
+
+    override suspend fun getLastestReadChapterDetail(comicId: String): Result<Chapter> {
+        val response = chapterService.getLastestReadChapterDetail(comicId)
+        when {
+            response.isSuccessful -> {
+                return response.body()?.let {
+                    Result.Success(it.toChapter())
+                } ?: Result.Error("No chapter found")
+            }
+
+            else -> {
+                return Result.Error(response.message(), HttpStatus.from(response.code()))
+            }
+        }
+
+    }
+
+    override suspend fun getFirstChapterDetail(comicId: String): Result<Chapter> {
+        val response = chapterService.getFirstChapterDetail(comicId)
+        when {
+            response.isSuccessful -> {
+                return response.body()?.let {
+                    Result.Success(it.toChapter())
+                } ?: Result.Error("No chapter found")
+            }
+
+            else -> {
+                return Result.Error(response.message(), HttpStatus.from(response.code()))
+            }
+        }
+    }
 }

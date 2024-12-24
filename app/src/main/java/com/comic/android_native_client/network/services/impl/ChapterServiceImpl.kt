@@ -25,4 +25,12 @@ class ChapterServiceImpl(
     ): Response<ChapterResponse> {
         return publicChapterService.getChapterDetail(comicId, chapterId)
     }
+
+    override suspend fun getLastestReadChapterDetail(comicId: String): Response<ChapterResponse> {
+        return publicChapterService.getLastestReadChapterDetail(comicId)
+    }
+
+    override suspend fun getFirstChapterDetail(comicId: String): Response<ChapterResponse> {
+        return publicChapterService.getFirstChapterDetail(comicId)
+    }
 }

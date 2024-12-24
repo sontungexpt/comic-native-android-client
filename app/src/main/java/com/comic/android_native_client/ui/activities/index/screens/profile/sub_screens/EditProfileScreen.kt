@@ -25,6 +25,7 @@ import androidx.navigation.NavHostController
 import com.comic.android_native_client.ui.components.Avatar
 import com.comic.android_native_client.ui.components.common.LoadingIndicatorButton
 import com.comic.android_native_client.ui.components.layout.BackFloatingScreen
+import com.comic.validation_text_field.components.ValidableOutlineTextField
 
 @Composable
 fun EditProfileScreen(
@@ -58,6 +59,15 @@ fun EditProfileScreen(
                     modifier = Modifier.fillMaxSize()
                 )
             }
+
+            ValidableOutlineTextField(
+                state = editProfileViewModel.emailState,
+                onValueChange = {
+                    editProfileViewModel.updateEmail(it)
+                },
+                label = { Text("Email") },
+                modifier = Modifier.fillMaxWidth()
+            )
 
             OutlinedTextField(
                 isError = false,

@@ -22,7 +22,7 @@ data class ChapterUiScreenState(
 
     val hasPrev: Boolean = false,
     val hasNext: Boolean = false,
-    val chapterList: List<Chapter>? = null,
+    val chapterList: List<Chapter> = emptyList(),
     val chapterListLoading: Boolean = false
 )
 
@@ -31,10 +31,61 @@ class ComicReadingViewModel @Inject constructor(
     private val chapterRepository: ChapterRepository,
 ) : ViewModel() {
     private var _currChapterIndex = -1
-    private var _currChapter = ""
 
     private var _uiState = MutableStateFlow(ChapterUiScreenState())
     val uiState: StateFlow<ChapterUiScreenState> = _uiState
+
+    fun loadLastestReadChapter(
+        comicId: String,
+        onNotFound: () -> Unit,
+        onSuccess: () -> Unit = {}
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.update { it.copy(chapterLoading = true) }
+            try {
+                when (val result = chapterRepository.getLastestReadChapterDetail(comicId)) {
+                    is Result.Success -> {
+                        val chapter = result.data.also {
+                            if (_currChapterIndex == -1) {
+                                updateChapterIndex(_uiState.value.chapterList, it.id)
+                            }
+                        }
+                        _uiState.update {
+                            it.copy(
+                                chapter = chapter,
+                                chapterLoading = false
+                            )
+                        }
+                        onSuccess()
+                        return@launch
+                    }
+
+                    is Result.Error -> {
+                        when (result.status) {
+                            HttpStatus.NotFound -> {
+                                withContext(Dispatchers.Main) {
+                                    onNotFound()
+                                }
+                            }
+
+                            HttpStatus.BadRequest -> {
+                                withContext(Dispatchers.Main) {
+                                    onNotFound()
+                                }
+                            }
+
+                            else -> TODO()
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _uiState.update { it.copy(chapterLoading = false) }
+            }
+        }
+    }
+
 
     fun loadChapter(
         comicId: String,
@@ -42,15 +93,19 @@ class ComicReadingViewModel @Inject constructor(
         onNotFound: () -> Unit,
         onSuccess: () -> Unit = {}
     ) {
-        _currChapter = chapterId
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update { it.copy(chapterLoading = true) }
             try {
                 when (val result = chapterRepository.getChapter(comicId, chapterId)) {
                     is Result.Success -> {
+                        val chapter = result.data.also {
+                            if (_currChapterIndex == -1) {
+                                updateChapterIndex(_uiState.value.chapterList, it.id)
+                            }
+                        }
                         _uiState.update {
                             it.copy(
-                                chapter = result.data,
+                                chapter = chapter,
                                 chapterLoading = false
                             )
                         }
@@ -88,7 +143,7 @@ class ComicReadingViewModel @Inject constructor(
         comicId: String,
         onNotFound: () -> Unit,
     ) {
-        if (_uiState.value.chapterList == null) {
+        if (_uiState.value.chapterList.isEmpty()) {
             loadAllChapters(comicId, onNotFound)
         }
     }
@@ -102,23 +157,23 @@ class ComicReadingViewModel @Inject constructor(
             lazyLoadAllChapters(comicId, onNotFound)
 
             if (_uiState.value.chapterListLoading) return@launch
-            else if (_currChapterIndex == -1 || _uiState.value.chapterList == null) return@launch
-            else if (_currChapterIndex + 1 >= _uiState.value.chapterList!!.size) {
+            else if (_currChapterIndex == -1 || _uiState.value.chapterList.isEmpty()) return@launch
+            else if (_currChapterIndex + 1 >= _uiState.value.chapterList.size) {
                 loadAllChapters(comicId, onNotFound)
-                if (_currChapterIndex + 1 >= _uiState.value.chapterList!!.size) {
+                if (_currChapterIndex + 1 >= _uiState.value.chapterList.size) {
                     return@launch
                 }
             }
 
             loadChapter(
                 comicId = comicId,
-                chapterId = _uiState.value.chapterList!![_currChapterIndex + 1].id,
+                chapterId = _uiState.value.chapterList[_currChapterIndex + 1].id,
                 onNotFound = onNotFound,
                 onSuccess = {
                     _currChapterIndex++
                     _uiState.update {
                         it.copy(
-                            hasNext = _currChapterIndex < _uiState.value.chapterList!!.size - 1,
+                            hasNext = _currChapterIndex < _uiState.value.chapterList.size - 1,
                             hasPrev = _currChapterIndex > 0
                         )
                     }
@@ -136,18 +191,18 @@ class ComicReadingViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             lazyLoadAllChapters(comicId, onNotFound)
-            if (_uiState.value.chapterListLoading) return@launch
+            if (_uiState.value.chapterList.isEmpty()) return@launch
             else if (_currChapterIndex < 1) return@launch
 
             loadChapter(
                 comicId = comicId,
-                chapterId = _uiState.value.chapterList!![_currChapterIndex - 1].id,
+                chapterId = _uiState.value.chapterList[_currChapterIndex - 1].id,
                 onNotFound = onNotFound,
                 onSuccess = {
                     _currChapterIndex--
                     _uiState.update {
                         it.copy(
-                            hasNext = _currChapterIndex < _uiState.value.chapterList!!.size - 1,
+                            hasNext = _currChapterIndex < _uiState.value.chapterList.size - 1,
                             hasPrev = _currChapterIndex > 0
                         )
                     }
@@ -156,18 +211,25 @@ class ComicReadingViewModel @Inject constructor(
         }
     }
 
+    fun updateChapterIndex(chapterList: List<Chapter>, chapterId: String?) {
+        if (chapterList.isNotEmpty() && chapterId != null) {
+            _currChapterIndex = _uiState.value.chapterList.indexOfFirst { it.id == chapterId }
+        }
+    }
+
     fun loadAllChapters(
         comicId: String,
         onNotFound: () -> Unit
     ) {
+        if (_uiState.value.chapterListLoading) return
         viewModelScope.launch(Dispatchers.IO) {
-            if (_uiState.value.chapterListLoading) return@launch
             _uiState.update { it.copy(chapterListLoading = true) }
             try {
                 when (val result = chapterRepository.getAllChapters(comicId)) {
                     is Result.Success -> {
-                        val chapterList = result.data
-                        _currChapterIndex = chapterList.indexOfFirst { it.id == _currChapter }
+                        val chapterList = result.data.also {
+                            updateChapterIndex(it, _uiState.value.chapter?.id)
+                        }
                         _uiState.update {
                             it.copy(
                                 chapterList = chapterList,
@@ -176,8 +238,6 @@ class ComicReadingViewModel @Inject constructor(
                                 hasPrev = _currChapterIndex > 0
                             )
                         }
-
-
                     }
 
                     is Result.Error -> {

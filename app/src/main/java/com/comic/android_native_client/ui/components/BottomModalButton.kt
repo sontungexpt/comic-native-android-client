@@ -11,7 +11,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetDefaults
 import androidx.compose.material3.ModalBottomSheetProperties
@@ -30,12 +29,12 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BottomModalButton(
     onClick: () -> Unit,
+    enabled: Boolean = true,
     modifier: Modifier = Modifier,
     colors: IconButtonColors = IconButtonDefaults.iconButtonColors(),
 
     icon: ImageVector = Icons.AutoMirrored.Filled.NoteAdd,
     contentDescription: String? = null,
-    tint: Color = MaterialTheme.colorScheme.primary,
     iconModifier: Modifier = Modifier,
 
     modalVisible: Boolean,
@@ -70,6 +69,7 @@ fun BottomModalButton(
         )
     }
     IconButton(
+        enabled = enabled,
         colors = colors,
         onClick = onClick,
         modifier = modifier
@@ -78,7 +78,6 @@ fun BottomModalButton(
             modifier = iconModifier,
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = tint,
         )
     }
 }

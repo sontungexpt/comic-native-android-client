@@ -58,7 +58,7 @@ fun ProfileScreen(
                 ProfileHeader(
                     username = userState.name,
                     paddingX = paddingX,
-                    introduction = userState.introduction,
+                    bio = userState.bio,
                     imageHeight = 300,
                     onEditProfile = {
                         navController.navigate(

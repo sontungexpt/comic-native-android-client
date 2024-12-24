@@ -42,7 +42,6 @@ fun PasswordEditable(
     label: @Composable (() -> Unit)? = null,
     prefix: @Composable (() -> Unit)? = null,
     suffix: @Composable (() -> Unit)? = null,
-    supportingText: @Composable (() -> Unit)? = null,
 ) {
     val passwordVisible = remember { mutableStateOf(false) }
     return ValidableOutlineTextField(
@@ -68,7 +67,6 @@ fun PasswordEditable(
         shape = shape,
         maxLines = maxLines,
         leadingIcon = leadingIcon,
-        supportingText = supportingText,
         prefix = prefix,
         suffix = suffix,
         placeholder = { Text(text = stringResource(R.string.passwordExp)) },

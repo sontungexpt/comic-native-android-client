@@ -21,16 +21,9 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object JwtDatastoreConfig {
-
-
     @Singleton
     @Provides
     fun providePreferencesDataStore(@ApplicationContext appContext: Context): DataStore<Preferences> {
-        android.util.Log.d(
-            "DataStoreTest",
-            "Initializing JWT DataStore with file: ${DataStoreName.JWT_PREFERCENES.name}"
-        )
-
         return PreferenceDataStoreFactory.create(
             corruptionHandler = ReplaceFileCorruptionHandler(
                 produceNewData = { emptyPreferences() }

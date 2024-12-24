@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
                             UserState(
                                 name = it.name,
                                 avatar = it.avatar,
-                                introduction = it.introduction
+                                bio = it.bio
                             )
                         )
                     }

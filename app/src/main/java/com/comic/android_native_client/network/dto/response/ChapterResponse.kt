@@ -33,6 +33,7 @@ abstract class ChapterResponse {
     abstract val thumbnailUrl: String
     abstract val num: Double
     abstract val name: String
+    abstract val read: Boolean
     abstract val description: String
     abstract val originalSource: OriginalSourceResponse
     abstract val updatedDate: Instant?
@@ -61,6 +62,7 @@ class ShortInfoChapterResponse(
     override val originalSource: OriginalSourceResponse,
     override val updatedDate: Instant?,
     override val chapter: String,
+    override val read: Boolean,
     val type: String
 ) : ChapterResponse()
 
@@ -72,6 +74,7 @@ fun ShortInfoChapterResponse.toChapter(): Chapter {
             type = type,
             thumbnailUrl = thumbnailUrl,
             num = num,
+            read = read,
             name = name,
             description = description,
             originalSource = originalSource.toOriginalSource(),
@@ -90,6 +93,7 @@ fun ShortInfoChapterResponse.toChapter(): Chapter {
             name = name,
             description = description,
             chapter = chapter,
+            read = read,
             originalSource = originalSource.toOriginalSource(),
             updatedDate = updatedDate,
             content = ""
@@ -148,6 +152,7 @@ data class ComicChapterResponse(
     override val originalSource: OriginalSourceResponse,
     override val updatedDate: Instant?,
     override val chapter: String,
+    override val read: Boolean,
     val imagePages: List<ImagePageResponse>,
     @Polymorphic
     val resourceInfo: ResourceInfoResponse,
@@ -159,6 +164,8 @@ fun ComicChapterResponse.toChapter(): ComicChapter {
         comicId = comicId,
         thumbnailUrl = thumbnailUrl,
         num = num,
+        read = read,
+
         chapter = chapter,
         type = "COMIC",
         name = name,
@@ -181,6 +188,7 @@ class NovelChapterResponse(
     override val description: String,
     override val originalSource: OriginalSourceResponse,
     override val updatedDate: Instant?,
+    override val read: Boolean,
     override val chapter: String,
     val content: String,
 ) : ChapterResponse()
@@ -193,6 +201,7 @@ fun NovelChapterResponse.toChapter(): NovelChapter {
         num = num,
         chapter = chapter,
         type = "NOVEL",
+        read = read,
         name = name,
         description = description,
         originalSource = originalSource.toOriginalSource(),

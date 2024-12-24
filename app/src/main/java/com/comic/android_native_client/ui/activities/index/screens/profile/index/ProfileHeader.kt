@@ -47,7 +47,7 @@ fun ProfileHeader(
     userBackgroundUrl: String? = null,
     avatarUrl: String? = null,
     username: String = "User",
-    introduction: String = "",
+    bio: String = "",
 
     imageHeight: Int = 240,
     paddingX: Int = 16,
@@ -178,9 +178,9 @@ fun ProfileHeader(
                 )
             }
 
-            if (introduction.isNotEmpty()) {
+            if (bio.isNotEmpty()) {
                 Text(
-                    text = introduction,
+                    text = bio,
                     style = MaterialTheme.typography.titleSmall,
                     textAlign = TextAlign.Justify,
                     color = MaterialTheme.colorScheme.onBackground

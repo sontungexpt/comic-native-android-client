@@ -1,7 +1,7 @@
 package com.comic.android_native_client.network.constants
 
 object MainEndpoint {
-    const val BASE_URL = "https://6c63-14-186-95-55.ngrok-free.app/api/"
+    const val BASE_URL = "https://420f-123-22-56-236.ngrok-free.app/api/"
 
     const val REFRESH_TOKEN_V1 = "v1/auth/refresh-token"
 
@@ -39,6 +39,8 @@ object MainEndpoint {
     // Chapter
     const val GET_ALL_CHAPTERS_V1 = "v1/comics/{comicId}/chapters"
     const val GET_CHAPTER_DETAIL_V1 = "v1/comics/{comicId}/chapters/{chapterId}"
+    const val GET_LASTEST_READ_CHAPTER = "v1/comics/{comicId}/chapters/lastest-read"
+    const val GET_FIRST_CHAPTER = "v1/comics/{comicId}/chapters/fist"
 
 
 }

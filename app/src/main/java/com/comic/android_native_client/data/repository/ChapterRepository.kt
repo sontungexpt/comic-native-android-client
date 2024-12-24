@@ -13,4 +13,14 @@ interface ChapterRepository {
     suspend fun getAllChapters(
         comicId: String
     ): Result<List<Chapter>>
+
+
+    suspend fun getLastestReadChapterDetail(
+        comicId: String
+    ): Result<Chapter>
+
+
+    suspend fun getFirstChapterDetail(
+        comicId: String
+    ): Result<Chapter>
 }

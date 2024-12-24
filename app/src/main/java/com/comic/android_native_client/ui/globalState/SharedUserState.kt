@@ -21,7 +21,8 @@ val RANDOM_AVATAR = when ((1..MAX_IMAGE_ID).random()) {
 data class UserState(
     val name: String,
     val avatar: String,
-    val introduction: String = ""
+    val email: String = "",
+    val bio: String = ""
 )
 
 @Singleton
@@ -30,7 +31,8 @@ class SharedUserState @Inject constructor() {
         UserState(
             name = "",
             avatar = "",
-            introduction = ""
+            bio = "",
+            email = "",
         )
     )
     val userState = _userState.asStateFlow()
@@ -45,7 +47,7 @@ class SharedUserState @Inject constructor() {
 
     fun clearUser() {
         _userState.value = UserState(
-            introduction = "",
+            bio = "",
             name = "",
             avatar = ""
         )
