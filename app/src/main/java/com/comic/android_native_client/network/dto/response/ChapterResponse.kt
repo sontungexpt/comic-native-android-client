@@ -152,7 +152,7 @@ data class ComicChapterResponse(
     override val originalSource: OriginalSourceResponse,
     override val updatedDate: Instant?,
     override val chapter: String,
-    override val read: Boolean,
+    override val read: Boolean = false,
     val imagePages: List<ImagePageResponse>,
     @Polymorphic
     val resourceInfo: ResourceInfoResponse,
@@ -188,7 +188,7 @@ class NovelChapterResponse(
     override val description: String,
     override val originalSource: OriginalSourceResponse,
     override val updatedDate: Instant?,
-    override val read: Boolean,
+    override val read: Boolean = false,
     override val chapter: String,
     val content: String,
 ) : ChapterResponse()

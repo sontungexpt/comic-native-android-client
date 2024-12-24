@@ -15,12 +15,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EmojiEvents
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -82,28 +79,28 @@ fun ProfileHeader(
             )
 
             // Settings Button
-            IconButton(
-                onClick = {
-                    onSettingsClick()
-                },
-                colors = IconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    contentColor = MaterialTheme.colorScheme.onSurface,
-                    disabledContainerColor = Color(0x80000000),
-                    disabledContentColor = Color.White,
-                ),
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(16.dp)
-                    .clip(CircleShape)
-            ) {
-                Icon(
-                    modifier = Modifier.aspectRatio(1f),
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "Settings",
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
-            }
+//            IconButton(
+//                onClick = {
+//                    onSettingsClick()
+//                },
+//                colors = IconButtonColors(
+//                    containerColor = MaterialTheme.colorScheme.surface,
+//                    contentColor = MaterialTheme.colorScheme.onSurface,
+//                    disabledContainerColor = Color(0x80000000),
+//                    disabledContentColor = Color.White,
+//                ),
+//                modifier = Modifier
+//                    .align(Alignment.TopEnd)
+//                    .padding(16.dp)
+//                    .clip(CircleShape)
+//            ) {
+//                Icon(
+//                    modifier = Modifier.aspectRatio(1f),
+//                    imageVector = Icons.Default.Settings,
+//                    contentDescription = "Settings",
+//                    tint = MaterialTheme.colorScheme.onSurface
+//                )
+//            }
 
             Avatar(
                 imageUrl = avatarUrl,

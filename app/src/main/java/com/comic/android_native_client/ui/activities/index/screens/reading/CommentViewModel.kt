@@ -33,6 +33,8 @@ class CommentViewModel @Inject constructor(
     private var _comments = mutableStateMapOf<String, Comments>(
         TOP_LEVEL_ID to Comments()
     )
+
+    // input fields
     private var _commentMsg by mutableStateOf("")
     private var _isCommentAdding by mutableStateOf(false)
     private var _isCommentSentError by mutableStateOf(false)

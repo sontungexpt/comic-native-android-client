@@ -25,6 +25,7 @@ class FavoriteViewModel @Inject constructor(
 
     private var _favoriteComics = mutableStateListOf<Comic>()
     private var _loadingMore by mutableStateOf(false)
+    private var _favoriteChanging by mutableStateOf(false)
 
     val comics: List<Comic>
         get() = _favoriteComics
@@ -32,6 +33,8 @@ class FavoriteViewModel @Inject constructor(
     val loadingMore
         get() = _loadingMore
 
+    val favoriteChanging
+        get() = _favoriteChanging
 
     val intialized: Boolean
         get() = _currentPage != -1
@@ -80,6 +83,7 @@ class FavoriteViewModel @Inject constructor(
     fun favoriteComic(
         comic: Comic
     ) {
+        _favoriteChanging = true
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 when (val result = favoriteRepository.addFavorite(comic.id)) {
@@ -100,6 +104,8 @@ class FavoriteViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+            } finally {
+                _favoriteChanging = false
             }
 
         }
@@ -110,6 +116,7 @@ class FavoriteViewModel @Inject constructor(
         onSuccess: () -> Unit = {},
         onError: (HttpStatus) -> Unit = {}
     ) {
+        _favoriteChanging = true
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 when (val result = favoriteRepository.removeFavorite(comic.id)) {
@@ -130,6 +137,8 @@ class FavoriteViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+            } finally {
+                _favoriteChanging = false
             }
 
         }

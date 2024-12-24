@@ -96,17 +96,17 @@ fun LoginScreen(
             shape = MaterialTheme.shapes.medium
         )
 
-        TextButton(
-            onClick = {
-            },
-            modifier = Modifier.align(Alignment.End)
-        ) {
-            Text(
-                stringResource(R.string.forgot_password) + "?",
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
+//        TextButton(
+//            onClick = {
+//            },
+//            modifier = Modifier.align(Alignment.End)
+//        ) {
+//            Text(
+//                stringResource(R.string.forgot_password) + "?",
+//                color = MaterialTheme.colorScheme.primary,
+//                style = MaterialTheme.typography.bodyMedium
+//            )
+//        }
 
         Spacer(modifier = Modifier.height(20.dp))
 

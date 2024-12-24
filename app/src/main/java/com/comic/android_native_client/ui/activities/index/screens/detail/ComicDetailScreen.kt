@@ -133,6 +133,8 @@ fun ComicDetailScreen(
                     modifier = Modifier
                         .padding(vertical = 20.dp)
                         .fillMaxWidth(),
+                    favoriteEnabled = uiState.comicDetail != null,
+                    favoritedChanging = favoriteViewModel.favoriteChanging,
                     onToggleFavorited = {
                         comicDetailViewModel.updateFavoriteStatus(
                             it,
@@ -157,12 +159,61 @@ fun ComicDetailScreen(
                     style = MaterialTheme.typography.titleMedium,
                     text = stringResource(R.string.introduction)
                 )
-                Column {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+
+                    val onUpdating = stringResource(R.string.on_updating)
+
+                    var authorsString =
+                        uiState.comicDetail?.authors?.map { it.name }?.joinToString(", ")
+                    if (authorsString.isNullOrBlank()) {
+                        authorsString = stringResource(R.string.on_updating)
+                    }
+
                     Text(
-                        text = "Dang cap nhat",
+                        text = stringResource(R.string.authors) + ": " + authorsString,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+                    var artistsString =
+                        uiState.comicDetail?.artists?.map { it.name }?.joinToString(", ")
+                    if (artistsString.isNullOrBlank()) {
+                        artistsString = stringResource(R.string.on_updating)
+                    }
+
+                    Text(
+                        text = stringResource(R.string.artists) + ": " + artistsString,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Text(
+                        text = stringResource(R.string.status) + ": " + uiState.comicDetail?.status,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    val alternativeNames =
+                        uiState.comicDetail?.alternativeNames?.joinToString(", ") ?: onUpdating
+                    if (alternativeNames.isNotBlank()) {
+                        Text(
+                            text = stringResource(R.string.alternative_names) + ": " + alternativeNames,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+
+                    Text(
+                        text = stringResource(R.string.source) + ": " + uiState.comicDetail?.originalSource?.name,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+
+
+
                     Spacer(modifier = Modifier.height(20.dp))
                 }
             }

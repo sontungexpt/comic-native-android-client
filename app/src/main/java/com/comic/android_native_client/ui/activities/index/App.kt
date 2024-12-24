@@ -38,6 +38,7 @@ import com.comic.android_native_client.ui.activities.index.screens.profile.sub_s
 import com.comic.android_native_client.ui.activities.index.screens.profile.sub_screens.PrivacyPolicyScreen
 import com.comic.android_native_client.ui.activities.index.screens.profile.sub_screens.TermsScreen
 import com.comic.android_native_client.ui.activities.index.screens.reading.ComicReadingScreen
+import com.comic.android_native_client.ui.activities.index.screens.reading.CommentViewModel
 import com.comic.android_native_client.ui.activities.index.screens.search.ComicSearchScreen
 import com.comic.android_native_client.ui.activities.index.screens.search.ComicSearchViewModel
 import com.comic.shareable_theme.ui.theme.ShareableTheme
@@ -154,12 +155,16 @@ fun App(
                     horizontalPadding = horizontalPadding,
                     currentComic = currentComic,
                     navController = navController,
-                    favoriteViewModel = favoriteViewModel
-                )
+                    favoriteViewModel = favoriteViewModel,
+
+                    )
             }
             composable<Screen.ComicReading> {
                 val currentChapterInfo = it.toRoute<Screen.ComicReading>()
+                val commentViewModel = hiltViewModel<CommentViewModel>()
+
                 ComicReadingScreen(
+                    commentViewModel = commentViewModel,
                     navController = navController,
                     horizontalPadding = horizontalPadding,
                     currentChapter = currentChapterInfo

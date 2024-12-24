@@ -129,6 +129,7 @@ class ComicDetailViewModel @Inject constructor(
                             chapters = result.data.chapters.content,
                             loadingMoreChapter = false
                         )
+
                         _last = result.data.chapters.last
                         return@launch
                     }

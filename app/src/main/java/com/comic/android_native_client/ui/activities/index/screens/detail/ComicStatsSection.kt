@@ -21,13 +21,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.comic.android_native_client.R
 import com.comic.android_native_client.ui.components.FavoriteIconToggleable
+import com.comic.android_native_client.ui.components.common.LoadingCircle
 import com.comic.android_native_client.ui.components.common.TextWithIcon
 
 @Composable
 fun ComicStatsSection(
     views: Long,
-    favorited: Boolean,
     rating: String,
+
+    favoriteEnabled: Boolean = true,
+    favorited: Boolean,
+    favoritedChanging: Boolean,
     onToggleFavorited: (favorited: Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -78,14 +82,25 @@ fun ComicStatsSection(
             },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            FavoriteIconToggleable(
-                modifier = Modifier.height(38.dp),
-                iconSize = with(density) {
-                    24.sp.toDp()
-                },
-                favorited = favorited,
-                onToggleFavorited = onToggleFavorited
-            )
+            if (favoritedChanging) {
+                LoadingCircle(
+                    wrapperModifier = Modifier.height(38.dp),
+                    modifier = Modifier.size(24.dp),
+                    color = MaterialTheme.colorScheme.primary
+                )
+            } else {
+                FavoriteIconToggleable(
+                    enabled = favoriteEnabled,
+                    modifier = Modifier.height(38.dp),
+                    iconSize = with(density) {
+                        24.sp.toDp()
+                    },
+                    favorited = favorited,
+                    favoritedColor = MaterialTheme.colorScheme.error,
+                    onToggleFavorited = onToggleFavorited
+                )
+            }
+
             Text(
                 text = stringResource(R.string.favorite),
                 style = MaterialTheme.typography.bodyLarge,

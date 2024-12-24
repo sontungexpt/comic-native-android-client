@@ -86,6 +86,7 @@ fun ComicReadingScreen(
         }
     }
 
+
     LaunchedEffect(
         currentChapter.chapterId,
         currentChapter.comicId
@@ -102,17 +103,26 @@ fun ComicReadingScreen(
                 onNotFound = { handleNotFound() }
             )
         }
-
         comicReadingViewModel.loadAllChapters(
             comicId = currentChapter.comicId,
             onNotFound = { handleNotFound() }
         )
+    }
 
-
+    LaunchedEffect(uiState.chapter?.id, currentChapter.comicId) {
+        if (uiState.chapter != null) {
+            commentViewModel.resetComments()
+            commentViewModel.fetchTopLevelComments(
+                comicId = currentChapter.comicId,
+                chapterId = uiState.chapter!!.id
+            )
+        }
     }
 
     BackFloatingScreen(
-        onBackCLick = { navController.popBackStack() },
+        onBackCLick = {
+            navController.popBackStack<Screen.ComicReading>(true)
+        },
         modifier = Modifier.fillMaxSize()
     ) {
         if (chapterListDiaglogVisibal) {
@@ -270,14 +280,6 @@ fun ComicReadingScreen(
             },
         ) {
 
-            LaunchedEffect(uiState.chapter?.id, currentChapter.comicId) {
-                if (uiState.chapter != null) {
-                    commentViewModel.fetchTopLevelComments(
-                        comicId = currentChapter.comicId,
-                        chapterId = uiState.chapter!!.id
-                    )
-                }
-            }
 
             val paddingX = 16
             Scaffold(
@@ -318,6 +320,7 @@ fun ComicReadingScreen(
                 },
 
                 ) { innerPadding ->
+
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(20.dp),
                     modifier = Modifier
@@ -331,8 +334,6 @@ fun ComicReadingScreen(
                             key = id,
                             contentType = comment.javaClass
                         ) {
-
-
                             CommentCard(
                                 modifier = Modifier
                                     .padding(

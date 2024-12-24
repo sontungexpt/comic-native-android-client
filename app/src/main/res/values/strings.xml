@@ -111,6 +111,11 @@
     <string name="input_comic_name">Input comic name</string>
     <string name="category">Category</string>
     <string name="no_comic_found">No Comics Found</string>
+    <string name="authors">Authors</string>
+    <string name="status">Status</string>
+    <string name="artists">Artists</string>
+    <string name="alternative_names">Alternative Names</string>
+    <string name="source">Source</string>
 
 
 </resources>

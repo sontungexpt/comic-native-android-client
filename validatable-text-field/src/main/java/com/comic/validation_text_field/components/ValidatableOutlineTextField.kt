@@ -94,6 +94,7 @@ fun ValidableOutlineTextField(
         colors = colors,
         supportingText = {
             AnimatedVisibility(
+                modifier = Modifier.fillMaxWidth(),
                 enter = enterErrorTransition,
                 exit = exitErrorTransition,
                 visible = hasError,

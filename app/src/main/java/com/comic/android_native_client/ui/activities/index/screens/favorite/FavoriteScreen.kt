@@ -83,8 +83,7 @@ fun FavoriteScreen(
                     key = { it.id }
                 ) {
                     Box(
-                        modifier = Modifier
-                            .height(284.dp)
+                        modifier = Modifier.height(284.dp)
                     ) {
                         var dialogOpened by remember { mutableStateOf(false) }
                         var unFavoriteProcessing by remember { mutableStateOf(false) }
@@ -108,8 +107,8 @@ fun FavoriteScreen(
                             onToggleFavorited = {
                                 dialogOpened = true
                             },
+                            favoritedColor = MaterialTheme.colorScheme.error,
                             iconSize = 28.dp,
-                            tint = MaterialTheme.colorScheme.error,
                             iconModifier = Modifier
                                 .background(
                                     color = MaterialTheme.colorScheme.surface.copy(
