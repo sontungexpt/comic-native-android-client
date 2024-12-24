@@ -11,8 +11,8 @@ open class Chapter(
     val num: Double = 0.0,
     val name: String = "",
     val description: String = "",
-    val chapter: String = "",
-    val read: Boolean = false,
+    var chapter: String = "",
+    var read: Boolean = false,
     val originalSource: OriginalSource,
     val updatedDate: Instant?,
 )

@@ -21,6 +21,7 @@ const val TAG = "ComicDetailViewModel"
 data class ComicDetailUIState(
     val initializing: Boolean = false,
     val comicDetail: ComicDetail? = null,
+
     val chapters: List<Chapter> = emptyList(),
     val loadingMoreChapter: Boolean = false
 )
@@ -35,11 +36,11 @@ class ComicDetailViewModel @Inject constructor(
     val noMoreChapter: Boolean
         get() = _last
 
-    private var _comicDetailUIState: MutableStateFlow<ComicDetailUIState> =
-        MutableStateFlow(ComicDetailUIState())
+    private var _comicDetailUIState = MutableStateFlow(ComicDetailUIState())
+
     val comicDetailUIState: StateFlow<ComicDetailUIState> = _comicDetailUIState.asStateFlow()
 
-
+    
     fun updateFavoriteStatus(
         status: Boolean,
         addFavoriteReqeust: (comic: Comic) -> Unit,
@@ -78,7 +79,6 @@ class ComicDetailViewModel @Inject constructor(
                     size = 10,
                 )) {
                     is Result.Success -> {
-                        var newChapters = mutableListOf(_comicDetailUIState.value.chapters)
                         _comicDetailUIState.value = _comicDetailUIState.value.copy(
                             chapters = _comicDetailUIState.value.chapters + result.data.chapters.content,
                             loadingMoreChapter = false
@@ -107,11 +107,17 @@ class ComicDetailViewModel @Inject constructor(
         }
     }
 
+    fun resetUIState() {
+        _comicDetailUIState.value = ComicDetailUIState()
+    }
+
     fun initialize(comicId: String, sourceName: String) {
         if (_comicDetailUIState.value.initializing) return
         _comicDetailUIState.value = _comicDetailUIState.value.copy(
             initializing = true,
-            loadingMoreChapter = true
+            loadingMoreChapter = true,
+            chapters = emptyList(),
+            comicDetail = null
         )
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -146,7 +152,7 @@ class ComicDetailViewModel @Inject constructor(
             } finally {
                 _comicDetailUIState.value = comicDetailUIState.value.copy(
                     initializing = false,
-                    loadingMoreChapter = false
+                    loadingMoreChapter = false,
                 )
             }
         }

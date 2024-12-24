@@ -74,6 +74,8 @@ fun App(
     val exploreViewModel = hiltViewModel<ExploreViewModel>()
     val profileViewModel = hiltViewModel<ProfileViewModel>()
     val searchViewModel = hiltViewModel<ComicSearchViewModel>()
+
+
     Scaffold(
         bottomBar = {
             BottomNavigationBar(navController)
@@ -150,14 +152,14 @@ fun App(
             composable<Screen.ComicDetail> {
                 val currentComic = it.toRoute<Screen.ComicDetail>()
                 val comicDetailViewModel = hiltViewModel<ComicDetailViewModel>()
+
                 ComicDetailScreen(
+                    favoriteViewModel = favoriteViewModel,
                     comicDetailViewModel = comicDetailViewModel,
                     horizontalPadding = horizontalPadding,
                     currentComic = currentComic,
                     navController = navController,
-                    favoriteViewModel = favoriteViewModel,
-
-                    )
+                )
             }
             composable<Screen.ComicReading> {
                 val currentChapterInfo = it.toRoute<Screen.ComicReading>()

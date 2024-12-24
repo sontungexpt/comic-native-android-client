@@ -124,6 +124,8 @@ class CommentViewModel @Inject constructor(
         comicId: String,
         chapterId: String
     ) {
+        if (comments[TOP_LEVEL_ID]!!.loading == true) return
+        comments[TOP_LEVEL_ID] = comments[TOP_LEVEL_ID]!!.copy(loading = true)
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val nextPage = comments[TOP_LEVEL_ID]!!.currentPage + 1
@@ -136,8 +138,11 @@ class CommentViewModel @Inject constructor(
                     page = nextPage,
                 )) {
                     is Result.Success -> {
-                        _comments[TOP_LEVEL_ID] = Comments(
-                            items = result.data.content,
+                        val newComments = result.data.content
+                        if (newComments.isEmpty()) return@launch
+                        val current = comments[TOP_LEVEL_ID]!!
+                        _comments[TOP_LEVEL_ID] = current.copy(
+                            items = current.items + newComments,
                             total = result.data.totalElements,
                             currentPage = nextPage
                         )
@@ -149,7 +154,11 @@ class CommentViewModel @Inject constructor(
                 }
 
             } catch (e: Exception) {
-                println("Unexpected error: ${e.message}")
+                e.printStackTrace()
+            } finally {
+                comments[TOP_LEVEL_ID] = comments[TOP_LEVEL_ID]!!.copy(
+                    loading = false
+                )
             }
         }
     }
@@ -170,8 +179,10 @@ class CommentViewModel @Inject constructor(
 
                     is Result.Success -> {
                         val current = comments[parentCommentId] ?: Comments()
+                        val newReplies = result.data.content
+                        if (newReplies.isEmpty()) return@launch
                         _comments[parentCommentId] = current.copy(
-                            items = current.items + result.data.content,
+                            items = current.items + newReplies,
                             total = result.data.totalElements,
                             loading = false,
                             currentPage = nextPage

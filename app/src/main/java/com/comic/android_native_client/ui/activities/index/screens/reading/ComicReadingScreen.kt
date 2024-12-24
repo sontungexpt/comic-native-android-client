@@ -58,9 +58,7 @@ fun getChapterName(chapter: Chapter): String {
     else "Chapter ${chapter.num}"
 }
 
-@OptIn(
-    ExperimentalMaterial3Api::class
-)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ComicReadingScreen(
     horizontalPadding: Dp = 20.dp,
@@ -71,7 +69,8 @@ fun ComicReadingScreen(
 ) {
     val context = LocalContext.current
     val uiState by comicReadingViewModel.uiState.collectAsState()
-    var chapterListDiaglogVisibal by remember { mutableStateOf(false) }
+
+    var chapterListDiaglogOpened by remember { mutableStateOf(false) }
 
     val chapterName = if (uiState.chapter != null)
         getChapterName(uiState.chapter!!)
@@ -86,7 +85,7 @@ fun ComicReadingScreen(
         }
     }
 
-
+    // initial effect
     LaunchedEffect(
         currentChapter.chapterId,
         currentChapter.comicId
@@ -109,26 +108,29 @@ fun ComicReadingScreen(
         )
     }
 
-    LaunchedEffect(uiState.chapter?.id, currentChapter.comicId) {
+    // the effect when chapter is loaded
+    LaunchedEffect(uiState.chapter, currentChapter.comicId) {
         if (uiState.chapter != null) {
             commentViewModel.resetComments()
             commentViewModel.fetchTopLevelComments(
                 comicId = currentChapter.comicId,
                 chapterId = uiState.chapter!!.id
             )
+
         }
     }
 
     BackFloatingScreen(
         onBackCLick = {
-            navController.popBackStack<Screen.ComicReading>(true)
+            navController.popBackStack()
+
         },
         modifier = Modifier.fillMaxSize()
     ) {
-        if (chapterListDiaglogVisibal) {
+        if (chapterListDiaglogOpened) {
             Dialog(
                 onDismissRequest = {
-                    chapterListDiaglogVisibal = false
+                    chapterListDiaglogOpened = false
                 },
             ) {
                 LazyColumn(
@@ -185,7 +187,7 @@ fun ComicReadingScreen(
             },
             onClickName = {
                 if (uiState.chapterList.isNotEmpty()) {
-                    chapterListDiaglogVisibal = !chapterListDiaglogVisibal
+                    chapterListDiaglogOpened = !chapterListDiaglogOpened
                 }
             },
             modifier = Modifier
@@ -377,6 +379,23 @@ fun ComicReadingScreen(
                             )
                         }
                     }
+
+                    item(
+                        key = "loadMoreComment",
+                        contentType = "loadMoreComment"
+                    ) {
+                        LaunchedEffect(uiState.chapter) {
+                            commentViewModel.fetchTopLevelComments(
+                                comicId = currentChapter.comicId,
+                                chapterId = uiState.chapter!!.id
+                            )
+                        }
+                        LoadingCircle(
+                            loading = commentViewModel.comments[commentViewModel.TOP_LEVEL_ID]!!.loading,
+                        )
+
+                    }
+
                 }
             }
         }

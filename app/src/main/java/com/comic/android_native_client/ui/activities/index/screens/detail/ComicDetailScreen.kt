@@ -58,13 +58,11 @@ fun ComicDetailScreen(
         )
     }
 
-
-
     BackFloatingScreen(
+        backButtonModifier = Modifier.offset(x = 24.dp, y = 24.dp),
         onBackCLick = {
             navController.popBackStack()
         },
-        backButtonModifier = Modifier.offset(x = 24.dp, y = 24.dp),
     ) {
         LazyColumn(
             state = lazyListState,
@@ -189,30 +187,37 @@ fun ComicDetailScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
+                    val status = uiState.comicDetail?.status ?: onUpdating
                     Text(
-                        text = stringResource(R.string.status) + ": " + uiState.comicDetail?.status,
+                        text = stringResource(R.string.status) + ": " + status,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    val source = uiState.comicDetail?.originalSource
+                    var sourceName = if (source != null) {
+                        var result = source.name
+                        if (source.link.isNotBlank()) {
+                            result + " (" + source.link + ")"
+                        } else {
+                            result
+                        }
+                    } else onUpdating
+
+                    Text(
+                        text = stringResource(R.string.source) + ": " + sourceName,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
-                    val alternativeNames =
-                        uiState.comicDetail?.alternativeNames?.joinToString(", ") ?: onUpdating
-                    if (alternativeNames.isNotBlank()) {
+                    val alternativeNames = uiState.comicDetail?.alternativeNames?.joinToString(", ")
+                    if (!alternativeNames.isNullOrBlank()
+                    ) {
                         Text(
                             text = stringResource(R.string.alternative_names) + ": " + alternativeNames,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.primary
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.tertiary
                         )
                     }
-
-                    Text(
-                        text = stringResource(R.string.source) + ": " + uiState.comicDetail?.originalSource?.name,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-
-
-
 
                     Spacer(modifier = Modifier.height(20.dp))
                 }
@@ -273,7 +278,7 @@ fun ComicDetailScreen(
                     isRead = it.read,
                     name = it.name,
                     number = it.num.toString(),
-                    imageUrl = if (!it.thumbnailUrl.isNullOrBlank()) {
+                    imageUrl = if (it.thumbnailUrl.isNotBlank()) {
                         it.thumbnailUrl
                     } else {
                         currentComic.imageUrl

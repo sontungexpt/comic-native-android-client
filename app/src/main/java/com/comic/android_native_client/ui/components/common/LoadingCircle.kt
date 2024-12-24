@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 fun LoadingCircle(
     wrapperModifier: Modifier = Modifier
         .fillMaxWidth()
-        .height(32.dp),
+        .height(34.dp),
     modifier: Modifier = Modifier.size(28.dp),
     loading: Boolean = true,
     propagateMinConstraints: Boolean = false,
