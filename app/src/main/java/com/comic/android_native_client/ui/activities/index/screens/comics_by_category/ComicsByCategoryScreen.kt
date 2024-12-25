@@ -80,7 +80,9 @@ fun ComicsByCategoryScreen(
                                     name = it.name,
                                     imageUrl = it.thumbnailUrl,
                                     sourceName = it.originalSource.name,
-                                    genres = it.categories.map { it.name },
+                                    genres = it.categories.map {
+                                        it.name
+                                    },
                                 )
                             )
                         }

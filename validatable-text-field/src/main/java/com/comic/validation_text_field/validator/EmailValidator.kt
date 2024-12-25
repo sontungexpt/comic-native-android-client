@@ -8,7 +8,10 @@ class EmailValidator(
     private var errorMessage: String? = null
 ) : TextFieldValidator {
     override fun validate(value: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(value).matches()
+        if (value.isNotBlank()) {
+            return Patterns.EMAIL_ADDRESS.matcher(value).matches()
+        }
+        return true
     }
 
     override fun showErrorMessage(value: String, fieldName: String, context: Context?): String {

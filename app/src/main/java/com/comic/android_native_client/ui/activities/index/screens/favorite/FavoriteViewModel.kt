@@ -1,5 +1,7 @@
 package com.comic.android_native_client.ui.activities.index.screens.favorite
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -11,13 +13,17 @@ import com.comic.android_native_client.constants.HttpStatus
 import com.comic.android_native_client.data.model.Comic
 import com.comic.android_native_client.data.repository.FavoriteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
+    @ApplicationContext
+    private val context: Context,
     private val favoriteRepository: FavoriteRepository
 ) : ViewModel() {
     private var _totalComics: Int = 0
@@ -81,7 +87,9 @@ class FavoriteViewModel @Inject constructor(
 
 
     fun favoriteComic(
-        comic: Comic
+        comic: Comic,
+        onSuccess: () -> Unit = {},
+        onError: (HttpStatus) -> Unit = {}
     ) {
         _favoriteChanging = true
         viewModelScope.launch(Dispatchers.IO) {
@@ -90,16 +98,36 @@ class FavoriteViewModel @Inject constructor(
                     is Result.Success -> {
                         _totalComics++
                         _favoriteComics.add(comic)
+                        onSuccess()
                     }
 
                     is Result.Error -> {
                         when (result.status) {
                             HttpStatus.Conflict -> {
-
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(
+                                        context,
+                                        "Comic already in favorite",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
 
-                            else -> {}
+                            HttpStatus.Unauthorized -> {
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(
+                                        context,
+                                        "Please login to favorite comic",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+
+
+                            else -> {
+                            }
                         }
+                        result.status?.let { onError(it) }
                     }
                 }
             } catch (e: Exception) {
@@ -128,6 +156,27 @@ class FavoriteViewModel @Inject constructor(
 
                     is Result.Error -> {
                         when (result.status) {
+                            HttpStatus.NotFound -> {
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(
+                                        context,
+                                        "Comic not in favorite",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+
+                            HttpStatus.Unauthorized -> {
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(
+                                        context,
+                                        "Please login to unfavorite comic",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                            }
+
                             else -> {
 
                             }

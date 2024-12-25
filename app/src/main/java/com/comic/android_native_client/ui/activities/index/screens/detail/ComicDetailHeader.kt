@@ -26,6 +26,7 @@ import coil3.compose.AsyncImage
 fun ComicDetailHeader(
     comicName: String,
     comicImageUrl: String,
+    onGenreClick: (name: String, index: Int) -> Unit,
     comicGenres: List<String>,
 ) {
     Box(
@@ -61,12 +62,16 @@ fun ComicDetailHeader(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    comicGenres.forEach {
+                    for (i in comicGenres.indices) {
                         GenreTag(
+                            onClick = {
+                                onGenreClick(comicGenres[i], i)
+                            },
                             modifier = Modifier,
-                            name = it
+                            name = comicGenres[i],
                         )
                     }
+
                 }
             }
         }

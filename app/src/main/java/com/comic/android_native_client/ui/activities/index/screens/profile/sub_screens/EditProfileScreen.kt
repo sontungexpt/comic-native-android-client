@@ -18,10 +18,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.comic.android_native_client.R
 import com.comic.android_native_client.ui.components.Avatar
 import com.comic.android_native_client.ui.components.common.LoadingIndicatorButton
 import com.comic.android_native_client.ui.components.layout.BackFloatingScreen
@@ -76,7 +78,7 @@ fun EditProfileScreen(
                     editProfileViewModel.updateName(it)
                 },
                 label = {
-                    Text("Username")
+                    Text(stringResource(R.string.name))
                 },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
@@ -87,7 +89,7 @@ fun EditProfileScreen(
                 onValueChange = {
                     editProfileViewModel.updateIntroduction(it)
                 },
-                label = { Text("Introduction") },
+                label = { stringResource(R.string.bio) },
                 placeholder = { Text("Introduce yourself") },
                 modifier = Modifier
                     .fillMaxWidth()

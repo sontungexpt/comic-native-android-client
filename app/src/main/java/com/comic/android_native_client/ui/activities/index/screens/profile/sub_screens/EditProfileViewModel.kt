@@ -11,6 +11,7 @@ import com.comic.android_native_client.network.dto.request.UpdateUserInfoRequest
 import com.comic.android_native_client.ui.globalState.SharedUserState
 import com.comic.android_native_client.ui.globalState.UserState
 import com.comic.validation_text_field.ValidableTextFieldState
+import com.comic.validation_text_field.ValidableTextFieldWatcher
 import com.comic.validation_text_field.validator.EmailValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +29,8 @@ class EditProfileViewModel @Inject constructor(
         fieldName = "Email",
         validators = listOf(EmailValidator()),
     )
+    private var stateWatcher = ValidableTextFieldWatcher(_emailState)
+
     private var _name by mutableStateOf(sharedUserState.userState.value.name)
     private var _avatar by mutableStateOf(sharedUserState.userState.value.avatar)
     private var _introduction by mutableStateOf(sharedUserState.userState.value.bio)
@@ -64,8 +67,12 @@ class EditProfileViewModel @Inject constructor(
         get() = _loading
 
     fun updateProfile(navigateBack: () -> Unit) {
+        if (!stateWatcher.validateAll()) {
+            return
+        }
         _loading = true
         viewModelScope.launch(Dispatchers.IO) {
+
             try {
                 val result = userRepository.updateUser(
                     UpdateUserInfoRequest(

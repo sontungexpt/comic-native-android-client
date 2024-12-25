@@ -11,6 +11,7 @@ import com.comic.android_native_client.network.dto.request.RegisterRequest
 import com.comic.android_native_client.network.services.AuthService
 import com.comic.validation_text_field.ValidableTextFieldState
 import com.comic.validation_text_field.ValidableTextFieldWatcher
+import com.comic.validation_text_field.validator.LengthValidator
 import com.comic.validation_text_field.validator.MatchPasswordValidator
 import com.comic.validation_text_field.validator.PasswordValidator
 import com.comic.validation_text_field.validator.RequiredValidator
@@ -31,14 +32,15 @@ class SignUpViewModel @Inject constructor(
     var _isLoading = mutableStateOf(false)
     val isLoading: Boolean
         get() = _isLoading.value
-    val requiredValidator = RequiredValidator()
+    private val requiredValidator = RequiredValidator()
+    private val lengthValidator = LengthValidator(minLength = 3, maxLength = 50)
     val usernameState = ValidableTextFieldState(
         fieldName = "User Name",
-        validators = listOf(requiredValidator)
+        validators = listOf(requiredValidator, lengthValidator),
     )
     val nameState = ValidableTextFieldState(
         fieldName = "Name",
-        validators = listOf(requiredValidator),
+        validators = listOf(requiredValidator, lengthValidator),
     )
     val passwordState = ValidableTextFieldState(
         fieldName = "Password",
@@ -73,32 +75,37 @@ class SignUpViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     withContext(Dispatchers.Main) {
                         navController.navigate(Screen.Login)
-                    }
-                    val msg = "Registration successful"
+                        val msg = "Registration successful"
 
-                    Toast.makeText(
-                        context,
-                        msg,
-                        msg.length
-                    ).show()
+                        Toast.makeText(
+                            context,
+                            msg,
+                            msg.length
+                        ).show()
+                    }
+
                 } else {
                     when (response.code()) {
                         409 -> {
-                            val msg = "Username or password existed"
-                            Toast.makeText(
-                                context,
-                                msg,
-                                msg.length
-                            ).show()
+                            withContext(Dispatchers.Main) {
+                                val msg = "Username or password existed"
+                                Toast.makeText(
+                                    context,
+                                    msg,
+                                    msg.length
+                                ).show()
+                            }
                         }
 
                         else -> {
-                            val msg = "Something went wrong"
-                            Toast.makeText(
-                                context,
-                                msg,
-                                msg.length
-                            ).show()
+                            withContext(Dispatchers.Main) {
+                                val msg = "Something went wrong" + response.code()
+                                Toast.makeText(
+                                    context,
+                                    msg,
+                                    msg.length
+                                ).show()
+                            }
                         }
                     }
                 }

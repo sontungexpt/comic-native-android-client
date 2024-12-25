@@ -31,7 +31,6 @@ fun ValidableOutlineTextField(
     state: ValidableTextFieldState,
     onValueChange: ((String) -> Unit) = {},
     modifier: Modifier = Modifier,
-    textInputModifier: Modifier = Modifier,
     enabled: Boolean = true,
     readOnly: Boolean = false,
     errorField: @Composable() ((errorMessage: String) -> Unit) = {

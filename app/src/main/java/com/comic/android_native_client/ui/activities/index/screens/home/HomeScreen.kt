@@ -85,7 +85,9 @@ fun HomeScreen(
                 imageUrl = comic.thumbnailUrl,
                 name = comic.name,
                 sourceName = comic.originalSource.name,
-                genres = comic.categories.map { it.name }
+                genres = comic.categories.map {
+                    it.name
+                }
             )
         )
     }

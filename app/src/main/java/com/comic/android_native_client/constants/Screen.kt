@@ -134,6 +134,8 @@ sealed class Screen(
         val imageUrl: String,
         val name: String? = null,
         val sourceName: String,
+
+        // first genre is id and second is name
         val genres: List<String>? = null,
     ) : DynamicScreen {
         override fun icon(): ImageVector {

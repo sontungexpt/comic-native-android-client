@@ -81,7 +81,7 @@ fun SignUpScreen(
                 state = viewModel.passwordState,
             )
 
-            ValidableOutlineTextField(
+            PasswordEditable(
                 maxLines = 1,
                 shape = MaterialTheme.shapes.medium,
                 state = viewModel.matchPasswordState,

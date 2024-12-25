@@ -40,19 +40,22 @@ class ComicDetailViewModel @Inject constructor(
 
     val comicDetailUIState: StateFlow<ComicDetailUIState> = _comicDetailUIState.asStateFlow()
 
-    
+
     fun updateFavoriteStatus(
         status: Boolean,
-        addFavoriteReqeust: (comic: Comic) -> Unit,
-        removeFavoriteRequest: (comic: Comic) -> Unit
+        addFavoriteReqeust: (comic: Comic, onSuccess: () -> Unit) -> Unit,
+        removeFavoriteRequest: (comic: Comic, onSuccess: () -> Unit) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             if (_comicDetailUIState.value.comicDetail == null) return@launch
-            _comicDetailUIState.value.comicDetail?.followed = status
             if (status) {
-                addFavoriteReqeust(comicDetailUIState.value.comicDetail!!)
+                addFavoriteReqeust(comicDetailUIState.value.comicDetail!!, {
+                    _comicDetailUIState.value.comicDetail?.followed = status
+                })
             } else {
-                removeFavoriteRequest(comicDetailUIState.value.comicDetail!!)
+                removeFavoriteRequest(comicDetailUIState.value.comicDetail!!, {
+                    _comicDetailUIState.value.comicDetail?.followed = status
+                })
             }
             _comicDetailUIState.value = comicDetailUIState.value.copy(
                 comicDetail = _comicDetailUIState.value.comicDetail

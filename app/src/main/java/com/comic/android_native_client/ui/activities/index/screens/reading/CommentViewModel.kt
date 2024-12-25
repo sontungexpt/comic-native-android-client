@@ -1,5 +1,7 @@
 package com.comic.android_native_client.ui.activities.index.screens.reading
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -7,17 +9,22 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.comic.android_native_client.common.Result
+import com.comic.android_native_client.constants.HttpStatus
 import com.comic.android_native_client.data.model.Comment
 import com.comic.android_native_client.data.repository.CommentRepository
 import com.comic.android_native_client.network.dto.request.CommentRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
 @HiltViewModel
 class CommentViewModel @Inject constructor(
+    @ApplicationContext
+    private val appContext: Context,
     private val commentRepository: CommentRepository
 ) : ViewModel() {
     val TOP_LEVEL_ID = "0"
@@ -108,6 +115,21 @@ class CommentViewModel @Inject constructor(
                     }
 
                     is Result.Error -> {
+                        when (result.status) {
+                            HttpStatus.Unauthorized -> {
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(
+                                        appContext,
+                                        "Please login to comment",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+
+                            else -> {
+                                _isCommentSentError = true
+                            }
+                        }
 
                     }
                 }

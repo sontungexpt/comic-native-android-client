@@ -56,6 +56,7 @@ class AuthAuthenticator @Inject constructor(
                     val status = HttpStatus.from(refreshTokenResponse.code())
                     if (status == HttpStatus.Unauthorized) {
                         runBlocking {
+                            println("test")
                             sharedUserState.clearUser()
                             jwtRepository.clearAllTokens()
                             Log.d(TAG, "Refresh token expired")

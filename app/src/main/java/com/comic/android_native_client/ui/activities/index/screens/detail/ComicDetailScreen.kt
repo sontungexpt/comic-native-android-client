@@ -80,8 +80,20 @@ fun ComicDetailScreen(
                 ComicDetailHeader(
                     comicName = currentComic.name ?: uiState.comicDetail?.name ?: "",
                     comicImageUrl = currentComic.imageUrl,
-                    comicGenres = currentComic.genres
-                        ?: uiState.comicDetail?.categories?.map { it.name } ?: emptyList(),
+                    onGenreClick = { name, index ->
+                        if (uiState.comicDetail != null) {
+                            navController.navigate(
+                                Screen.ComicByCategory(
+                                    id = uiState.comicDetail!!.categories[index].id,
+                                    name = name
+                                )
+                            )
+                        }
+
+                    },
+                    comicGenres = uiState.comicDetail?.categories?.map {
+                        it.name
+                    } ?: currentComic.genres ?: emptyList(),
                 )
             }
             stickyHeader(
@@ -136,11 +148,17 @@ fun ComicDetailScreen(
                     onToggleFavorited = {
                         comicDetailViewModel.updateFavoriteStatus(
                             it,
-                            {
-                                favoriteViewModel.favoriteComic(it)
+                            { comic, onSuccess ->
+                                favoriteViewModel.favoriteComic(
+                                    comic,
+                                    onSuccess
+                                )
                             },
-                            {
-                                favoriteViewModel.favoriteComic(it)
+                            { comic, onSuccess ->
+                                favoriteViewModel.unfavoriteComic(
+                                    comic,
+                                    onSuccess
+                                )
                             }
                         )
                     }

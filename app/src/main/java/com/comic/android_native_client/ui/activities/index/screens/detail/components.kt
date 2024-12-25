@@ -1,6 +1,7 @@
 package com.comic.android_native_client.ui.activities.index.screens.detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -26,10 +27,14 @@ fun SectionDivider() {
 @Composable
 fun GenreTag(
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
     name: String,
 ) {
     Box(
         modifier = modifier
+            .clickable {
+                onClick()
+            }
             .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(12.dp))
             .padding(horizontal = 12.dp, vertical = 6.dp)
     ) {

@@ -149,7 +149,9 @@ fun ExploreScreen(
                                             id = it.id,
                                             name = it.name,
                                             imageUrl = it.thumbnailUrl,
-                                            genres = it.categories.map { genre -> genre.name },
+                                            genres = it.categories.map {
+                                                it.name
+                                            },
                                             sourceName = it.originalSource.name
                                         )
                                     )

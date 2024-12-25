@@ -116,6 +116,7 @@
     <string name="artists">Artists</string>
     <string name="alternative_names">Alternative Names</string>
     <string name="source">Source</string>
+    <string name="bio">Bio</string>
 
 
 </resources>

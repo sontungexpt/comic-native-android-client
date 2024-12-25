@@ -133,7 +133,9 @@ fun FavoriteScreen(
                                         imageUrl = it.thumbnailUrl,
                                         name = it.name,
                                         sourceName = it.originalSource.name,
-                                        genres = it.categories.map { it.name }
+                                        genres = it.categories.map {
+                                            it.name
+                                        }
                                     )
                                 )
                             },
