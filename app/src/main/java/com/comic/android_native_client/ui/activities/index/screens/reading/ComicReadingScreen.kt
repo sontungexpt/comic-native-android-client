@@ -299,6 +299,8 @@ fun ComicReadingScreen(
                 },
                 bottomBar = {
                     CommentInput(
+                        enabled = uiState.chapter != null &&
+                                commentViewModel.commentMsg.isNotBlank(),
                         comment = commentViewModel.commentMsg,
                         onCommentChange = {
                             commentViewModel.updateCommentMsg(it)
@@ -310,7 +312,7 @@ fun ComicReadingScreen(
                         sending = commentViewModel.isCommentAdding,
                         onSendComment = {
                             commentViewModel.addComment(
-                                chapterId = currentChapter.chapterId,
+                                chapterId = uiState.chapter!!.id,
                                 comicId = currentChapter.comicId
                             )
                         },

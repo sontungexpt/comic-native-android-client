@@ -27,6 +27,7 @@ import com.comic.android_native_client.R
 fun CommentInput(
     replyingTo: String?,
 
+    enabled: Boolean = true,
     comment: String,
     sending: Boolean,
     isError: Boolean = false,
@@ -91,6 +92,7 @@ fun CommentInput(
         ),
         trailingIcon = {
             IconButton(
+                enabled = enabled,
                 modifier = Modifier.padding(end = 14.dp),
                 onClick = {
                     if (!sending) {
