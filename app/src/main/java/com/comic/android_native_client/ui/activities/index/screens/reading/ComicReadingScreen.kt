@@ -2,6 +2,8 @@ package com.comic.android_native_client.ui.activities.index.screens.reading
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,11 +25,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -69,7 +74,7 @@ fun ComicReadingScreen(
 ) {
     val context = LocalContext.current
     val uiState by comicReadingViewModel.uiState.collectAsState()
-
+    val couroutineScope = rememberCoroutineScope()
     var chapterListDiaglogOpened by remember { mutableStateOf(false) }
 
     val chapterName = if (uiState.chapter != null)
@@ -235,10 +240,20 @@ fun ComicReadingScreen(
             )
         } else if (uiState.chapter is ComicChapter) {
             val comicChapter = uiState.chapter as ComicChapter
+            var scale by remember { mutableStateOf(1f) }
+            var offset by remember { mutableStateOf(Offset.Zero) }
+            val state = rememberTransformableState { zoomChange, offsetChange, rotationChange ->
+                scale *= zoomChange
+            }
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.TopCenter)
+                    .graphicsLayer(
+                        scaleX = maxOf(1f, minOf(scale, 3f)),
+                        scaleY = maxOf(1f, minOf(scale, 3f)),
+                    )
+                    .transformable(state = state)
                     .padding(top = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
@@ -256,6 +271,7 @@ fun ComicReadingScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(MaterialTheme.shapes.medium)
+
                     )
                 }
             }
