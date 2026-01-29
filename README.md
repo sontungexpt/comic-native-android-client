@@ -1,9 +1,11 @@
-# Comic App - README
+# Comic App
 
 ## Giới thiệu
 Comic App là một ứng dụng đọc truyện, nơi bạn có thể tìm kiếm và đọc các truyện yêu thích một cách dễ dàng. Ứng dụng bao gồm hai thành phần chính:
 - **Backend**: Xử lý logic, lưu trữ dữ liệu và cung cấp API.
 - **Client**: Ứng dụng Android Native để người dùng truy cập và sử dụng dịch vụ.
+
+- [Backend Repo](https://github.com/sontungexpt/comic)
 
 ## Demo
 
